@@ -1,0 +1,236 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 48rpx;
+  background: $color-bg-page;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroDecor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 300rpx;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decorDot {
+  position: absolute;
+  border-radius: $radius-round;
+  opacity: 0.35;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.dotBlue {
+  width: 56rpx;
+  height: 56rpx;
+  background: $ball-blue;
+  top: 48rpx;
+  right: 52rpx;
+  animation: drift 5s ease-in-out infinite;
+}
+
+.dotRed {
+  width: 32rpx;
+  height: 32rpx;
+  background: $ball-red;
+  top: 120rpx;
+  right: 120rpx;
+  animation: drift 4s ease-in-out infinite 0.5s;
+}
+
+.dotYellow {
+  width: 40rpx;
+  height: 40rpx;
+  background: $ball-yellow;
+  top: 32rpx;
+  right: 160rpx;
+  animation: drift 6s ease-in-out infinite 1s;
+}
+
+.dotGreen {
+  width: 24rpx;
+  height: 24rpx;
+  background: $ball-green;
+  top: 160rpx;
+  right: 48rpx;
+  animation: drift 4.5s ease-in-out infinite 1.5s;
+}
+
+.dotPink {
+  width: 36rpx;
+  height: 36rpx;
+  background: $ball-pink;
+  top: 96rpx;
+  right: 204rpx;
+  animation: drift 5.5s ease-in-out infinite 0.8s;
+}
+
+@keyframes drift {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12rpx) scale(1.05);
+  }
+}
+
+.heroTop {
+  position: relative;
+  z-index: 1;
+  padding: 48rpx $page-padding 0;
+}
+
+.greetingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.greeting {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.greetingName {
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: 32rpx;
+  line-height: $line-height-tight;
+}
+
+.greetingHighlight {
+  display: block;
+  color: $ball-blue;
+  text-shadow: 2rpx 2rpx 0 rgba($bubu-blue-light, 0.35);
+}
+
+.searchBox {
+  position: relative;
+  z-index: 1;
+  margin: 0 $page-padding $spacing-md;
+  padding: 22rpx 28rpx;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-float;
+  }
+}
+
+.searchIcon {
+  margin-right: 14rpx;
+  font-size: 28rpx;
+  color: $bubu-blue;
+}
+
+.searchText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.searchBadge {
+  padding: 6rpx 18rpx;
+  background: $ball-yellow;
+  color: $color-text-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-button;
+}
+
+.sectionHeader {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 $page-padding;
+  margin: 24rpx 0 20rpx;
+}
+
+.sectionTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.sectionSub {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.bentoGrid {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 20rpx;
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-lg;
+}
+
+.bentoItem {
+  position: relative;
+  flex: 1;
+  height: 200rpx;
+  border-radius: $radius-lg;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+  overflow: visible;
+
+  &:active {
+    transform: scale(0.96);
+    opacity: 0.92;
+  }
+}
+
+.bentoItemA {
+  background: linear-gradient(135deg, $ball-blue 0%, $bubu-blue 100%);
+}
+
+.bentoItemB {
+  background: linear-gradient(135deg, $ball-red 0%, $ball-pink 100%);
+}
+
+.bentoItemC {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.bentoEmoji {
+  font-size: 48rpx;
+}
+
+.bentoTitle {
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-md;
+  margin-top: 8rpx;
+}
+
+.bentoDesc {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4rpx;
+}
+
+.cornerList {
+  position: relative;
+  z-index: 1;
+  padding: 0 $page-padding;
+}

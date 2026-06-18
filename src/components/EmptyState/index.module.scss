@@ -1,0 +1,47 @@
+@use '@/styles/variables.scss' as *;
+
+.empty {
+  margin: 80rpx $page-padding;
+  padding: 64rpx 48rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  text-align: center;
+  box-shadow: $shadow-card;
+  @include flex-center;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: 72rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.35;
+  color: $color-primary;
+}
+
+.title {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 12rpx;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: $line-height-normal;
+  margin-bottom: 28rpx;
+}
+
+.action {
+  padding: 14rpx 36rpx;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.97);
+  }
+}

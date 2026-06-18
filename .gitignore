@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs (Taro 编译产物，可重新生成)
+dist/
+build/
+.swc/
+
+# Local env / cache
+.env
+.env.local
+.env.*.local
+.cache/
+.parcel-cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+*.iml
+
+# Trae IDE
+.pai/
+.trae/
+
+# 独立子项目（隶属 https://github.com/xiaoyesoso/MaydaySkills，不纳入本仓库）
+MaydaySkills/
+
+# Misc
+*.tgz
+.eslintcache

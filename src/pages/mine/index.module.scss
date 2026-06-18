@@ -1,0 +1,245 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 64rpx;
+  background: $color-bg-page;
+}
+
+.profile {
+  position: relative;
+  margin: 24rpx $page-padding 32rpx;
+  padding: 36rpx 32rpx;
+  border-radius: $radius-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  bottom: -100rpx;
+  right: -60rpx;
+  width: 300rpx;
+  height: 300rpx;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.3) 0%, transparent 70%);
+}
+
+.profileTop {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-round;
+  background: $color-accent;
+  color: $color-primary;
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  flex-shrink: 0;
+  @include flex-center;
+}
+
+.profileMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  margin-bottom: 6rpx;
+  @include text-ellipsis;
+}
+
+.userTag {
+  font-size: $font-size-xs;
+  color: $color-accent-light;
+  letter-spacing: 2rpx;
+}
+
+.profileStats {
+  margin-top: 28rpx;
+  display: flex;
+  position: relative;
+  z-index: 1;
+}
+
+.statItem {
+  flex: 1;
+  text-align: center;
+}
+
+.statNum {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4rpx;
+}
+
+.statDivider {
+  width: 2rpx;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.section {
+  margin: 0 $page-padding $spacing-lg;
+}
+
+.sectionTitleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.sectionTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.sectionSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18rpx;
+}
+
+.badgeItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 24rpx 16rpx;
+  text-align: center;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+    opacity: 0.92;
+  }
+}
+
+.badgeIcon {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto 12rpx;
+  border-radius: $radius-round;
+  background: $color-primary;
+  color: $color-accent;
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  @include flex-center;
+}
+
+.badgeSong {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.badgeMeta {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.footprintList {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 8rpx 0;
+  box-shadow: $shadow-card;
+}
+
+.footprintItem {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.footprintImg {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-soft;
+}
+
+.footprintBody {
+  flex: 1;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+
+.footprintTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  @include text-ellipsis;
+}
+
+.footprintLyric {
+  font-size: $font-size-xs;
+  color: $color-text-lyric;
+  font-style: italic;
+  @include text-ellipsis;
+  margin-bottom: 4rpx;
+}
+
+.footprintMeta {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 28rpx 16rpx;
+  box-shadow: $shadow-card;
+}
+
+.toolItem {
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.toolEmoji {
+  width: 72rpx;
+  height: 72rpx;
+  margin: 0 auto 12rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  font-size: 32rpx;
+  color: $color-primary;
+  @include flex-center;
+}

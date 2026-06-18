@@ -1,0 +1,66 @@
+// ============================================
+// 主题配色变量 - MaydayLand 五月天·城市漫游
+// 风格：温柔复古胶片 + 手写笔触 + 五球/卜卜/StayReal 元素抽象
+// ============================================
+
+// 品牌主题色：墨色（呼应五月天专辑封面常用配色）
+$color-primary: #2d2a24;
+$color-primary-light: #4a3f35;
+$color-primary-dark: #1a1814;
+
+// 辅助色：复古橙 + 苔绿（歌词高亮 / 标签）
+$color-accent: #d4a574;
+$color-accent-light: #e8c89e;
+$color-accent-dark: #b8884f;
+$color-secondary: #a8b5a0;
+
+// 五球色彩：五月天 5525 巡演标志性五色气模
+// 蓝（怪兽）/ 红（石头）/ 黄（阿信）/ 绿（玛莎）/ 粉（冠佑）
+$ball-blue: #5b8bd8;
+$ball-red: #e85d5d;
+$ball-yellow: #f4c84c;
+$ball-green: #7bc36b;
+$ball-pink: #e97ab0;
+
+// 卜卜蓝：五月天吉祥物怪兽的蓝色调
+$bubu-blue: #4a90e2;
+$bubu-blue-light: #8fc5ff;
+
+// StayReal 街头气质：高饱和原色点缀
+$stayreal-red: #e02020;
+$stayreal-yellow: #ffd200;
+$stayreal-cyan: #00c3ff;
+
+// 功能色
+$color-success: #6ba368;
+$color-warning: #d49a3a;
+$color-error: #c4584c;
+$color-info: #6b8aa8;
+
+// 背景色（暖米色调，呼应纸质温度）
+$color-bg-page: #f8f6f0;
+$color-bg-card: #ffffff;
+$color-bg-hover: #f0ede4;
+$color-bg-soft: #f5f1e8;
+
+// 文本色
+$color-text-primary: #2d2a24;
+$color-text-secondary: #6b655a;
+$color-text-tertiary: #a39e91;
+$color-text-disabled: #c9c4b8;
+$color-text-white: #ffffff;
+$color-text-lyric: #d4a574; // 歌词高亮专用
+
+// 边框色
+$color-border: #e8e4d9;
+$color-divider: #f0ede4;
+
+// 骨架屏
+$color-skeleton: #f0ede4;
+
+// 业务变量
+$color-passcode-bg: #f8e8d4; // 暗号卡片背景
+$color-badge-bg: #2d2a24; // 徽章背景
+$color-tag-active: #2d2a24;
+$color-tag-default: #f0ede4;
+$color-tag-highlight: #e8d5b5;
