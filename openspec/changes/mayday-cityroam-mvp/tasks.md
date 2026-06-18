@@ -21,6 +21,34 @@
 - [x] 0.10 Zip 打包 `MaydayLand-HTML-Demo.zip`（含 index.html + app.js + README.txt）上传社区
 - [x] 0.11 初赛评审维度对齐：AGENT.md / 需求文档 / openspec 均补充评审维度论证
 
+## 0.v1.1 HTML Demo v1.1 增强（4 个新需求）
+
+### 城市切换（city-switcher）
+- [ ] 0.12 首页顶部增加城市选择器入口 `🏙️ 当前城市：xx ▾`
+- [ ] 0.13 实现城市选择半屏抽屉（5 城 + 专属色调徽章 + 角落数量）
+- [ ] 0.14 城市切换后列表/地图/演唱会联动刷新 + 200ms 淡入动画
+- [ ] 0.15 `localStorage.currentCity` 记忆 + 定位兜底 + `citySwitchCount` 计数
+
+### 评论增强（comment-enhance）
+- [ ] 0.16 评论点赞：心形按钮 + `likedCommentIds` 持久化 + 点赞数 +1/-1
+- [ ] 0.17 评论回复：二级回复输入框 + 缩进展示 + 回复数据结构
+- [ ] 0.18 评论数据结构升级（replies 数组）+ 50 条上限归档
+- [ ] 0.19 `commentLikedCount` 统计（支撑歌单解锁）
+
+### 角落详情增强（corner-detail-enhance）
+- [ ] 0.20 角落数据补充 `description / openingHours / phone / tags / tips` 字段
+- [ ] 0.21 详情页信息卡渲染（营业时间 / 电话可拨打 / 距离 / 氛围标签）
+- [ ] 0.22 "查看大地图"按钮 + 全屏地图页（独立 page）
+- [ ] 0.23 "🧭 导航"按钮（wx.openLocation / Apple Maps / 高德 URL Scheme）
+- [ ] 0.24 底部三按钮组（导航 / 打卡 / 对暗号）+ 地址长按复制
+
+### 歌单解锁（song-unlock）
+- [ ] 0.25 定义 24 首精选歌曲数据（按 9 张专辑分组）+ 8 类解锁条件
+- [ ] 0.26 我的页"歌单解锁"区块渲染（进度统计 + 专辑分组网格 + 锁/解锁状态）
+- [ ] 0.27 `checkSongUnlock()` 函数 + 5 个触发点（打卡/暗号/分享/切城/点赞）
+- [ ] 0.28 解锁全屏动画（五球粒子绽放 + 歌名浮入 + 试听按钮）
+- [ ] 0.29 试听外链（QQ 音乐 / 网易云音乐）+ 下一首解锁提示
+
 ## 1. 项目脚手架与基础设施
 
 - [ ] 1.1 创建小程序工程骨架 `miniapp/`（`app.json` 主包 + `pages/index、discover、corner、checkin、concert、me` + `subpackages/merchant`）

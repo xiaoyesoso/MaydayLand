@@ -26,6 +26,10 @@
 - `concert-hub`：演唱会日程轮播、官方动态、场馆地图 + 周边角落、"今晚同场"留言。
 - `share-growth`：打卡卡片图分享封面、`onShareAppMessage` / `onShareTimeline` 携参、用户 ID 追踪、原生分享分析。
 - `lyric-data-pipeline`：从 MaydaySkills `lyrics-db/` 抽取片段 + 情绪标签生成角落–歌词匹配字典（合规 ≤ 30 字片段）。
+- `city-switcher`（v1.1 新增）：首页城市选择器、5 城切换、数据联动、记忆持久化、城市徽章配色、切换计数。
+- `comment-enhance`（v1.1 新增）：评论点赞、二级回复、评论数据结构升级、被点赞计数、多源评论合并。
+- `corner-detail-enhance`（v1.1 新增）：详情增强字段、查看大地图、一键导航、地址复制、底部三按钮组。
+- `song-unlock`（v1.1 新增）：歌单墙展示、8 类多维度解锁条件、解锁动画、数据持久化、触发点检查、下一首解锁提示。
 
 ### Modified Capabilities
 <!-- 当前 MaydaySkills 仓库尚无 openspec/specs/ 既有规格，无现存 capability 的 requirement 变更。 -->

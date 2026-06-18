@@ -107,12 +107,6 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .action-btn.secondary{background:#f0f0f2;color:var(--ink)}
 .action-btn svg{width:18px;height:18px}
 .comments{margin-top:22px}
-.comment-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
-.comment-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
-.comment-main{flex:1}
-.comment-name{font-size:13px;font-weight:600}
-.comment-text{font-size:13px;color:var(--ink2);margin-top:3px;line-height:1.5}
-.comment-time{font-size:11px;color:var(--ink3);margin-top:4px}
 .comment-input{display:flex;gap:8px;padding:12px 0}
 .comment-input input{flex:1;background:#f5f5f7;border-radius:20px;padding:10px 16px;font-size:13px}
 .comment-input button{background:var(--ink);color:#fff;padding:0 18px;border-radius:20px;font-size:13px;font-weight:600}
@@ -262,6 +256,105 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .recommend-card .rc-close{font-size:20px;color:var(--ink3);cursor:pointer;padding:0 4px;line-height:1}
 @keyframes slideUp{from{opacity:1;transform:translateX(-50%) translateY(0)}to{opacity:0;transform:translateX(-50%) translateY(-20px)}}
 
+/* 城市选择器 */
+.city-selector{margin:0 16px 12px;padding:10px 16px;background:#fff;border-radius:14px;font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:transform .15s}
+.city-selector:active{transform:scale(.98)}
+.city-selector .city-arrow{color:var(--ink3);font-size:12px;margin-left:auto}
+.city-selector .city-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+
+/* 城市选择面板 */
+.city-panel-mask{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:none;opacity:0;transition:opacity .3s}
+.city-panel-mask.show{display:block;opacity:1}
+.city-panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:390px;max-width:100%;background:#fff;border-radius:24px 24px 0 0;z-index:501;transition:transform .35s cubic-bezier(.32,.72,0,1);max-height:70vh;display:flex;flex-direction:column}
+.city-panel.show{transform:translateX(-50%) translateY(0)}
+.city-panel-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px;border-bottom:1px solid #f0f0f2}
+.city-panel-title{font-size:16px;font-weight:800;color:var(--ink)}
+.city-panel-close{font-size:24px;color:var(--ink3);cursor:pointer;line-height:1;padding:0 4px}
+.city-panel-search{padding:12px 20px}
+.city-panel-search input{width:100%;padding:10px 14px;background:#f5f5f7;border-radius:12px;border:none;font-size:14px;outline:none}
+.city-panel-list{flex:1;overflow-y:auto;padding:0 20px 20px}
+.city-card{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;margin-bottom:8px;cursor:pointer;transition:background .15s;border:2px solid transparent}
+.city-card:active{background:#f5f5f7}
+.city-card.active{border-color:var(--blue);background:rgba(59,125,216,.06)}
+.city-card .cc-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800;flex-shrink:0}
+.city-card .cc-info{flex:1}
+.city-card .cc-name{font-size:15px;font-weight:700;color:var(--ink)}
+.city-card .cc-count{font-size:12px;color:var(--ink3);margin-top:2px}
+.city-card .cc-check{color:var(--blue);font-size:18px;opacity:0}
+.city-card.active .cc-check{opacity:1}
+
+/* 列表淡入动画 */
+.fade-in{animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* 歌单解锁样式 */
+.song-unlock-section{margin-top:20px;padding:0 16px}
+.song-unlock-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.song-unlock-title{font-size:16px;font-weight:800;color:var(--ink)}
+.song-unlock-progress{font-size:12px;color:var(--ink3);font-weight:600}
+.song-unlock-next-tip{font-size:11px;color:var(--purple);margin-bottom:12px;padding:8px 12px;background:rgba(155,126,222,.08);border-radius:10px}
+.album-group{margin-bottom:16px}
+.album-name{font-size:12px;font-weight:700;color:var(--ink3);margin-bottom:8px;padding-left:4px}
+.song-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.song-cell{aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:transform .15s;position:relative;overflow:hidden}
+.song-cell:active{transform:scale(.95)}
+.song-cell.locked{background:#f0f0f2;color:#bbb}
+.song-cell.unlocked{color:#fff;font-weight:600}
+.song-cell .sc-icon{font-size:20px}
+.song-cell .sc-name{font-size:10px;text-align:center;padding:0 4px;line-height:1.2}
+.song-cell.locked .sc-name{filter:blur(3px)}
+.song-cell .sc-tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;font-size:10px;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;margin-bottom:6px;z-index:10}
+.song-cell.locked:active .sc-tooltip{opacity:1}
+
+/* 解锁动画 */
+.unlock-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;display:none;align-items:center;justify-content:center;flex-direction:column}
+.unlock-overlay.show{display:flex}
+.unlock-particles{position:relative;width:200px;height:200px;margin-bottom:30px}
+.unlock-particle{position:absolute;width:12px;height:12px;border-radius:50%;top:50%;left:50%;opacity:0}
+.unlock-song-name{color:#fff;font-size:28px;font-weight:800;margin-bottom:8px;animation:unlockFloat .6s cubic-bezier(.32,.72,0,1)}
+.unlock-sub{color:rgba(255,255,255,.7);font-size:14px;margin-bottom:24px}
+.unlock-btn{padding:12px 32px;background:#fff;color:var(--ink);border-radius:24px;font-size:14px;font-weight:700;border:none;cursor:pointer}
+@keyframes unlockFloat{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes particleBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(0)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(1)}}
+
+/* 角落详情增强 */
+.detail-info-card{margin:0 16px 14px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.detail-info-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);padding:6px 0;border-bottom:1px solid #f5f5f7}
+.detail-info-row:last-child{border-bottom:none}
+.detail-info-row svg{width:16px;height:16px;color:var(--ink3);flex-shrink:0}
+.detail-info-row a{color:var(--blue);text-decoration:none}
+.detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.detail-tag{font-size:11px;color:var(--purple);background:rgba(155,126,222,.1);padding:3px 10px;border-radius:10px}
+.detail-description{margin:0 16px 14px;font-size:13px;line-height:1.7;color:var(--ink2);padding:0 4px}
+.detail-tips{margin:0 16px 14px;padding:12px 16px;background:rgba(255,210,63,.12);border-radius:12px;font-size:12px;color:#8a6d00;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.detail-tips-icon{font-size:16px;flex-shrink:0}
+.detail-actions-row{display:flex;gap:8px;padding:0 16px;margin-bottom:14px}
+.detail-action-btn{flex:1;padding:12px 0;border-radius:14px;font-size:13px;font-weight:600;text-align:center;cursor:pointer;border:none;transition:transform .15s}
+.detail-action-btn:active{transform:scale(.96)}
+.detail-action-btn.primary{background:var(--grad5);color:#fff}
+.detail-action-btn.secondary{background:#fff;color:var(--ink);border:1.5px solid #e5e5ea}
+.detail-action-btn svg{width:16px;height:16px;vertical-align:-3px;margin-right:4px}
+
+/* 评论增强 */
+.comment-item{padding:12px 0;border-bottom:1px solid #f5f5f7}
+.comment-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.comment-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.comment-user{font-size:12px;font-weight:700;color:var(--ink)}
+.comment-time{font-size:10px;color:var(--ink3);margin-left:auto}
+.comment-text{font-size:13px;color:var(--ink2);line-height:1.5;padding-left:36px}
+.comment-actions{display:flex;gap:16px;padding-left:36px;margin-top:6px}
+.comment-action{font-size:11px;color:var(--ink3);cursor:pointer;display:flex;align-items:center;gap:4px}
+.comment-action.liked{color:var(--pink)}
+.comment-action svg{width:14px;height:14px}
+.comment-replies{margin-left:36px;margin-top:8px;padding-left:12px;border-left:2px solid #f0f0f2}
+.reply-item{padding:6px 0;font-size:12px;color:var(--ink2)}
+.reply-item .reply-user{font-weight:700;color:var(--ink);font-size:11px}
+.reply-item .reply-actions{display:flex;gap:12px;margin-top:3px}
+.reply-input-box{margin-left:36px;margin-top:8px;display:none;gap:8px}
+.reply-input-box.show{display:flex}
+.reply-input-box input{flex:1;background:#f5f5f7;border-radius:16px;padding:8px 14px;font-size:12px;border:none;outline:none}
+.reply-input-box button{background:var(--ink);color:#fff;border-radius:16px;padding:0 14px;font-size:12px;font-weight:600;border:none;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -274,8 +367,9 @@ input,textarea{font-family:inherit;outline:none;border:none}
 <div class="page active" id="page-discover"><div class="scroll">
 <div class="hero"><img class="hero-img" src="https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?w=800&q=80" alt=""><div class="hero-overlay"><div class="hero-balls"><i style="background:var(--blue)"></i><i style="background:var(--green)"></i><i style="background:var(--yellow)"></i><i style="background:var(--pink)"></i><i style="background:var(--purple)"></i></div><span class="hero-label">2026 最新 · 真实五迷角落</span><div class="hero-headline">鸟巢 55 场<br>毕业快乐</div><div class="hero-lyric">从无名高地到鸟巢的 10 年，谢谢你们对五月天的疼爱</div><div class="hero-meta"><span>12 个角落</span><span>·</span><span>4 座城市</span><span>·</span><span>持续更新</span></div></div></div>
 <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="searchInput" placeholder="搜歌词情绪：温柔 / 倔强 / 同款…"><span id="searchClear" style="display:none;color:#bbb;font-size:18px;padding:0 4px">×</span></div>
+<div class="city-selector" id="citySelector" onclick="openCityPanel()">🏙️ 当前城市：<span id="currentCityName">北京</span> <span class="city-arrow">▾</span></div>
 <div class="tag-row" id="tagRow"></div>
-<div class="map-wrap"><div class="map-title">五迷角落地图 · 北京</div><svg class="map-svg" viewBox="0 0 350 220"><rect width="350" height="220" fill="#eef2f7"/><path d="M0 60 Q80 40 160 70 T350 50" stroke="#d8e0ea" stroke-width="20" fill="none"/><path d="M0 140 Q100 120 200 145 T350 130" stroke="#d8e0ea" stroke-width="16" fill="none"/><circle cx="175" cy="110" r="50" fill="#e4ecf5"/><g id="mapPins"></g></svg></div>
+<div class="map-wrap"><div class="map-title" id="mapTitle">五迷角落地图 · 北京</div><svg class="map-svg" viewBox="0 0 350 220"><rect width="350" height="220" fill="#eef2f7"/><path d="M0 60 Q80 40 160 70 T350 50" stroke="#d8e0ea" stroke-width="20" fill="none"/><path d="M0 140 Q100 120 200 145 T350 130" stroke="#d8e0ea" stroke-width="16" fill="none"/><circle cx="175" cy="110" r="50" fill="#e4ecf5"/><g id="mapPins"></g></svg></div>
 <div class="section-title">歌词角落 <span class="more" id="cornerCount">12 个真实打卡点</span></div>
 <div id="cornerList"></div><div style="height:20px"></div>
 </div>
@@ -284,9 +378,17 @@ input,textarea{font-family:inherit;outline:none;border:none}
 
 <div class="page" id="page-corner"><div class="scroll" id="cornerScroll">
 <div class="detail-hero"><img id="detailImg" src="" alt=""><div class="back-btn abs-back" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div class="grad"></div><div class="detail-lyric-box"><div class="lyric" id="detailLyric"></div><div class="credit" id="detailCredit"></div></div></div>
-<div class="detail-body"><div class="detail-name" id="detailName"></div><div class="detail-addr" id="detailAddr"></div><div class="detail-recommend"><span class="label">五迷推荐</span><span id="detailRecommend"></span></div>
+<div class="detail-body"><div class="detail-name" id="detailName"></div><div class="detail-addr" id="detailAddr"></div>
+<div class="detail-description" id="detailDescription"></div>
+<div class="detail-info-card" id="detailInfoCard"></div>
+<div class="detail-recommend"><span class="label">五迷推荐</span><span id="detailRecommend"></span></div>
+<div class="detail-tips" id="detailTips" style="display:none"></div>
 <div class="passcode-block"><div class="pc-label">💬 五迷暗号 · 对暗号享隐藏权益</div><div class="pc-code" id="detailPasscode"></div><div class="pc-hint">到店出示暗号，可获限定周边 / 饮品升级 / 专属合影</div><button class="pc-btn" onclick="openPasscodeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> 我要对暗号</button></div>
-<div class="action-row"><button class="action-btn primary" onclick="goCheckin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> 我要打卡</button><button class="action-btn secondary" onclick="shareCorner()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> 分享角落</button></div>
+<div class="detail-actions-row">
+  <button class="detail-action-btn secondary" onclick="openBigMap()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> 大地图</button>
+  <button class="detail-action-btn secondary" onclick="navigateToCorner()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg> 导航</button>
+  <button class="detail-action-btn primary" onclick="goCheckin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> 打卡</button>
+</div>
 <div class="comments"><div class="section-title" style="padding-left:0">五迷留言 <span class="more" id="commentCount">0</span></div><div id="commentList"></div><div class="comment-input"><input id="commentInput" placeholder="留下你的五迷心声…"><button onclick="sendComment()">发送</button></div></div>
 </div></div></div>
 
@@ -332,6 +434,11 @@ input,textarea{font-family:inherit;outline:none;border:none}
 <div class="profile-header"><div class="profile-avatar">五</div><div class="profile-name">五迷 · 同好</div><div class="profile-id">MaydayLand ID · 2026</div><div class="profile-stats"><div class="ps-item"><div class="ps-num" id="statFootprint">0</div><div class="ps-label">打卡足迹</div></div><div class="ps-item"><div class="ps-num" id="statBadge">0</div><div class="ps-label">五迷徽章</div></div><div class="ps-item"><div class="ps-num" id="statCity">0</div><div class="ps-label">覆盖城市</div></div><div class="ps-item"><div class="ps-num" id="statShare">0</div><div class="ps-label">分享次数</div></div></div></div>
 <div class="mine-section"><div class="ms-title">打卡足迹 <span class="ms-more">按时间倒序</span></div><div class="footprint-list" id="footprintList"></div></div>
 <div class="mine-section"><div class="ms-title">五迷徽章墙 <span class="ms-more">对暗号解锁</span></div><div class="badge-grid" id="badgeGrid"></div></div>
+<div class="song-unlock-section">
+  <div class="song-unlock-header"><div class="song-unlock-title">🎵 歌单解锁</div><div class="song-unlock-progress" id="songUnlockProgress">0 / 0</div></div>
+  <div class="song-unlock-next-tip" id="songUnlockNextTip"></div>
+  <div id="songUnlockGrid"></div>
+</div>
 <div class="mine-section"><div class="ms-title">我的推荐 <span class="ms-more">审核中 / 已通过</span></div><div class="footprint-list" id="submittedList"></div></div>
 <div style="height:20px"></div>
 </div></div>
@@ -344,9 +451,24 @@ input,textarea{font-family:inherit;outline:none;border:none}
 </div>
 </div></div>
 <div class="modal-mask" id="passcodeModal"><div class="modal" id="passcodeModalContent"></div></div>
+<div class="city-panel-mask" id="cityPanelMask" onclick="closeCityPanel()"></div>
+<div class="city-panel" id="cityPanel">
+  <div class="city-panel-header">
+    <span class="city-panel-title">选择城市</span>
+    <span class="city-panel-close" onclick="closeCityPanel()">×</span>
+  </div>
+  <div class="city-panel-search"><input id="citySearchInput" placeholder="搜索城市名…" oninput="filterCityPanel()"></div>
+  <div class="city-panel-list" id="cityPanelList"></div>
+</div>
 <div class="recommend-card" id="recommendCard"><div class="rc-avatar" id="rcAvatar">五</div><div class="rc-text"><strong class="rc-name">某位五迷</strong> 邀请你一起漫游 MaydayLand</div><div class="rc-close" onclick="closeRecommendCard()">×</div></div>
 <div class="guide-mask" id="guideMask"><div class="guide-card"><div class="guide-title">欢迎来到 MaydayLand</div><div class="guide-step"><span class="gs-num">1</span><div><strong>发现角落</strong><p>跟着五月天歌词，找到城市里的五迷据点</p></div></div><div class="guide-step"><span class="gs-num">2</span><div><strong>打卡生成卡片</strong><p>上传现场照片，合成专属歌词打卡卡片</p></div></div><div class="guide-step"><span class="gs-num">3</span><div><strong>对暗号领徽章</strong><p>到店出示暗号二维码，解锁主题歌徽章</p></div></div><button class="guide-btn" onclick="closeGuide()">开始漫游</button></div></div>
 <div id="toast"></div>
+<div class="unlock-overlay" id="unlockOverlay">
+  <div class="unlock-particles" id="unlockParticles"></div>
+  <div class="unlock-song-name" id="unlockSongName"></div>
+  <div class="unlock-sub" id="unlockSub">🎉 已解锁</div>
+  <button class="unlock-btn" onclick="closeUnlockOverlay()">太棒了</button>
+</div>
 <script src="app.js"></script>
 </body>
 </html>

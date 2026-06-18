@@ -19,18 +19,18 @@ function img(id){ return IMG[id] || 'https://images.unsplash.com/photo-149644222
 
 /* ---- 种子数据：12 个真实五迷角落（2026 最新） ---- */
 var corners = [
-  {id:'corner_001',name:'明园餐厅',city:'北京',address:'东城区北总布胡同 21 号',categoryLabel:'五迷同款',imageId:431,lyric:'一碗炸酱面 吃出了整个老北京',song:'任意门',lyricCredit:'玛莎 2026 鸟巢演唱会期间同款',passcode:'玛莎同款',recommend:'演唱会期间排队超 100 号，炸酱面、焦熘丸子必点',likes:315,notes:67,distanceText:'距鸟巢 4.2km',moodTags:['同款','地道','烟火气'],lat:39.9042,lng:116.4074},
-  {id:'corner_002',name:'北外滩歌词地贴步道',city:'上海',address:'北外滩滨江绿地',categoryLabel:'打卡地',imageId:1080,lyric:'外滩风光 跃出课本 是那么新鲜',song:'任意门',lyricCredit:'2025 上海 MAYDAYLAND 官方打卡点',passcode:'任意门',recommend:'五公仔人偶 + 歌词地贴，背景是浦东陆家嘴',likes:186,notes:28,distanceText:'距上海体育场 5.1km',moodTags:['地标','浪漫','夜景'],lat:31.2450,lng:121.4900},
-  {id:'corner_003',name:'西单更新场 STAYREAL PARK',city:'北京',address:'西城区西单北大街 180 号',categoryLabel:'快闪店',imageId:250,lyric:'给我抱抱 把爱传出去',song:'拥抱',lyricCredit:'STAYREAL PARK 4.0 拥抱公园主题',passcode:'给我抱抱',recommend:'7.4 米纯真兔、6 米胡萝卜、京味漫游限定周边',likes:238,notes:42,distanceText:'距鸟巢 9.8km',moodTags:['治愈','潮玩','限定'],lat:39.9090,lng:116.3730},
-  {id:'corner_004',name:'水立方 MOJO EXPO',city:'北京',address:'朝阳区天辰东路 11 号',categoryLabel:'展览',imageId:292,lyric:'真正的人生梦想 在你的手上',song:'倔强',lyricCredit:'2026 鸟巢演唱会期间限定装置',passcode:'梦想卜览',recommend:'33 米巨型胡萝卜麦克风，吉尼斯世界纪录认证',likes:421,notes:89,distanceText:'距鸟巢 0.5km',moodTags:['梦想','震撼','打卡'],lat:39.9930,lng:116.3970},
-  {id:'corner_005',name:'THE BOX 朝外 MAYDAYLAND',city:'北京',address:'朝阳区朝阳门外大街 10 号 B 馆 L3',categoryLabel:'特展',imageId:1015,lyric:'从无名高地到鸟巢的 10 年',song:'任意门',lyricCredit:'2026 北京限定特展官方文案',passcode:'回到那一天',recommend:'4/25-5/19 限定展，需凭演唱会门票预约',likes:567,notes:134,distanceText:'距鸟巢 8.6km',moodTags:['展览','限定','回忆'],lat:39.9230,lng:116.4480},
-  {id:'corner_006',name:'东方明珠 MAYDAYLAND',city:'上海',address:'浦东新区世纪大道 1 号',categoryLabel:'打卡地',imageId:119,lyric:'因为你 所以我 爱上那片天空',song:'因为你 所以我',lyricCredit:'2025 上海站「MAYDAYLAND 东方明珠指挥总部」',passcode:'因为你所以五',recommend:'5.025 米 SUPER MAYDAY MAX 乐高机甲 + 喵星人装置',likes:198,notes:31,distanceText:'距上海体育场 6.3km',moodTags:['地标','科技感','合影'],lat:31.2397,lng:121.4998},
-  {id:'corner_007',name:'长沙 IFS 卜卜花园',city:'长沙',address:'芙蓉区解放西路 188 号',categoryLabel:'首展',imageId:326,lyric:'绽放星城 一起拥抱',song:'拥抱',lyricCredit:'MOJO IN BLOOM 全国首展 2026.05.23',passcode:'MOJO IN BLOOM',recommend:'11 米长沙限定卜卜全球首展，三大沉浸式展区',likes:287,notes:56,distanceText:'市中心',moodTags:['首展','卜卜','治愈'],lat:28.1970,lng:112.9750},
-  {id:'corner_008',name:'钟鼓楼广场 怪兽公仔',city:'北京',address:'东城区钟鼓楼广场',categoryLabel:'公仔点',imageId:1018,lyric:'我和我最后的倔强 握紧双手绝对不放',song:'倔强',lyricCredit:'北京旅游集散中心「五迷专属打卡巴士」首站',passcode:'倔强',recommend:'官方打卡观光巴士起点，串联五大成员公仔点位',likes:142,notes:19,distanceText:'距鸟巢 7.5km',moodTags:['倔强','城市漫游','官方'],lat:39.9410,lng:116.3970},
-  {id:'corner_009',name:'首钢园 石头公仔',city:'北京',address:'石景山区石景山路 68 号',categoryLabel:'公仔点',imageId:1036,lyric:'然后呢 一起走吧',song:'后青春期的诗',lyricCredit:'首钢园沉淀池广场限定装置',passcode:'一起走吧',recommend:'工业风背景 + 石头公仔，日落时分最出片',likes:632,notes:156,distanceText:'距鸟巢 12km',moodTags:['工业风','日落','出片'],lat:39.9250,lng:116.1750},
-  {id:'corner_010',name:'朝阳公园五色大球',city:'北京',address:'朝阳区朝阳公园南路 1 号',categoryLabel:'应援点',imageId:1044,lyric:'天空和我的中间 只剩倾盆的思念',song:'步步',lyricCredit:'2026 鸟巢演唱会期间五大球巨型气膜回归',passcode:'五月天',recommend:'五大球巨型气膜 + 好运桥《星空》光影秀',likes:389,notes:78,distanceText:'距鸟巢 6.8km',moodTags:['应援','夜景','五大球'],lat:39.9430,lng:116.4780},
-  {id:'corner_011',name:'居庸关长城 阿信公仔',city:'北京',address:'昌平区居庸关长城',categoryLabel:'公仔点',imageId:1082,lyric:'不到长城非好汉',song:'离开地球表面',lyricCredit:'北京旅游集散中心官方打卡巴士线路三',passcode:'离开地球表面',recommend:'官方「痛车」巴士可达，长城 + 阿信公仔同框',likes:478,notes:92,distanceText:'距鸟巢 45km',moodTags:['长城','官方','壮观'],lat:40.2910,lng:116.0710},
-  {id:'corner_012',name:'阿信同款烧饼店',city:'北京',address:'东城区某胡同（凭暗号解锁地址）',categoryLabel:'五迷同款',imageId:580,lyric:'就算失望 不能绝望',song:'倔强',lyricCredit:'阿信早年社交平台分享的老北京烧饼',passcode:'不能绝望',recommend:'阿信随手分享后成为五迷隐藏打卡点，价格实惠馅扎实',likes:92,notes:11,distanceText:'距鸟巢 6.5km',moodTags:['同款','隐藏','烟火气'],lat:39.8900,lng:116.4300}
+  {id:'corner_001',name:'明园餐厅',city:'北京',address:'东城区北总布胡同 21 号',categoryLabel:'五迷同款',imageId:431,lyric:'一碗炸酱面 吃出了整个老北京',song:'任意门',lyricCredit:'玛莎 2026 鸟巢演唱会期间同款',passcode:'玛莎同款',recommend:'演唱会期间排队超 100 号，炸酱面、焦熘丸子必点',likes:315,notes:67,distanceText:'距鸟巢 4.2km',moodTags:['同款','地道','烟火气'],lat:39.9042,lng:116.4074,description:'藏在北总布胡同里的老北京家常菜馆，玛莎鸟巢演唱会期间被五迷发现并疯狂打卡。老板是地道北京人，炸酱面配方传了三代，焦熘丸子外酥里嫩。墙上贴满了五迷留下的合影和便利贴，是演唱会前后"续场"的热门据点。',openingHours:'11:00-21:00',phone:'010-6523XXXX',tags:['复古','胡同','烟火气','五迷同款'],tips:'演唱会期间建议提前 1 小时到店，对暗号"玛莎同款"可获赠酸梅汤一杯'},
+  {id:'corner_002',name:'北外滩歌词地贴步道',city:'上海',address:'北外滩滨江绿地',categoryLabel:'打卡地',imageId:1080,lyric:'外滩风光 跃出课本 是那么新鲜',song:'任意门',lyricCredit:'2025 上海 MAYDAYLAND 官方打卡点',passcode:'任意门',recommend:'五公仔人偶 + 歌词地贴，背景是浦东陆家嘴',likes:186,notes:28,distanceText:'距上海体育场 5.1km',moodTags:['地标','浪漫','夜景'],lat:31.2450,lng:121.4900,description:'2025 上海站 MAYDAYLAND 官方设置的歌词地贴步道，沿北外滩滨江延伸 500 米，每一步都踩着五月天的金句。五公仔人偶错落分布，背景是浦东陆家嘴天际线，日落与夜景皆可出片。',openingHours:'全天开放',phone:'无',tags:['地标','浪漫','夜景','官方'],tips:'日落前 1 小时最佳光线，周末人较多建议工作日前往'},
+  {id:'corner_003',name:'西单更新场 STAYREAL PARK',city:'北京',address:'西城区西单北大街 180 号',categoryLabel:'快闪店',imageId:250,lyric:'给我抱抱 把爱传出去',song:'拥抱',lyricCredit:'STAYREAL PARK 4.0 拥抱公园主题',passcode:'给我抱抱',recommend:'7.4 米纯真兔、6 米胡萝卜、京味漫游限定周边',likes:238,notes:42,distanceText:'距鸟巢 9.8km',moodTags:['治愈','潮玩','限定'],lat:39.9090,lng:116.3730,description:'STAYREAL PARK 4.0「拥抱公园」主题快闪，7.4 米纯真兔坐镇中庭，6 米胡萝卜装置可互动。京味漫游限定周边仅此一站有售，包括胡同元素卜卜 Tee、京剧脸谱公仔等。',openingHours:'10:00-22:00',phone:'010-6655XXXX',tags:['潮玩','限定','治愈','快闪'],tips:'限定周边库存有限，建议开馆即入手；对暗号享 9 折'},
+  {id:'corner_004',name:'水立方 MOJO EXPO',city:'北京',address:'朝阳区天辰东路 11 号',categoryLabel:'展览',imageId:292,lyric:'真正的人生梦想 在你的手上',song:'倔强',lyricCredit:'2026 鸟巢演唱会期间限定装置',passcode:'梦想卜览',recommend:'33 米巨型胡萝卜麦克风，吉尼斯世界纪录认证',likes:421,notes:89,distanceText:'距鸟巢 0.5km',moodTags:['梦想','震撼','打卡'],lat:39.9930,lng:116.3970,description:'鸟巢演唱会期间限定开放的 MOJO EXPO，33 米巨型胡萝卜麦克风获吉尼斯世界纪录认证。馆内设五大沉浸式展区，从「无名高地」到「鸟巢 55 场」完整回顾五月天 25 年历程，出口处可盖限定纪念章。',openingHours:'09:00-21:00',phone:'010-8437XXXX',tags:['展览','震撼','限定','吉尼斯'],tips:'凭演唱会门票可免预约入场，出口纪念章仅限当日盖'},
+  {id:'corner_005',name:'THE BOX 朝外 MAYDAYLAND',city:'北京',address:'朝阳区朝阳门外大街 10 号 B 馆 L3',categoryLabel:'特展',imageId:1015,lyric:'从无名高地到鸟巢的 10 年',song:'任意门',lyricCredit:'2026 北京限定特展官方文案',passcode:'回到那一天',recommend:'4/25-5/19 限定展，需凭演唱会门票预约',likes:567,notes:134,distanceText:'距鸟巢 8.6km',moodTags:['展览','限定','回忆'],lat:39.9230,lng:116.4480,description:'2026 北京限定特展，4/25-5/19 仅 25 天。以「从无名高地到鸟巢的 10 年」为主线，展出历年演唱会舞台模型、阿信手稿复刻、五人乐器 1:1 还原。需凭演唱会门票预约，每日限流 800 人。',openingHours:'10:00-22:00',phone:'010-8562XXXX',tags:['展览','限定','回忆','预约'],tips:'必须提前在 MaydayLand 小程序预约，每日 800 人满即止'},
+  {id:'corner_006',name:'东方明珠 MAYDAYLAND',city:'上海',address:'浦东新区世纪大道 1 号',categoryLabel:'打卡地',imageId:119,lyric:'因为你 所以我 爱上那片天空',song:'因为你 所以我',lyricCredit:'2025 上海站「MAYDAYLAND 东方明珠指挥总部」',passcode:'因为你所以五',recommend:'5.025 米 SUPER MAYDAY MAX 乐高机甲 + 喵星人装置',likes:198,notes:31,distanceText:'距上海体育场 6.3km',moodTags:['地标','科技感','合影'],lat:31.2397,lng:121.4998,description:'2025 上海站「MAYDAYLAND 东方明珠指挥总部」遗址，5.025 米 SUPER MAYDAY MAX 乐高机甲永久保留。喵星人装置与东方明珠塔同框，是上海五迷的"朝圣点"。塔下广场设有歌词投影，每晚 19:00/20:00 各一场。',openingHours:'全天开放（投影 19:00/20:00）',phone:'021-5879XXXX',tags:['地标','科技感','合影','夜景'],tips:'乐高机甲夜间有灯光秀，投影时段提前 15 分钟到场占位'},
+  {id:'corner_007',name:'长沙 IFS 卜卜花园',city:'长沙',address:'芙蓉区解放西路 188 号',categoryLabel:'首展',imageId:326,lyric:'绽放星城 一起拥抱',song:'拥抱',lyricCredit:'MOJO IN BLOOM 全国首展 2026.05.23',passcode:'MOJO IN BLOOM',recommend:'11 米长沙限定卜卜全球首展，三大沉浸式展区',likes:287,notes:56,distanceText:'市中心',moodTags:['首展','卜卜','治愈'],lat:28.1970,lng:112.9750,description:'STAYREAL MOJO IN BLOOM 全国首展，11 米长沙限定卜卜全球首次亮相。三大沉浸式展区：花海迷宫、卜卜咖啡馆、限定周边店。长沙限定口味「臭豆腐卜卜」周边仅此有售。',openingHours:'10:00-22:00',phone:'0731-8488XXXX',tags:['首展','卜卜','治愈','限定'],tips:'工作日 14:00 后人少，臭豆腐卜卜周边每日限量 50 个'},
+  {id:'corner_008',name:'钟鼓楼广场 怪兽公仔',city:'北京',address:'东城区钟鼓楼广场',categoryLabel:'公仔点',imageId:1018,lyric:'我和我最后的倔强 握紧双手绝对不放',song:'倔强',lyricCredit:'北京旅游集散中心「五迷专属打卡巴士」首站',passcode:'倔强',recommend:'官方打卡观光巴士起点，串联五大成员公仔点位',likes:142,notes:19,distanceText:'距鸟巢 7.5km',moodTags:['倔强','城市漫游','官方'],lat:39.9410,lng:116.3970,description:'北京旅游集散中心推出的「五迷专属打卡巴士」首站，怪兽公仔坐镇钟鼓楼广场。巴士串联五大成员公仔点位（钟鼓楼/首钢园/朝阳公园/居庸关/鸟巢），全程约 4 小时，含讲解。',openingHours:'巴士 09:00/13:00 两班',phone:'010-8401XXXX',tags:['倔强','城市漫游','官方','巴士'],tips:'巴士需提前 1 天预约，凭 MaydayLand 打卡记录享 8 折'},
+  {id:'corner_009',name:'首钢园 石头公仔',city:'北京',address:'石景山区石景山路 68 号',categoryLabel:'公仔点',imageId:1036,lyric:'然后呢 一起走吧',song:'后青春期的诗',lyricCredit:'首钢园沉淀池广场限定装置',passcode:'一起走吧',recommend:'工业风背景 + 石头公仔，日落时分最出片',likes:632,notes:156,distanceText:'距鸟巢 12km',moodTags:['工业风','日落','出片'],lat:39.9250,lng:116.1750,description:'首钢园沉淀池广场的石头公仔，背靠工业遗迹高炉，硬核工业风与治愈公仔形成强烈反差。日落时分金色光线打在高炉上，是北京五迷公认的"最出片"打卡点。园区免费开放，可骑行游览。',openingHours:'全天开放',phone:'010-8829XXXX',tags:['工业风','日落','出片','免费'],tips:'日落前 40 分钟到达最佳，园区内可租共享单车'},
+  {id:'corner_010',name:'朝阳公园五色大球',city:'北京',address:'朝阳区朝阳公园南路 1 号',categoryLabel:'应援点',imageId:1044,lyric:'天空和我的中间 只剩倾盆的思念',song:'步步',lyricCredit:'2026 鸟巢演唱会期间五大球巨型气膜回归',passcode:'五月天',recommend:'五大球巨型气膜 + 好运桥《星空》光影秀',likes:389,notes:78,distanceText:'距鸟巢 6.8km',moodTags:['应援','夜景','五大球'],lat:39.9430,lng:116.4780,description:'2026 鸟巢演唱会期间回归的五大球巨型气膜，蓝粉黄绿紫五色对应五位成员。夜晚 19:00-22:00 灯光秀，配合好运桥《星空》光影步道，是演唱会前后最热闹的五迷聚集地。',openingHours:'气膜 09:00-22:00',phone:'010-6595XXXX',tags:['应援','夜景','五大球','光影'],tips:'灯光秀整点开始，好运桥步道限流建议 18:30 排队'},
+  {id:'corner_011',name:'居庸关长城 阿信公仔',city:'北京',address:'昌平区居庸关长城',categoryLabel:'公仔点',imageId:1082,lyric:'不到长城非好汉',song:'离开地球表面',lyricCredit:'北京旅游集散中心官方打卡巴士线路三',passcode:'离开地球表面',recommend:'官方「痛车」巴士可达，长城 + 阿信公仔同框',likes:478,notes:92,distanceText:'距鸟巢 45km',moodTags:['长城','官方','壮观'],lat:40.2910,lng:116.0710,description:'北京旅游集散中心官方打卡巴士线路三终点，阿信公仔立于居庸关长城烽火台。官方「痛车」巴士车身印满五月天元素，从鸟巢出发约 1.5 小时。长城 + 阿信同框，是"不到长城非好汉"的五迷版诠释。',openingHours:'巴士 08:00 单班',phone:'010-8401XXXX',tags:['长城','官方','壮观','痛车'],tips:'巴士仅 08:00 一班，返程 15:00，需带身份证购票'},
+  {id:'corner_012',name:'阿信同款烧饼店',city:'北京',address:'东城区某胡同（凭暗号解锁地址）',categoryLabel:'五迷同款',imageId:580,lyric:'就算失望 不能绝望',song:'倔强',lyricCredit:'阿信早年社交平台分享的老北京烧饼',passcode:'不能绝望',recommend:'阿信随手分享后成为五迷隐藏打卡点，价格实惠馅扎实',likes:92,notes:11,distanceText:'距鸟巢 6.5km',moodTags:['同款','隐藏','烟火气'],lat:39.8900,lng:116.4300,description:'阿信早年社交平台随手分享的老北京烧饼店，被五迷考古后成为隐藏打卡点。地址需对暗号"不能绝望"才告知，保护店家日常生意。烧饼 5 元一个，馅料扎实，是"就算失望不能绝望"的烟火气注脚。',openingHours:'06:00-11:00（售完即止）',phone:'凭暗号解锁',tags:['同款','隐藏','烟火气','平价'],tips:'营业时间极短，建议早 7 点前到，对暗号后老板会画地图'}
 ];
 
 var concerts = [
@@ -61,8 +61,40 @@ var allBadges = [
   {song:'离开地球表面',icon:'🚀',color:'#FF6B9D'}
 ];
 
+/* ---- 种子评论（v1.1 评论增强） ---- */
+var seedComments=[
+  {id:'seed_cmt_001',cornerId:'corner_001',user:'倔强的番茄',text:'拿铁拉花超美！老板说玛莎来的时候也是点这杯',time:'2026-06-18 14:32',likes:12,replies:[{id:'seed_rpl_001',user:'明园老板',text:'谢谢支持～玛莎同款随时欢迎',time:'2026-06-18 15:10',likes:3}]},
+  {id:'seed_cmt_002',cornerId:'corner_001',user:'温柔的歌',text:'演唱会前 1 小时来的，刚好不用排队，炸酱面绝了',time:'2026-06-17 18:20',likes:8,replies:[]},
+  {id:'seed_cmt_003',cornerId:'corner_002',user:'星空下的我们',text:'外滩夜景 + 歌词地贴 = 完美出片，建议日落前来',time:'2026-06-16 19:05',likes:15,replies:[{id:'seed_rpl_002',user:'任意门守门人',text:'确实！19 点的光线最棒',time:'2026-06-16 20:30',likes:2}]},
+  {id:'seed_cmt_004',cornerId:'corner_003',user:'卜卜爱好者',text:'7.4 米纯真兔太治愈了！限定 Tee 已入手',time:'2026-06-15 16:00',likes:21,replies:[]},
+  {id:'seed_cmt_005',cornerId:'corner_004',user:'梦想卜览员',text:'33 米胡萝卜麦克风震撼！吉尼斯认证实至名归',time:'2026-06-14 11:30',likes:34,replies:[]},
+  {id:'seed_cmt_006',cornerId:'corner_009',user:'工业风五迷',text:'首钢园日落 + 石头公仔 = 北京最出片打卡点，没有之一',time:'2026-06-13 18:45',likes:42,replies:[{id:'seed_rpl_003',user:'石头本石',text:'哈哈谢谢认可，下次一起走起',time:'2026-06-13 22:00',likes:5}]}
+];
+
 /* ---- 全局状态 ---- */
-var state = { tab:'discover', currentCorner:null, currentConcert:null, activeTag:'全部', keyword:'', checkinTpl:'polaroid', checkinPhoto:null, stack:['discover'], countdownTimer:null, checkinDistance:null, checkinMode:'strict' };
+var state = { tab:'discover', currentCorner:null, currentConcert:null, activeTag:'全部', keyword:'', checkinTpl:'polaroid', checkinPhoto:null, stack:['discover'], countdownTimer:null, checkinDistance:null, checkinMode:'strict', currentCity:'北京', replyTo:null };
+
+/* ---- 城市配置 ---- */
+var cityConfig=[
+  {name:'北京',color:'#FFD23F',emoji:'🏛️'},
+  {name:'上海',color:'#3B7DD8',emoji:'🌃'},
+  {name:'台北',color:'#FF6B9D',emoji:'🗼'},
+  {name:'广州',color:'#4ECDC4',emoji:'🌸'},
+  {name:'成都',color:'#9B7EDE',emoji:'🐼'}
+];
+
+/* ---- 歌单解锁配置（24 首精选，按专辑分组） ---- */
+var songUnlockConfig=[
+  {album:'第一张创作专辑',songs:[{name:'志明与春娇',color:'#3B7DD8'},{name:'轧车',color:'#4ECDC4'}]},
+  {album:'爱情万岁',songs:[{name:'爱情万岁',color:'#FF6B9D'}]},
+  {album:'人生海海',songs:[{name:'人生海海',color:'#9B7EDE',unlock:{action:'cities',value:5}},{name:'温柔',color:'#FF6B9D',unlock:{action:'commentLiked',value:10}}]},
+  {album:'时光机',songs:[{name:'倔强',color:'#FFD23F',unlock:{action:'passcode',value:1}},{name:'知足',color:'#4ECDC4',unlock:{action:'share',value:1}},{name:'垃圾车',color:'#3B7DD8'}]},
+  {album:'神的孩子都在跳舞',songs:[{name:'恋爱ing',color:'#FF6B9D'},{name:'离开地球表面',color:'#9B7EDE',unlock:{action:'citySwitch',value:3}}]},
+  {album:'为爱而生',songs:[{name:'突然好想你',color:'#FFD23F',unlock:{action:'looseCheckin',value:1}},{name:'小太阳',color:'#4ECDC4'}]},
+  {album:'后青春期的诗',songs:[{name:'你不是真正的快乐',color:'#3B7DD8'},{name:'生存以上 生活以下',color:'#FF6B9D'}]},
+  {album:'第二人生',songs:[{name:'干杯',color:'#FFD23F',unlock:{action:'checkin',value:5}},{name:'诺亚方舟',color:'#9B7EDE'},{name:'星空',color:'#3B7DD8'}]},
+  {album:'自传',songs:[{name:'任意门',color:'#4ECDC4',unlock:{action:'firstCheckin',value:1}},{name:'成名在望',color:'#FF6B9D'},{name:'后来的我们',color:'#9B7EDE'},{name:'派对动物',color:'#FFD23F'},{name:'如果我们不曾相遇',color:'#3B7DD8'}]}
+];
 
 /* ---- 本地存储 ---- */
 var ls = {
@@ -115,7 +147,7 @@ function renderTags(){
   }).join('');
 }
 function renderCornerList(){
-  var list=corners;
+  var list=corners.filter(function(c){ return c.city===state.currentCity; });
   if(state.activeTag!=='全部') list=list.filter(function(c){ return c.moodTags.indexOf(state.activeTag)>=0; });
   if(state.keyword){
     var kw=state.keyword;
@@ -125,8 +157,9 @@ function renderCornerList(){
   var el=document.getElementById('cornerList');
   if(!list.length){ el.innerHTML='<div class="empty">'+
     '<div style="font-size:48px;margin-bottom:12px">🔍</div>'+
-    '<div>没找到匹配角落，换个关键词试试～</div>'+
+    '<div>当前城市暂无匹配角落，切换城市或换个关键词试试～</div>'+
     '<button class="empty-cta" onclick="recommendCorner()">让 MaydayLand 推荐一个</button></div>'; return; }
+  el.className='fade-in';
   el.innerHTML=list.map(function(c){
     return '<div class="corner-card" onclick="navigate(\'corner\',\''+c.id+'\')">'+
       '<div class="corner-img-wrap"><img src="'+img(c.imageId)+'" alt="'+c.name+'" loading="lazy">'+
@@ -138,6 +171,7 @@ function renderCornerList(){
       '<div class="corner-stats"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 6.5 5c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3C21 5 23 9 21.5 12 19 16.5 12 21 12 21z"/></svg>'+c.likes+'</span>'+
       '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>'+c.notes+'</span></div></div></div>';
   }).join('');
+  setTimeout(function(){ el.classList.remove('fade-in'); }, 220);
 }
 function filterTag(k){ state.activeTag=k; renderTags(); renderCornerList(); }
 
@@ -162,10 +196,11 @@ document.getElementById('searchClear').addEventListener('click',function(){
 
 /* ---- 地图标记 ---- */
 function renderMapPins(){
-  var bc=corners.filter(function(c){ return c.city==='北京'; });
+  var cc=corners.filter(function(c){ return c.city===state.currentCity; });
+  document.getElementById('mapTitle').textContent='五迷角落地图 · '+state.currentCity;
   var pos=[[80,60],[120,90],[160,70],[200,110],[240,80],[280,120],[100,150],[220,160],[300,90],[150,180]];
   var colors=['#3B7DD8','#FF6B9D','#FFD23F','#4ECDC4','#9B7EDE'];
-  document.getElementById('mapPins').innerHTML=bc.slice(0,10).map(function(c,i){
+  document.getElementById('mapPins').innerHTML=cc.slice(0,10).map(function(c,i){
     return '<g class="map-pin" onclick="navigate(\'corner\',\''+c.id+'\')">'+
       '<circle cx="'+pos[i][0]+'" cy="'+pos[i][1]+'" r="7" fill="'+colors[i%5]+'" stroke="#fff" stroke-width="2"/>'+
       '<text x="'+pos[i][0]+'" y="'+(pos[i][1]+3)+'" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">'+(i+1)+'</text></g>';
@@ -182,22 +217,131 @@ function renderCorner(){
   document.getElementById('detailAddr').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>'+c.city+' · '+c.address+' · '+c.distanceText;
   document.getElementById('detailRecommend').textContent=c.recommend;
   document.getElementById('detailPasscode').textContent=c.passcode;
+  /* v1.1：增强字段 */
+  var descEl=document.getElementById('detailDescription');
+  if(c.description){ descEl.textContent=c.description; descEl.style.display='block'; } else { descEl.style.display='none'; }
+  var infoEl=document.getElementById('detailInfoCard');
+  var infoHtml='';
+  if(c.openingHours) infoHtml+='<div class="detail-info-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>营业时间：'+c.openingHours+'</div>';
+  if(c.phone && c.phone!=='无' && c.phone!=='凭暗号解锁') infoHtml+='<div class="detail-info-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><a href="tel:'+c.phone+'">'+c.phone+'</a></div>';
+  infoHtml+='<div class="detail-info-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>'+c.distanceText+'</div>';
+  if(c.tags && c.tags.length) infoHtml+='<div class="detail-tags">'+c.tags.map(function(t){ return '<span class="detail-tag">#'+t+'</span>'; }).join('')+'</div>';
+  infoEl.innerHTML=infoHtml;
+  var tipsEl=document.getElementById('detailTips');
+  if(c.tips){ tipsEl.innerHTML='<div class="detail-tips-icon">💡</div><div>'+c.tips+'</div>'; tipsEl.style.display='flex'; } else { tipsEl.style.display='none'; }
   renderComments();
+}
+
+/* ---- v1.1：角落详情增强 - 大地图 / 导航 ---- */
+function openBigMap(){
+  var c=state.currentCorner; if(!c) return;
+  var url='https://uri.amap.com/marker?position='+c.lng+','+c.lat+'&name='+encodeURIComponent(c.name)+'&coordinate=wgs84&callnative=1';
+  window.open(url,'_blank');
+  toast('已打开高德地图查看大图 🗺️');
+}
+function navigateToCorner(){
+  var c=state.currentCorner; if(!c) return;
+  /* 优先尝试高德 URL Scheme，失败则降级到网页版 */
+  var amapUrl='https://uri.amap.com/navigation?to='+c.lng+','+c.lat+','+encodeURIComponent(c.name)+'&mode=car&coordinate=wgs84&callnative=1';
+  var baiduUrl='https://api.map.baidu.com/direction?destination=latlng:'+c.lat+','+c.lng+'|name:'+encodeURIComponent(c.name)+'&mode=driving&coord_type=wgs84&output=html';
+  var ua=navigator.userAgent;
+  if(/iphone|ipad|ipod/i.test(ua)){
+    /* iOS：尝试 Apple Maps */
+    window.location.href='maps://?daddr='+c.lat+','+c.lng+'&q='+encodeURIComponent(c.name);
+    setTimeout(function(){ window.open(amapUrl,'_blank'); }, 800);
+  } else {
+    window.open(amapUrl,'_blank');
+  }
+  toast('正在唤起导航 🧭');
+}
+function copyAddress(){
+  var c=state.currentCorner; if(!c) return;
+  var text=c.city+' '+c.address;
+  if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ toast('地址已复制 📋'); }); }
+  else { toast('请长按地址手动复制'); }
 }
 function renderComments(){
   var c=state.currentCorner; var list=ls.get('comments_'+c.id,[]);
+  /* 合并种子评论 */
+  var seed=seedComments.filter(function(s){ return s.cornerId===c.id; });
+  list=seed.concat(list);
   document.getElementById('commentCount').textContent=list.length;
   var colors=['#3B7DD8','#FF6B9D','#FFD23F','#4ECDC4','#9B7EDE'];
+  var likedIds=ls.get('likedCommentIds',[]);
   document.getElementById('commentList').innerHTML=list.length?list.map(function(cm,i){
-    return '<div class="comment-item"><div class="comment-avatar" style="background:'+colors[i%5]+'">'+(cm.name[0]||'五')+'</div>'+
-      '<div class="comment-main"><div class="comment-name">'+cm.name+'</div><div class="comment-text">'+cm.text+'</div><div class="comment-time">'+cm.time+'</div></div></div>';
+    var liked=likedIds.indexOf(cm.id)>=0;
+    var repliesHtml=(cm.replies&&cm.replies.length)?'<div class="comment-replies">'+cm.replies.map(function(r,ri){
+      var rliked=likedIds.indexOf(r.id)>=0;
+      return '<div class="reply-item"><span class="reply-user">'+r.user+'：</span>'+r.text+
+        '<div class="reply-actions"><span class="comment-action '+(rliked?'liked':'')+'" onclick="toggleReplyLike(\''+cm.id+'\',\''+r.id+'\')"><svg viewBox="0 0 24 24" fill="'+(rliked?'currentColor':'none')+'" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 6.5 5c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3C21 5 23 9 21.5 12 19 16.5 12 21 12 21z"/></svg>'+(r.likes||0)+'</span></div></div>';
+    }).join('')+'</div>':'';
+    return '<div class="comment-item"><div class="comment-header">'+
+      '<div class="comment-avatar" style="background:'+colors[i%5]+'">'+(cm.user[0]||'五')+'</div>'+
+      '<div class="comment-user">'+cm.user+'</div>'+
+      '<div class="comment-time">'+cm.time+'</div></div>'+
+      '<div class="comment-text">'+cm.text+'</div>'+
+      '<div class="comment-actions">'+
+        '<span class="comment-action '+(liked?'liked':'')+'" onclick="toggleCommentLike(\''+cm.id+'\')"><svg viewBox="0 0 24 24" fill="'+(liked?'currentColor':'none')+'" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9 3 5 6.5 5c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3C21 5 23 9 21.5 12 19 16.5 12 21 12 21z"/></svg>'+(cm.likes||0)+'</span>'+
+        '<span class="comment-action" onclick="showReplyInput(\''+cm.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>回复</span>'+
+      '</div>'+repliesHtml+
+      '<div class="reply-input-box" id="replyBox_'+cm.id+'"><input id="replyInput_'+cm.id+'" placeholder="回复 '+cm.user+'："><button onclick="sendReply(\''+cm.id+'\')">发送</button></div></div>';
   }).join(''):'<div class="empty">还没有留言，做第一个发声的五迷吧～</div>';
+}
+function toggleCommentLike(cid){
+  var list=ls.get('comments_'+state.currentCorner.id,[]);
+  var cm=list.find(function(c){ return c.id===cid; });
+  if(!cm){ /* 种子评论：本地记录点赞 */ cm=seedComments.find(function(c){ return c.id===cid; }); }
+  if(!cm) return;
+  var likedIds=ls.get('likedCommentIds',[]);
+  var idx=likedIds.indexOf(cid);
+  var isAdding=idx<0;
+  if(idx>=0){ likedIds.splice(idx,1); cm.likes=Math.max(0,(cm.likes||0)-1); }
+  else { likedIds.push(cid); cm.likes=(cm.likes||0)+1; }
+  ls.set('likedCommentIds',likedIds);
+  /* 如果是种子评论，把点赞数记录到本地覆盖 */
+  var overrides=ls.get('commentLikeOverrides',{}); overrides[cid]=cm.likes; ls.set('commentLikeOverrides',overrides);
+  /* v1.1：评论被点赞计数（仅当评论作者不是"我"时累加，支撑歌单解锁） */
+  if(isAdding && cm.user!=='我'){
+    ls.set('commentLikedCount', ls.get('commentLikedCount',0)+1);
+  } else if(!isAdding && cm.user!=='我'){
+    ls.set('commentLikedCount', Math.max(0, ls.get('commentLikedCount',0)-1));
+  }
+  renderComments();
+  checkSongUnlock('commentLiked');
+}
+function toggleReplyLike(cid,rid){
+  var list=ls.get('comments_'+state.currentCorner.id,[]);
+  var cm=list.find(function(c){ return c.id===cid; });
+  if(!cm) cm=seedComments.find(function(c){ return c.id===cid; });
+  if(!cm||!cm.replies) return;
+  var r=cm.replies.find(function(x){ return x.id===rid; }); if(!r) return;
+  var likedIds=ls.get('likedCommentIds',[]);
+  var idx=likedIds.indexOf(rid);
+  if(idx>=0){ likedIds.splice(idx,1); r.likes=Math.max(0,(r.likes||0)-1); }
+  else { likedIds.push(rid); r.likes=(r.likes||0)+1; }
+  ls.set('likedCommentIds',likedIds);
+  renderComments();
+}
+function showReplyInput(cid){
+  document.querySelectorAll('.reply-input-box').forEach(function(b){ b.classList.remove('show'); });
+  var box=document.getElementById('replyBox_'+cid); if(box){ box.classList.add('show'); box.querySelector('input').focus(); }
+}
+function sendReply(cid){
+  var input=document.getElementById('replyInput_'+cid); var text=input.value.trim();
+  if(!text){ toast('先写点什么吧'); return; }
+  var list=ls.get('comments_'+state.currentCorner.id,[]);
+  var cm=list.find(function(c){ return c.id===cid; });
+  if(!cm){ /* 种子评论：克隆到本地再添加回复 */ cm=seedComments.find(function(c){ return c.id===cid; }); cm=JSON.parse(JSON.stringify(cm)); list.push(cm); }
+  if(!cm.replies) cm.replies=[];
+  cm.replies.push({id:'rpl_'+Date.now(),user:'我',text:text,time:'刚刚',likes:0});
+  ls.set('comments_'+state.currentCorner.id,list.slice(0,50));
+  renderComments(); toast('回复成功 💬');
 }
 function sendComment(){
   var input=document.getElementById('commentInput'); var text=input.value.trim();
   if(!text){ toast('先写点什么吧'); return; }
   var c=state.currentCorner; var list=ls.get('comments_'+c.id,[]);
-  list.unshift({name:'我',text:text,time:'刚刚'});
+  list.unshift({id:'cmt_'+Date.now(),cornerId:c.id,user:'我',text:text,time:'刚刚',likes:0,replies:[]});
   ls.set('comments_'+c.id,list.slice(0,50));
   input.value=''; renderComments(); toast('留言已发送 ❤');
 }
@@ -450,6 +594,7 @@ function addFootprint(){
   if(!fp.some(function(f){ return f.cornerId===c.id; })){
     fp.unshift({cornerId:c.id,cornerName:c.name,city:c.city,song:c.song,lyric:c.lyric,imageId:c.imageId,date:new Date().toISOString().slice(0,10),mode:state.checkinMode||'strict'});
     ls.set('footprints',fp);
+    checkSongUnlock('checkin');
   }
 }
 function saveCard(){
@@ -472,6 +617,7 @@ function shareCard(){
   document.getElementById('shareText').textContent=text;
   document.getElementById('shareTextBox').style.display='block';
   ls.set('shareCount', ls.get('shareCount',0)+1);
+  checkSongUnlock('share');
   if(navigator.share){
     navigator.share({title:'MaydayLand · 五月天城市漫游', text:text}).then(function(){ toast('分享成功 ❤'); confetti(); }).catch(function(){});
   } else {
@@ -562,6 +708,7 @@ function verifyPasscode(){
   /* 记录核销日志 */
   passcodeLog.push({cornerId:c.id, song:c.song, date:today, ts:Date.now()});
   ls.set('passcodeLog',passcodeLog.slice(0,200));
+  checkSongUnlock('passcode');
   if(state.countdownTimer) clearInterval(state.countdownTimer);
   document.getElementById('passcodeModalContent').innerHTML=
     '<div class="modal-success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>'+
@@ -603,13 +750,21 @@ function closePasscodeModal(){
 /* ---- 演唱会页 ---- */
 function renderConcert(){
   var posterMap={1015:img(1015),1018:img(1018),1044:img(1044),1036:img(1036)};
-  document.getElementById('concertList').innerHTML=concerts.map(function(c){
-    return '<div class="concert-item" onclick="navigateConcert(\''+c.id+'\')">'+
-      '<img class="concert-poster" src="'+(posterMap[c.posterId]||img(c.posterId))+'" alt="">'+
-      '<div class="concert-info"><div class="ci-city">'+c.city+'</div>'+
-      '<div class="ci-venue">'+c.venue+'</div><div class="ci-date">'+c.dateText+'</div>'+
-      '<span class="ci-status '+c.status+'">'+c.statusLabel+'</span></div></div>';
-  }).join('');
+  var cc=concerts.filter(function(c){ return c.city===state.currentCity; });
+  var listEl=document.getElementById('concertList');
+  listEl.className='fade-in';
+  if(!cc.length){
+    listEl.innerHTML='<div class="empty" style="padding:40px 20px"><div style="font-size:36px;margin-bottom:8px">🎫</div>当前城市暂无演唱会安排，切换城市看看～</div>';
+  } else {
+    listEl.innerHTML=cc.map(function(c){
+      return '<div class="concert-item" onclick="navigateConcert(\''+c.id+'\')">'+
+        '<img class="concert-poster" src="'+(posterMap[c.posterId]||img(c.posterId))+'" alt="">'+
+        '<div class="concert-info"><div class="ci-city">'+c.city+'</div>'+
+        '<div class="ci-venue">'+c.venue+'</div><div class="ci-date">'+c.dateText+'</div>'+
+        '<span class="ci-status '+c.status+'">'+c.statusLabel+'</span></div></div>';
+    }).join('');
+  }
+  setTimeout(function(){ listEl.classList.remove('fade-in'); }, 220);
   document.getElementById('newsList').innerHTML=news.map(function(n){
     return '<div class="news-item"><span class="news-type '+n.type+'">'+n.typeLabel+'</span>'+
       '<div class="news-title">'+n.title+'</div>'+
@@ -760,6 +915,9 @@ function renderMine(){
       '<div>'+b.song+'</div></div>';
   }).join('');
 
+  /* v1.1：歌单解锁 */
+  renderSongUnlock();
+
   /* 我的推荐 */
   var sc=ls.get('submittedCorners',[]);
   var scEl=document.getElementById('submittedList');
@@ -779,6 +937,120 @@ function renderMine(){
 function showGuide(){
   if(!ls.get('guideShown',false)){
     setTimeout(function(){ document.getElementById('guideMask').classList.add('show'); }, 1800);
+  }
+}
+
+/* ---- v1.1：歌单解锁 ---- */
+function renderSongUnlock(){
+  var unlockedSongs=ls.get('unlockedSongs',[]);
+  /* 统计 */
+  var totalSongs=0, unlockedCount=0;
+  songUnlockConfig.forEach(function(a){ totalSongs+=a.songs.length; a.songs.forEach(function(s){ if(unlockedSongs.indexOf(s.name)>=0) unlockedCount++; }); });
+  document.getElementById('songUnlockProgress').textContent=unlockedCount+' / '+totalSongs;
+  /* 下一首解锁提示 */
+  var nextTip=getNextUnlockTip(unlockedSongs);
+  document.getElementById('songUnlockNextTip').textContent=nextTip;
+  /* 渲染分组网格 */
+  var html=songUnlockConfig.map(function(a){
+    return '<div class="album-group"><div class="album-name">'+a.album+'</div><div class="song-grid">'+
+      a.songs.map(function(s){
+        var on=unlockedSongs.indexOf(s.name)>=0;
+        var tip=getSongUnlockTip(s);
+        return '<div class="song-cell '+(on?'unlocked':'locked')+'" style="'+(on?'background:'+s.color:'')+'" onclick="'+(on?'playSong(\''+s.name+'\')':'toast(\''+tip+'\')')+'">'+
+          '<div class="sc-tooltip">'+tip+'</div>'+
+          '<div class="sc-icon">'+(on?'🎵':'🔒')+'</div>'+
+          '<div class="sc-name">'+s.name+'</div></div>';
+      }).join('')+'</div></div>';
+  }).join('');
+  document.getElementById('songUnlockGrid').innerHTML=html;
+}
+function getSongUnlockTip(s){
+  if(!s.unlock) return '继续探索 MaydayLand 解锁这首歌曲';
+  var map={firstCheckin:'首次打卡任意角落解锁',checkin:'累计打卡 '+s.unlock.value+' 个角落解锁',passcode:'对暗号成功 '+s.unlock.value+' 次解锁',share:'分享 '+s.unlock.value+' 次解锁',citySwitch:'切换城市 '+s.unlock.value+' 次解锁',commentLiked:'评论被点赞 '+s.unlock.value+' 次解锁',looseCheckin:'完成 1 次附近打卡解锁',cities:'打卡 '+s.unlock.value+' 个不同城市解锁'};
+  return map[s.unlock.action]||'继续探索解锁';
+}
+function getNextUnlockTip(unlockedSongs){
+  /* 找到第一个未解锁且有解锁条件的歌曲 */
+  for(var i=0;i<songUnlockConfig.length;i++){
+    for(var j=0;j<songUnlockConfig[i].songs.length;j++){
+      var s=songUnlockConfig[i].songs[j];
+      if(s.unlock && unlockedSongs.indexOf(s.name)<0){
+        return '🎯 下一首可解锁：'+s.name+' — '+getSongUnlockTip(s);
+      }
+    }
+  }
+  return '🎉 所有条件歌曲已解锁，继续探索完整歌单！';
+}
+function checkSongUnlock(triggerAction){
+  var unlockedSongs=ls.get('unlockedSongs',[]);
+  var newlyUnlocked=[];
+  var fp=ls.get('footprints',[]);
+  var badges=ls.get('badges',[]);
+  var passcodeLog=ls.get('passcodeLog',[]);
+  var shareCount=ls.get('shareCount',0);
+  var citySwitchCount=ls.get('citySwitchCount',0);
+  var commentLikedCount=ls.get('commentLikedCount',0);
+  var cities={}; fp.forEach(function(f){ cities[f.city]=1; });
+  var cityCount=Object.keys(cities).length;
+  var looseCheckinCount=fp.filter(function(f){ return f.mode==='loose'; }).length;
+
+  songUnlockConfig.forEach(function(a){
+    a.songs.forEach(function(s){
+      if(unlockedSongs.indexOf(s.name)>=0) return; /* 已解锁 */
+      if(!s.unlock) return; /* 无解锁条件，默认锁定 */
+      var cond=s.unlock;
+      var met=false;
+      switch(cond.action){
+        case 'firstCheckin': met=fp.length>=1; break;
+        case 'checkin': met=fp.length>=cond.value; break;
+        case 'passcode': met=passcodeLog.length>=cond.value; break;
+        case 'share': met=shareCount>=cond.value; break;
+        case 'citySwitch': met=citySwitchCount>=cond.value; break;
+        case 'commentLiked': met=commentLikedCount>=cond.value; break;
+        case 'looseCheckin': met=looseCheckinCount>=cond.value; break;
+        case 'cities': met=cityCount>=cond.value; break;
+      }
+      if(met){ unlockedSongs.push(s.name); newlyUnlocked.push(s); }
+    });
+  });
+
+  if(newlyUnlocked.length){
+    ls.set('unlockedSongs',unlockedSongs);
+    showUnlockAnimation(newlyUnlocked[0]);
+    renderSongUnlock();
+  }
+}
+function showUnlockAnimation(song){
+  var overlay=document.getElementById('unlockOverlay');
+  document.getElementById('unlockSongName').textContent='🎵 '+song.name;
+  /* 粒子绽放 */
+  var particlesEl=document.getElementById('unlockParticles');
+  particlesEl.innerHTML='';
+  var colors=['#3B7DD8','#FF6B9D','#FFD23F','#4ECDC4','#9B7EDE'];
+  for(var i=0;i<20;i++){
+    var p=document.createElement('div');
+    p.className='unlock-particle';
+    p.style.background=colors[i%5];
+    var angle=(i/20)*Math.PI*2;
+    var dist=80+Math.random()*40;
+    p.style.setProperty('--tx',Math.cos(angle)*dist+'px');
+    p.style.setProperty('--ty',Math.sin(angle)*dist+'px');
+    p.style.animation='particleBurst 1s ease-out '+i*0.03+'s forwards';
+    particlesEl.appendChild(p);
+  }
+  overlay.classList.add('show');
+}
+function closeUnlockOverlay(){
+  document.getElementById('unlockOverlay').classList.remove('show');
+}
+function playSong(name){
+  /* 试听外链：QQ 音乐搜索 */
+  var qqUrl='https://y.qq.com/n/ryqq/search?w='+encodeURIComponent('五月天 '+name);
+  var neteaseUrl='https://music.163.com/#/search/m/?s='+encodeURIComponent('五月天 '+name)+'&type=1';
+  if(confirm('试听《'+name+'》：\n确定 - QQ音乐搜索\n取消 - 网易云音乐搜索')){
+    window.open(qqUrl,'_blank');
+  } else {
+    window.open(neteaseUrl,'_blank');
   }
 }
 function closeGuide(){
@@ -829,9 +1101,14 @@ function requestLocation(){
 
 /* ---- 初始化 ---- */
 function init(){
+  /* v1.1：恢复记忆城市 */
+  var savedCity=ls.get('currentCity',null);
+  if(savedCity){ state.currentCity=savedCity; }
+  updateCitySelector();
   renderTags();
   renderCornerList();
   renderMapPins();
+  renderConcert();
   showGuide();
   requestLocation();
   /* 新用户分享落地页（share-growth spec：推荐人提示卡 + 2s 自动收起） */
@@ -842,6 +1119,49 @@ function init(){
   }
   /* 隐藏启动页 */
   setTimeout(function(){ document.getElementById('splash').classList.add('hide'); }, 1400);
+}
+
+/* ---- v1.1：城市切换 ---- */
+function updateCitySelector(){
+  var cfg=cityConfig.find(function(c){ return c.name===state.currentCity; })||cityConfig[0];
+  var nameEl=document.getElementById('currentCityName');
+  if(nameEl){ nameEl.innerHTML='<span class="city-dot" style="background:'+cfg.color+'"></span>'+state.currentCity; }
+}
+function openCityPanel(){
+  renderCityPanel();
+  document.getElementById('cityPanelMask').classList.add('show');
+  document.getElementById('cityPanel').classList.add('show');
+}
+function closeCityPanel(){
+  document.getElementById('cityPanelMask').classList.remove('show');
+  document.getElementById('cityPanel').classList.remove('show');
+}
+function renderCityPanel(){
+  var kw=(document.getElementById('citySearchInput').value||'').trim();
+  var list=cityConfig.filter(function(c){ return !kw||c.name.indexOf(kw)>=0; });
+  var cornerCounts={};
+  corners.forEach(function(c){ cornerCounts[c.city]=(cornerCounts[c.city]||0)+1; });
+  document.getElementById('cityPanelList').innerHTML=list.map(function(c){
+    var active=c.name===state.currentCity;
+    return '<div class="city-card '+(active?'active':'')+'" onclick="switchCity(\''+c.name+'\')">'+
+      '<div class="cc-dot" style="background:'+c.color+'">'+c.emoji+'</div>'+
+      '<div class="cc-info"><div class="cc-name">'+c.name+'</div><div class="cc-count">'+(cornerCounts[c.name]||0)+' 个五迷角落</div></div>'+
+      '<div class="cc-check">✓</div></div>';
+  }).join('');
+}
+function filterCityPanel(){ renderCityPanel(); }
+function switchCity(name){
+  if(name===state.currentCity){ closeCityPanel(); return; }
+  state.currentCity=name;
+  ls.set('currentCity',name);
+  var count=ls.get('citySwitchCount',0)+1; ls.set('citySwitchCount',count);
+  updateCitySelector();
+  closeCityPanel();
+  renderCornerList();
+  renderMapPins();
+  renderConcert();
+  toast('已切换到 '+name+' 🏙️');
+  checkSongUnlock('citySwitch');
 }
 
 /* 推荐人提示卡（share-growth spec） */

@@ -53,8 +53,7 @@
 
 ```
 MaydayLand/
-├── AGENT.md                          # 本文件
-├── 五月天粉丝互动MVP需求文档.md      # 产品功能需求文档
+├── AGENT.md                          # 本文件（AI Agent 研发指引，≤ 500 行）
 ├── MaydayLand-HTML-Demo.zip          # 比赛交付物：交互式 HTML Demo
 ├── html-demo/                        # 比赛交付 HTML Demo 源码
 │   ├── index.html                    # 单文件主页面（内联 CSS + 页面结构）
@@ -90,8 +89,10 @@ MaydayLand/
 │       ├── mine/                    # 我的（tabBar）
 │       ├── corner/                  # 角落详情（二级）
 │       └── checkin/                 # 打卡卡片合成（二级）
-├── openspec/                         # SDD 需求文档
-├── MaydaySkills/                     # 五月天 Agent Skills 集合
+├── openspec/                         # SDD 需求文档 + PRD（统一维护）
+│   ├── PRD-MVP.md                   # 产品功能需求文档（PRD）
+│   └── changes/mayday-cityroam-mvp/ # SDD 规格（proposal/design/tasks/specs）
+├── MaydaySkills/                     # 五月天 Agent Skills 集合（独立项目）
 └── package.json
 ```
 
@@ -191,3 +192,30 @@ node /Users/souljoy/.trae-cn/builtin_skills/TRAE-generate-mini-app/scripts/previ
 - 不提供完整歌词
 - 用户照片仅用于生成本人卡片，不公开展示原图
 - 店铺名称需合作授权或用户共创标注
+
+## 9. 关联文档索引
+
+> 本文件（AGENT.md）仅保留 AI Agent 研发指引核心规范（≤ 500 行）。以下文档已拆分到独立位置，请按需查阅：
+
+| 文档 | 路径 | 说明 |
+|------|------|------|
+| **PRD 产品需求文档** | [openspec/PRD-MVP.md](openspec/PRD-MVP.md) | MaydayLand MVP 完整功能需求文档（项目概述 / 用户分析 / 功能需求 / 数据验证 / 上线迭代 / 风险控制） |
+| **OpenSpec SDD 规格** | [openspec/changes/mayday-cityroam-mvp/](openspec/changes/mayday-cityroam-mvp/) | SDD 规格文档（proposal / design / tasks / 10 个 capability spec） |
+| **HTML Demo 源码** | [html-demo/](html-demo/) | 比赛交付物：单文件交互式 HTML Demo（index.html + app.js） |
+| **项目 README** | [README.md](README.md) | 项目简介、核心功能、仓库结构 |
+
+### OpenSpec SDD capability 清单
+
+| Capability | Spec 路径 | 状态 |
+|------------|----------|------|
+| lyric-corner-map | [specs/lyric-corner-map/spec.md](openspec/changes/mayday-cityroam-mvp/specs/lyric-corner-map/spec.md) | v1.0 |
+| checkin-card | [specs/checkin-card/spec.md](openspec/changes/mayday-cityroam-mvp/specs/checkin-card/spec.md) | v1.0 |
+| fan-passcode | [specs/fan-passcode/spec.md](openspec/changes/mayday-cityroam-mvp/specs/fan-passcode/spec.md) | v1.0 |
+| concert-hub | [specs/concert-hub/spec.md](openspec/changes/mayday-cityroam-mvp/specs/concert-hub/spec.md) | v1.0 |
+| share-growth | [specs/share-growth/spec.md](openspec/changes/mayday-cityroam-mvp/specs/share-growth/spec.md) | v1.0 |
+| lyric-data-pipeline | [specs/lyric-data-pipeline/spec.md](openspec/changes/mayday-cityroam-mvp/specs/lyric-data-pipeline/spec.md) | v1.0 |
+| city-switcher | [specs/city-switcher/spec.md](openspec/changes/mayday-cityroam-mvp/specs/city-switcher/spec.md) | v1.1 新增 |
+| comment-enhance | [specs/comment-enhance/spec.md](openspec/changes/mayday-cityroam-mvp/specs/comment-enhance/spec.md) | v1.1 新增 |
+| corner-detail-enhance | [specs/corner-detail-enhance/spec.md](openspec/changes/mayday-cityroam-mvp/specs/corner-detail-enhance/spec.md) | v1.1 新增 |
+| song-unlock | [specs/song-unlock/spec.md](openspec/changes/mayday-cityroam-mvp/specs/song-unlock/spec.md) | v1.1 新增 |
+
