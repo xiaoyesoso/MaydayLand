@@ -33,3 +33,7 @@ from app import views
 
 # 加载配置
 app.config.from_object('config')
+
+# 启动保活线程（生产环境定时访问云托管域名，避免 30 分钟无访问被回收）
+from app import keepalive
+keepalive.start()

@@ -2,6 +2,7 @@
 
 API 列表：
 - GET  /                      首页（index.html）
+- GET  /api/health            健康检查（保活线程 ping 用）
 - GET  /api/corners           角落列表（?city=）
 - GET  /api/corners/<id>      角落详情
 - GET  /api/concerts          演唱会列表（?city=）
@@ -33,6 +34,12 @@ from app.model import (Corner, Concert, News, Comment, Footprint, PasscodeLog,
 from app.response import make_succ_empty_response, make_succ_response, make_err_response
 
 USER_ID = 'local_user'
+
+
+# ---------- 健康检查 ----------
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    return make_succ_response({'status': 'ok', 'app': 'MaydayLand'})
 
 
 # ---------- 页面 ----------
