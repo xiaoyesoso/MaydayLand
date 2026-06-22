@@ -46,6 +46,19 @@ from app import views
 # 加载配置
 app.config.from_object('config')
 
+
+# 注入模板全局变量：构建时间戳，用于前端静态资源 cache busting
+@app.context_processor
+def _inject_buildtime():
+    build_time = None
+    try:
+        with open(os.path.join(_BASE_DIR, '.buildtime'), 'r') as f:
+            build_time = f.read().strip()
+    except Exception:
+        pass
+    return dict(build_time=build_time or str(int(os.environ.get('DEBUG', '0'))))
+
+
 # 启动保活线程（生产环境定时访问云托管域名，避免 30 分钟无访问被回收）
 from app import keepalive
 keepalive.start()

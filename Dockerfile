@@ -18,6 +18,9 @@ COPY . /app
 # 设定当前的工作目录
 WORKDIR /app
 
+# 写入构建时间戳，用于前端静态资源 cache busting（每次部署 URL 不同，强制刷新）
+RUN date +%s > /app/.buildtime
+
 # 安装依赖
 RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple \
 && pip config set global.trusted-host mirrors.cloud.tencent.com \
