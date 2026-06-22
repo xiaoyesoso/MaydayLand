@@ -33,7 +33,8 @@ var ALBUM_BY_SONG = {
   '伤心的人别听慢歌': ASSET + 'albums/' + encodeURIComponent('伤心的人别听慢歌-C6arM80p.jpg'),
   '将军令':       ASSET + 'albums/' + encodeURIComponent('将军令-CxjrlsAV.jpg'),
   '凡人歌':       ASSET + 'albums/' + encodeURIComponent('凡人歌-B23FlQae.jpg'),
-  'DNA':          ASSET + 'albums/' + encodeURIComponent('DNA-cz_Tdu1n.jpg')
+  'DNA':          ASSET + 'albums/' + encodeURIComponent('DNA-cz_Tdu1n.jpg'),
+  '如烟':         ASSET + 'albums/' + encodeURIComponent('为爱而生-B4BFUtgw.jpg')
 };
 var DEFAULT_ALBUM = ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg');
 
@@ -1068,7 +1069,7 @@ function checkSongUnlock(triggerAction){
   if(newlyUnlocked.length){
     ls.set('unlockedSongs',unlockedSongs);
     /* 同步到后端 */
-    newlyUnlocked.forEach(function(s){ api.post('/songs/unlock',{song:s.name,action:action}); });
+    newlyUnlocked.forEach(function(s){ api.post('/songs/unlock',{song:s.name,action:triggerAction}); });
     showUnlockAnimation(newlyUnlocked[0]);
     renderSongUnlock();
   }
@@ -1533,6 +1534,7 @@ function showQuizResult(){
     '</div>'+
     '<div class="quiz-result-actions">'+
       '<button class="quiz-result-btn secondary" onclick="startQuiz()">重新测评</button>'+
+      '<button class="quiz-result-btn primary" style="background:#07c160" onclick="openTipModal()">请作者喝杯奶茶 🧋</button>'+
       '<button class="quiz-result-btn primary" style="background:'+p.color+'" onclick="shareQuizResult(\''+maxType+'\')">分享结果</button>'+
     '</div>'+
   '</div>';
@@ -1544,15 +1546,279 @@ function showQuizResult(){
   checkSongUnlock('quiz');
 }
 function shareQuizResult(type){
+  /* 按 PRD §6 生成测评海报（Canvas 合成），打开海报预览弹层 */
   var p=quizPersonalities[type];
   ls.set('shareCount', ls.get('shareCount',0)+1);
   api.put('/user/stat',{shareCount:ls.get('shareCount',0)});
   checkSongUnlock('share');
-  if(navigator.share){
-    navigator.share({title:'我的人生代表曲是《'+p.song+'》',text:'五月天全曲库人格测评 — 我是「'+p.personality+'」'+p.lyric,url:location.href}).catch(function(){});
-  } else {
-    toast('已生成分享卡片 📸\n你的人生代表曲：《'+p.song+'》');
+  openQuizPosterModal(type);
+}
+
+/* ---- 测评海报弹层 ---- */
+function openQuizPosterModal(type){
+  var p=quizPersonalities[type];
+  /* 取副人格做复合标题 */
+  var sorted=Object.keys(quizState.scores).map(function(k){ return {k:k,s:quizState.scores[k]}; }).sort(function(a,b){ return b.s-a.s; });
+  var sec=quizPersonalities[(sorted[1]&&sorted[1].k)||type];
+  var comboTitle=sec.coreTag+'的'+p.name;
+
+  var mask=document.getElementById('quizPosterMask');
+  if(!mask){
+    mask=document.createElement('div');
+    mask.id='quizPosterMask';
+    mask.className='qpm-mask';
+    mask.innerHTML=
+      '<div class="qpm-panel">'+
+        '<div class="qpm-title">我的测评海报</div>'+
+        '<canvas id="quizPosterCanvas" width="720" height="1280"></canvas>'+
+        '<div class="qpm-tip">长按图片可保存到相册，或点击下方按钮分享</div>'+
+        '<div class="qpm-actions">'+
+          '<button class="qpm-btn secondary" onclick="closeQuizPoster()">关闭</button>'+
+          '<button class="qpm-btn save" onclick="saveQuizPoster()">保存图片</button>'+
+          '<button class="qpm-btn primary" onclick="shareQuizPoster()">分享</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(mask);
+    mask.addEventListener('click',function(e){ if(e.target===mask) closeQuizPoster(); });
   }
+  mask.style.display='flex';
+  setTimeout(function(){ mask.classList.add('show'); },10);
+  drawQuizPoster(p,sec,comboTitle);
+  console.log('[quiz-poster] open type=%s combo=%s',type,comboTitle);
+}
+
+function closeQuizPoster(){
+  var mask=document.getElementById('quizPosterMask');
+  if(!mask) return;
+  mask.classList.remove('show');
+  setTimeout(function(){ mask.style.display='none'; },300);
+}
+
+function drawQuizPoster(p,sec,comboTitle){
+  var canvas=document.getElementById('quizPosterCanvas');
+  if(!canvas) return;
+  var W=720,H=1280;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  /* 1) 头部渐变背景（按主人格主题色） */
+  var grad=ctx.createLinearGradient(0,0,W,H*0.55);
+  grad.addColorStop(0,p.color);
+  grad.addColorStop(1,p.containerBg);
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H*0.55);
+
+  /* 2) 白色卡片主体 */
+  ctx.fillStyle='#ffffff';
+  roundRect(ctx,40,H*0.32,W-80,H-H*0.32-60,32);
+  ctx.fill();
+
+  /* 3) 顶部 logo */
+  drawImageSafe('/static/assets/images/ui/%E4%BA%94%E7%89%88logo.png',function(img){
+    if(img) ctx.drawImage(img,W/2-60,50,120,40);
+    ctx.fillStyle='rgba(255,255,255,.85)';
+    ctx.font='600 22px -apple-system,system-ui,sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText('五月天全曲库人格测评',W/2,120);
+
+    /* 4) 吉祥物 */
+    drawImageSafe('/static/assets/images/ui/'+p.mascot+'.png',function(mascot){
+      if(mascot){
+        ctx.fillStyle='rgba(255,255,255,.85)';
+        ctx.beginPath(); ctx.arc(W/2,250,90,0,Math.PI*2); ctx.fill();
+        ctx.drawImage(mascot,W/2-78,172,156,156);
+      }
+      drawPosterText();
+    });
+  });
+
+  function drawPosterText(){
+    /* 5) 复合标题（在白卡顶部） */
+    ctx.fillStyle='#1a1a1a';
+    ctx.font='900 44px -apple-system,system-ui,"PingFang SC",sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(comboTitle,W/2,H*0.32+72);
+
+    /* 6) 英文原型 */
+    ctx.fillStyle=p.color;
+    ctx.font='600 16px Quicksand,-apple-system,sans-serif';
+    ctx.fillText(p.archetype.toUpperCase(),W/2,H*0.32+104);
+
+    /* 7) 人格 desc 前 4 句 */
+    ctx.fillStyle='#555';
+    ctx.font='400 22px -apple-system,system-ui,"PingFang SC",sans-serif';
+    ctx.textAlign='left';
+    var sentences=p.desc.split(/[。]/).filter(function(s){ return s.trim(); }).slice(0,4);
+    var y=H*0.32+150;
+    sentences.forEach(function(s){
+      var lines=wrapLine(ctx,s+'。',W-160);
+      lines.forEach(function(ln){
+        ctx.fillText(ln,80,y); y+=34;
+      });
+    });
+
+    /* 8) 分隔线 */
+    y+=10;
+    ctx.fillStyle='#eee'; ctx.fillRect(80,y,W-160,1); y+=30;
+
+    /* 9) 人生代表曲 label */
+    ctx.fillStyle='#999';
+    ctx.font='600 18px -apple-system,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText('YOUR LIFE SONG · 人生代表曲',80,y); y+=20;
+
+    /* 10) 专辑封面 + 歌曲信息 */
+    var albumUrl=ALBUM_BY_SONG[p.song]||DEFAULT_ALBUM;
+    drawImageSafe(albumUrl,function(alb){
+      var albY=y+10;
+      if(alb){
+        ctx.save();
+        roundRect(ctx,80,albY,140,140,16);
+        ctx.clip();
+        ctx.drawImage(alb,80,albY,140,140);
+        ctx.restore();
+      }
+      ctx.fillStyle='#1a1a1a';
+      ctx.font='900 36px -apple-system,"PingFang SC",sans-serif';
+      ctx.textAlign='left';
+      ctx.fillText('《'+p.song+'》',240,albY+44);
+      ctx.fillStyle='#888';
+      ctx.font='400 20px -apple-system,"PingFang SC",sans-serif';
+      ctx.fillText(p.album,240,albY+74);
+      ctx.fillStyle=p.color;
+      ctx.font='600 18px -apple-system,"PingFang SC",sans-serif';
+      ctx.fillText('「'+p.lyric.slice(0,18)+'」',240,albY+108);
+
+      /* 11) 用户昵称 */
+      var nick=(ls.get('quizResult',{})||{}).nickname||'五迷·同好';
+      ctx.fillStyle='#999';
+      ctx.font='400 18px -apple-system,sans-serif';
+      ctx.textAlign='center';
+      ctx.fillText('— '+nick+' 的人生代表曲 —',W/2,albY+200);
+
+      /* 12) 底部二维码（真实图片：指向云托管域名）+ 标语 */
+      drawImageSafe(ASSET+'ui/share-qrcode.png',function(qr){
+        var qrSize=140, qrX=W-qrSize-60, qrY=H-qrSize-70;
+        /* 二维码白底 + 圆角边框 */
+        ctx.fillStyle='#fff';
+        roundRect(ctx,qrX-8,qrY-8,qrSize+16,qrSize+16,12);
+        ctx.fill();
+        ctx.strokeStyle=p.color;
+        ctx.lineWidth=2;
+        roundRect(ctx,qrX-8,qrY-8,qrSize+16,qrSize+16,12);
+        ctx.stroke();
+        if(qr) ctx.drawImage(qr,qrX,qrY,qrSize,qrSize);
+        /* 文案 */
+        ctx.fillStyle='#555';
+        ctx.font='600 22px -apple-system,"PingFang SC",sans-serif';
+        ctx.textAlign='left';
+        ctx.fillText('扫码开启你的',80,H-180);
+        ctx.fillStyle=p.color;
+        ctx.font='900 30px -apple-system,"PingFang SC",sans-serif';
+        ctx.fillText('五月天人格测评',80,H-140);
+        ctx.fillStyle='#bbb';
+        ctx.font='400 14px -apple-system,sans-serif';
+        ctx.fillText('MaydayLand · 跟着歌词',80,H-105);
+        ctx.fillText('发现自己',80,H-85);
+      });
+    });
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function wrapLine(ctx,text,maxWidth){
+  var out=[],line='';
+  for(var i=0;i<text.length;i++){
+    var ch=text[i];
+    if(ctx.measureText(line+ch).width>maxWidth){
+      out.push(line); line=ch;
+    } else line+=ch;
+  }
+  if(line) out.push(line);
+  return out;
+}
+
+function drawImageSafe(src,cb){
+  var img=new Image();
+  img.crossOrigin='anonymous';
+  img.onload=function(){ cb(img); };
+  img.onerror=function(){ cb(null); };
+  img.src=src;
+}
+
+function saveQuizPoster(){
+  var canvas=document.getElementById('quizPosterCanvas');
+  if(!canvas){ toast('海报未生成'); return; }
+  try{
+    var link=document.createElement('a');
+    link.download='MaydayLand-人格测评-'+Date.now()+'.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    toast('海报已保存 📸');
+    console.log('[quiz-poster] saved');
+  }catch(e){
+    console.error('[quiz-poster] save failed',e);
+    toast('保存失败，请长按图片保存');
+  }
+}
+
+function shareQuizPoster(){
+  var canvas=document.getElementById('quizPosterCanvas');
+  if(!canvas) return;
+  var p=quizPersonalities[(ls.get('quizResult',{})||{}).type||'A'];
+  var text='我的人生代表曲是《'+p.song+'》— 五月天全曲库人格测评';
+  /* 优先调用 Web Share API（支持图片） */
+  if(navigator.canShare && navigator.share){
+    canvas.toBlob(function(blob){
+      if(!blob){ shareTextOnly(); return; }
+      var file=new File([blob],'maydayland-quiz.png',{type:'image/png'});
+      var payload={title:'我的五月天人格测评',text:text,files:[file]};
+      if(navigator.canShare(payload)){
+        navigator.share(payload).then(function(){ toast('分享成功 ❤'); }).catch(function(){});
+      } else {
+        shareTextOnly();
+      }
+    },'image/png');
+  } else {
+    shareTextOnly();
+  }
+  function shareTextOnly(){
+    if(navigator.share){
+      navigator.share({title:'我的五月天人格测评',text:text,url:location.href}).catch(function(){});
+    } else {
+      try{ navigator.clipboard.writeText(text+'\n'+location.href); toast('文案已复制，去粘贴分享吧～'); }
+      catch(e){ toast('请长按上方海报图片保存分享'); }
+    }
+  }
+}
+
+/* ---- 赞赏弹窗 ---- */
+function openTipModal(){
+  var m=document.getElementById('tipMask');
+  if(!m) return;
+  m.style.display='flex';
+  setTimeout(function(){ m.classList.add('show'); },10);
+  ls.set('tipShown', (ls.get('tipShown',0)|0)+1);
+  console.log('[tip] open');
+}
+function closeTipModal(){
+  var m=document.getElementById('tipMask');
+  if(!m) return;
+  m.classList.remove('show');
+  setTimeout(function(){ m.style.display='none'; },300);
+}
+function saveTipQR(){
+  /* 移动端通常长按图片保存，此处提示即可 */
+  toast('请长按上方二维码图片，保存到相册后到微信中识别 📷');
 }
 
 init();

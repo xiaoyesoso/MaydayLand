@@ -464,6 +464,54 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .quiz-result-btn:active{transform:scale(.97)}
 .quiz-result-btn.primary{background:linear-gradient(135deg,#3B7DD8,#9B7EDE);color:#fff}
 .quiz-result-btn.secondary{background:#f5f5f7;color:var(--ink)}
+/* 测评海报弹层（PRD §6） */
+.qpm-mask{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
+.qpm-mask.show{opacity:1}
+.qpm-panel{background:#fff;border-radius:24px;width:100%;max-width:380px;padding:18px 16px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:qpmSlideUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes qpmSlideUp{0%{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.qpm-title{font-size:16px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:12px}
+#quizPosterCanvas{width:100%;height:auto;display:block;border-radius:12px;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.12);margin-bottom:12px}
+.qpm-tip{font-size:12px;color:#999;text-align:center;margin-bottom:14px;line-height:1.5}
+.qpm-actions{display:flex;gap:10px}
+.qpm-btn{flex:1;padding:12px 0;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:transform .12s}
+.qpm-btn:active{transform:scale(.97)}
+.qpm-btn.primary{background:linear-gradient(135deg,#3B7DD8,#9B7EDE);color:#fff}
+.qpm-btn.save{background:#4ECDC4;color:#fff}
+.qpm-btn.secondary{background:#f5f5f7;color:var(--ink)}
+/* 赞赏入口卡（我的页底部） */
+.tip-card{display:flex;align-items:center;gap:14px;margin:18px 16px 0;padding:16px 18px;border-radius:20px;background:linear-gradient(135deg,#fff5e6 0%,#ffe9d6 60%,#fff5e6 100%);box-shadow:0 4px 16px rgba(231,148,68,.12);cursor:pointer;transition:transform .15s}
+.tip-card:active{transform:scale(.98)}
+.tip-icon{font-size:34px;line-height:1;flex-shrink:0;animation:tipBounce 1.6s ease-in-out infinite}
+@keyframes tipBounce{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-4px) rotate(6deg)}}
+.tip-main{flex:1;min-width:0}
+.tip-title{font-size:15px;font-weight:800;color:#7a4a17;margin-bottom:4px}
+.tip-msg{font-size:12px;color:#9b6a3a;line-height:1.5}
+.tip-msg .wink{font-family:monospace;color:#c97b3b}
+.tip-btn{padding:8px 14px;border-radius:20px;background:linear-gradient(135deg,#ff9d54,#f56b3a);color:#fff;font-size:12px;font-weight:700;flex-shrink:0;box-shadow:0 4px 10px rgba(245,107,58,.3)}
+/* 赞赏弹窗 */
+.tip-mask{position:fixed;inset:0;z-index:160;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
+.tip-mask.show{opacity:1}
+.tip-panel{background:#fff;border-radius:24px;width:100%;max-width:340px;padding:24px 22px 20px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;animation:tipSlideUp .35s cubic-bezier(.32,.72,0,1)}
+@keyframes tipSlideUp{0%{transform:translateY(40px) scale(.96);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.tip-hero{font-size:32px;margin-bottom:6px;animation:tipBounce 1.6s ease-in-out infinite}
+.tip-h1{font-size:18px;font-weight:900;color:var(--ink);margin-bottom:6px}
+.tip-h2{font-size:12px;color:#999;margin-bottom:16px;line-height:1.6}
+.tip-qr-wrap{padding:6px;background:linear-gradient(135deg,#07c160,#06ad56);border-radius:20px;margin:0 auto 14px;width:fit-content;box-shadow:0 8px 24px rgba(7,193,96,.25)}
+.tip-qr{display:block;width:240px;height:auto;border-radius:14px;background:#fff}
+.tip-quote{font-size:11px;color:#bbb;line-height:1.6;margin-top:8px;font-style:italic}
+.tip-close-row{display:flex;gap:10px;margin-top:16px}
+.tip-close-btn{flex:1;padding:11px;border-radius:14px;font-size:13px;font-weight:700;cursor:pointer;border:none}
+.tip-close-btn.primary{background:#07c160;color:#fff}
+.tip-close-btn.secondary{background:#f5f5f7;color:var(--ink)}
+/* 全局右下角浮动赞赏按钮（FAB） */
+.tip-fab{position:fixed;right:14px;bottom:80px;z-index:90;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#ff9d54,#f56b3a);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(245,107,58,.45),0 2px 6px rgba(0,0,0,.15);cursor:pointer;animation:fabFloat 2.6s ease-in-out infinite;border:3px solid #fff}
+.tip-fab::after{content:'赞赏';position:absolute;bottom:-2px;right:-6px;background:#fff;color:#f56b3a;font-size:9px;font-weight:900;padding:2px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.15);letter-spacing:.5px}
+.tip-fab-emoji{font-size:26px;line-height:1;animation:tipBounce 1.6s ease-in-out infinite}
+@keyframes fabFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.tip-fab:active{transform:scale(.92)}
+/* 顶部赞赏卡（我的页）— 升级版样式 */
+.tip-card{position:relative;overflow:hidden}
+.tip-card::before{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6) 0%,transparent 70%)}
 
 </style>
 </head>
@@ -580,6 +628,14 @@ input,textarea{font-family:inherit;outline:none;border:none}
 
 <div class="page" id="page-mine"><div class="scroll">
 <div class="profile-header"><div class="profile-avatar">五</div><div class="profile-name">五迷 · 同好</div><div class="profile-id">MaydayLand ID · 2026</div><div class="profile-stats"><div class="ps-item"><div class="ps-num" id="statFootprint">0</div><div class="ps-label">打卡足迹</div></div><div class="ps-item"><div class="ps-num" id="statBadge">0</div><div class="ps-label">五迷徽章</div></div><div class="ps-item"><div class="ps-num" id="statCity">0</div><div class="ps-label">覆盖城市</div></div><div class="ps-item"><div class="ps-num" id="statShare">0</div><div class="ps-label">分享次数</div></div></div></div>
+<div class="tip-card" onclick="openTipModal()">
+  <div class="tip-icon">🧋</div>
+  <div class="tip-main">
+    <div class="tip-title">请作者喝杯奶茶吧</div>
+    <div class="tip-msg">五月天陪你长大，我陪你找到歌词角落 <span class="wink">( ´･ᴗ･` )</span></div>
+  </div>
+  <div class="tip-btn">赞赏</div>
+</div>
 <div class="mine-section"><div class="ms-title">打卡足迹 <span class="ms-more">按时间倒序</span></div><div class="footprint-list" id="footprintList"></div></div>
 <div class="mine-section"><div class="ms-title">五迷徽章墙 <span class="ms-more">对暗号解锁</span></div><div class="badge-grid" id="badgeGrid"></div></div>
 <div class="song-unlock-section">
@@ -611,11 +667,25 @@ input,textarea{font-family:inherit;outline:none;border:none}
 <div class="recommend-card" id="recommendCard"><div class="rc-avatar" id="rcAvatar">五</div><div class="rc-text"><strong class="rc-name">某位五迷</strong> 邀请你一起漫游 MaydayLand</div><div class="rc-close" onclick="closeRecommendCard()">×</div></div>
 <div class="guide-mask" id="guideMask"><div class="guide-card"><div class="guide-title">欢迎来到 MaydayLand</div><div class="guide-step"><span class="gs-num">1</span><div><strong>发现角落</strong><p>跟着五月天歌词，找到城市里的五迷据点</p></div></div><div class="guide-step"><span class="gs-num">2</span><div><strong>打卡生成卡片</strong><p>上传现场照片，合成专属歌词打卡卡片</p></div></div><div class="guide-step"><span class="gs-num">3</span><div><strong>对暗号领徽章</strong><p>到店出示暗号二维码，解锁主题歌徽章</p></div></div><button class="guide-btn" onclick="closeGuide()">开始漫游</button></div></div>
 <div id="toast"></div>
+<div class="tip-fab" onclick="openTipModal()" title="请作者喝杯奶茶"><span class="tip-fab-emoji">🧋</span></div>
 <div class="unlock-overlay" id="unlockOverlay">
   <div class="unlock-particles" id="unlockParticles"></div>
   <div class="unlock-song-name" id="unlockSongName"></div>
   <div class="unlock-sub" id="unlockSub">🎉 已解锁</div>
   <button class="unlock-btn" onclick="closeUnlockOverlay()">太棒了</button>
+</div>
+<div class="tip-mask" id="tipMask" onclick="if(event.target===this)closeTipModal()">
+  <div class="tip-panel">
+    <div class="tip-hero">🧋</div>
+    <div class="tip-h1">谢谢你，请你喝杯奶茶</div>
+    <div class="tip-h2">五月天陪你走过了那么多重要时刻<br>能帮你找到歌词里的角落，真好 ✨</div>
+    <div class="tip-qr-wrap"><img class="tip-qr" src="/static/assets/images/ui/wechat-pay.png" alt="微信赞赏"></div>
+    <div class="tip-quote">「这一生志愿只要平凡快乐<br>谁说这样不伟大呢」</div>
+    <div class="tip-close-row">
+      <button class="tip-close-btn secondary" onclick="closeTipModal()">下次一定</button>
+      <button class="tip-close-btn primary" onclick="saveTipQR()">长按保存赞赏码</button>
+    </div>
+  </div>
 </div>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
