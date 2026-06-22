@@ -1,21 +1,49 @@
 /* ===== MaydayLand · 五月天城市漫游 · 交互逻辑 ===== */
 
-/* ---- 图片映射（真实地点 Unsplash 图） ---- */
-var IMG = {
-  431:'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&q=80',
-  292:'https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?w=800&q=80',
-  326:'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80',
-  580:'https://images.unsplash.com/photo-1517260739337-6799d239ce83?w=800&q=80',
-  1080:'https://images.unsplash.com/photo-1538428494232-9c0d8a3ab403?w=800&q=80',
-  1036:'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80',
-  1018:'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80',
-  250:'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80',
-  119:'https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?w=800&q=80',
-  1015:'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
-  1044:'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800&q=80',
-  1082:'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80'
+/* ---- 本地素材路径（assets/images/） ---- */
+var ASSET = '/static/assets/images/';
+var BALL = {
+  blue:   ASSET + 'ui/blue.png',
+  green:  ASSET + 'ui/green.png',
+  yellow: ASSET + 'ui/yellow.png',
+  pink:   ASSET + 'ui/pink.png',
+  red:    ASSET + 'ui/red.png'
 };
-function img(id){ return IMG[id] || 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80'; }
+var LOGO_URL = ASSET + 'ui/五版logo.png';
+
+/* 专辑封面：歌名 → 文件路径（用 encodeURI 处理中文） */
+var ALBUM_BY_SONG = {
+  '任意门':       ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg'),
+  '拥抱':         ASSET + 'albums/' + encodeURIComponent('第一张创作专辑-DkV_pH8G.jpg'),
+  '倔强':         ASSET + 'albums/' + encodeURIComponent('知足 最真杰作选-Dshc6mg-.jpg'),
+  '后青春期的诗': ASSET + 'albums/' + encodeURIComponent('后青春期的诗-EzCXj1Qb.jpg'),
+  '步步':         ASSET + 'albums/' + encodeURIComponent('步步 自选作品辑-DoBobm4t.jpg'),
+  '离开地球表面': ASSET + 'albums/' + encodeURIComponent('离开地球表面 Jump!-BhO1XiYG.jpg'),
+  '因为你 所以我': ASSET + 'albums/' + encodeURIComponent('因为你 所以我-s_V6WMTD.jpg'),
+  '成名在望':     ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg'),
+  '派对动物':     ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg'),
+  '如果我们不曾相遇': ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg'),
+  '突然好想你':   ASSET + 'albums/' + encodeURIComponent('后青春期的诗-EzCXj1Qb.jpg'),
+  '志明与春娇':   ASSET + 'albums/' + encodeURIComponent('爱情万岁-C7BlxB8G.jpg'),
+  '温柔':         ASSET + 'albums/' + encodeURIComponent('时光机-CGbQBaUm.jpg'),
+  '玫瑰少年':     ASSET + 'albums/' + encodeURIComponent('玫瑰少年-DbTsPLrn.jpg'),
+  '勇敢':         ASSET + 'albums/' + encodeURIComponent('勇敢-BXCpUl6B.jpg'),
+  '人生海海':     ASSET + 'albums/' + encodeURIComponent('人生海海-BOGDD25n.jpg'),
+  '盛夏光年':     ASSET + 'albums/' + encodeURIComponent('盛夏光年-DeGlutqh.jpg'),
+  '伤心的人别听慢歌': ASSET + 'albums/' + encodeURIComponent('伤心的人别听慢歌-C6arM80p.jpg'),
+  '将军令':       ASSET + 'albums/' + encodeURIComponent('将军令-CxjrlsAV.jpg'),
+  '凡人歌':       ASSET + 'albums/' + encodeURIComponent('凡人歌-B23FlQae.jpg'),
+  'DNA':          ASSET + 'albums/' + encodeURIComponent('DNA-cz_Tdu1n.jpg')
+};
+var DEFAULT_ALBUM = ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg');
+
+/* 给角落图找一张专辑封面（优先按 song 匹配，fallback 用默认专辑封面） */
+function img(idOrSong, song){
+  /* 兼容旧调用 img(imageId)；新调用建议传 (corner.imageId, corner.song) */
+  var key = song || idOrSong;
+  if (typeof key === 'string' && ALBUM_BY_SONG[key]) return ALBUM_BY_SONG[key];
+  return DEFAULT_ALBUM;
+}
 
 /* ---- 种子数据：12 个真实五迷角落（2026 最新） ---- */
 var corners = [
@@ -170,7 +198,7 @@ function renderCornerList(){
   el.className='fade-in';
   el.innerHTML=list.map(function(c){
     return '<div class="corner-card" onclick="navigate(\'corner\',\''+c.id+'\')">'+
-      '<div class="corner-img-wrap"><img src="'+img(c.imageId)+'" alt="'+c.name+'" loading="lazy">'+
+      '<div class="corner-img-wrap"><img src="'+img(c.imageId,c.song)+'" alt="'+c.name+'" loading="lazy">'+
       '<span class="corner-cat">'+c.categoryLabel+'</span>'+
       '<div class="corner-lyric-badge"><div class="lyric">「'+c.lyric+'」</div><div class="song">— '+c.song+'</div></div></div>'+
       '<div class="corner-body"><div class="corner-name">'+c.name+' <span class="dist">'+c.distanceText+'</span></div>'+
@@ -218,7 +246,7 @@ function renderMapPins(){
 /* ---- 角落详情 ---- */
 function renderCorner(){
   var c=state.currentCorner; if(!c) return;
-  document.getElementById('detailImg').src=img(c.imageId);
+  document.getElementById('detailImg').src=img(c.imageId,c.song);
   document.getElementById('detailLyric').textContent='「'+c.lyric+'」';
   document.getElementById('detailCredit').textContent='— '+c.song+' · '+c.lyricCredit;
   document.getElementById('detailName').textContent=c.name;
@@ -835,7 +863,7 @@ function renderVenueMap(c){
   /* 周边角落列表 */
   document.getElementById('nearbyCornerList').innerHTML=nearby.map(function(co,i){
     return '<div class="nearby-corner-item" onclick="navigate(\'corner\',\''+co.id+'\')">'+
-      '<img class="nearby-corner-thumb" src="'+img(co.imageId)+'">'+
+      '<img class="nearby-corner-thumb" src="'+img(co.imageId,co.song)+'">'+
       '<div class="nearby-corner-info"><div class="nci-name">'+co.name+'</div>'+
       '<div class="nci-lyric">「'+co.lyric+'」— '+co.song+'</div>'+
       '<div class="nci-dist">'+co.distanceText+'</div></div></div>';
@@ -913,7 +941,7 @@ function renderMine(){
   if(fp.length){
     fpEl.innerHTML=fp.map(function(f){
       var modeTag = f.mode==='loose' ? '<span class="fi-mode">附近打卡</span>' : '';
-      return '<div class="footprint-item"><img class="footprint-thumb" src="'+img(f.imageId)+'">'+
+      return '<div class="footprint-item"><img class="footprint-thumb" src="'+img(f.imageId,f.song)+'">'+
         '<div class="footprint-info"><div class="fi-name">'+f.cornerName+' '+modeTag+'</div>'+
         '<div class="fi-lyric">「'+f.lyric+'」— '+f.song+'</div>'+
         '<div class="fi-meta">'+f.city+' · '+f.date+'</div></div></div>';

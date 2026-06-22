@@ -57,6 +57,9 @@ instance/
 *.sqlite3
 mayday_land.db
 
+# 部署副本（图片源在仓库根 assets/，由 Flask 路由直接服务）
+app/static/assets/
+
 # Misc
 *.tgz
 .eslintcache

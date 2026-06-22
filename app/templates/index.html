@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="icon" type="image/svg+xml" href="/static/assets/images/ui/favicon.svg">
 <title>MaydayLand · 五月天·城市漫游</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -30,12 +31,13 @@ input,textarea{font-family:inherit;outline:none;border:none}
 #splash{position:absolute;inset:0;background:#0e0e12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;transition:opacity .5s}
 #splash.hide{opacity:0;pointer-events:none}
 .splash-balls{display:flex;gap:14px;margin-bottom:30px}
-.splash-balls b{width:34px;height:34px;border-radius:50%;display:block;animation:bn .8s ease-in-out infinite alternate}
-.splash-balls b:nth-child(1){background:var(--blue)}
-.splash-balls b:nth-child(2){background:var(--green);animation-delay:.1s}
-.splash-balls b:nth-child(3){background:var(--yellow);animation-delay:.2s}
-.splash-balls b:nth-child(4){background:var(--pink);animation-delay:.3s}
-.splash-balls b:nth-child(5){background:var(--purple);animation-delay:.4s}
+.splash-balls b{width:42px;height:42px;border-radius:50%;display:block;background-size:contain;background-repeat:no-repeat;background-position:center;animation:bn .8s ease-in-out infinite alternate;filter:drop-shadow(0 6px 12px rgba(0,0,0,.18))}
+.splash-balls b:nth-child(1){background-image:url('/static/assets/images/ui/blue.png')}
+.splash-balls b:nth-child(2){background-image:url('/static/assets/images/ui/green.png');animation-delay:.1s}
+.splash-balls b:nth-child(3){background-image:url('/static/assets/images/ui/yellow.png');animation-delay:.2s}
+.splash-balls b:nth-child(4){background-image:url('/static/assets/images/ui/pink.png');animation-delay:.3s}
+.splash-balls b:nth-child(5){background-image:url('/static/assets/images/ui/red.png');animation-delay:.4s}
+.splash-logo{width:140px;margin-bottom:16px;animation:bn 1.4s ease-in-out infinite alternate}
 @keyframes bn{from{transform:translateY(0)}to{transform:translateY(-16px)}}
 .splash-title{color:#fff;font-size:26px;font-weight:800;letter-spacing:2px}
 .splash-sub{color:#888;font-size:13px;margin-top:8px;letter-spacing:1px}
@@ -48,14 +50,16 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .tag-row{display:flex;gap:8px;padding:0 18px 12px;overflow-x:auto;scrollbar-width:none}
 .tag-row::-webkit-scrollbar{display:none}
 .hero{margin:14px;border-radius:24px;overflow:hidden;position:relative;background:var(--ink);box-shadow:0 12px 30px rgba(59,125,216,.25)}
-.hero-img{width:100%;height:200px;object-fit:cover;opacity:.55}
-.hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;color:#fff}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#3B7DD8 0%,#9B7EDE 35%,#FF6B9D 70%,#FFD23F 100%)}
+.hero-img{display:none}
+.hero-logo{position:absolute;right:16px;bottom:18px;width:84px;opacity:.95;filter:drop-shadow(0 4px 12px rgba(0,0,0,.25))}
+.hero-overlay{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 20px 22px;color:#fff;min-height:200px}
+.hero-balls{position:absolute;top:16px;right:16px;display:flex;gap:6px}
+.hero-balls i{width:18px;height:18px;border-radius:50%;display:block;background-size:contain;background-repeat:no-repeat;background-position:center;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
 .hero-label{align-self:flex-start;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:auto}
 .hero-headline{font-size:24px;font-weight:900;line-height:1.3;text-shadow:0 2px 12px rgba(0,0,0,.5)}
 .hero-lyric{font-size:13px;opacity:.9;margin-top:6px;line-height:1.5}
 .hero-meta{display:flex;gap:14px;margin-top:12px;font-size:12px}
-.hero-balls{position:absolute;top:16px;right:16px;display:flex;gap:5px}
-.hero-balls i{width:10px;height:10px;border-radius:50%;display:block;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .search-box{margin:0 18px 14px;display:flex;align-items:center;gap:8px;background:#fff;border-radius:16px;padding:11px 14px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
 .search-box svg{width:18px;height:18px;color:#bbb;flex-shrink:0}
 .search-box input{flex:1;font-size:14px;background:none}
@@ -426,11 +430,11 @@ input,textarea{font-family:inherit;outline:none;border:none}
 </head>
 <body>
 <div id="stage"><div class="phone">
-<div id="splash"><div class="splash-balls"><b></b><b></b><b></b><b></b><b></b></div><div class="splash-title">MAYDAYLAND</div><div class="splash-sub">五月天 · 城市漫游</div><div class="splash-hint">跟着歌词，发现城市里的五迷角落</div></div>
+<div id="splash"><img class="splash-logo" src="/static/assets/images/ui/%E4%BA%94%E7%89%88logo.png" alt="MAYDAYLAND"><div class="splash-balls"><b></b><b></b><b></b><b></b><b></b></div><div class="splash-title">MAYDAYLAND</div><div class="splash-sub">五月天 · 城市漫游</div><div class="splash-hint">跟着歌词，发现城市里的五迷角落</div></div>
 <div class="screen" id="screen">
 
 <div class="page active" id="page-discover"><div class="scroll">
-<div class="hero"><img class="hero-img" src="https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?w=800&q=80" alt=""><div class="hero-overlay"><div class="hero-balls"><i style="background:var(--blue)"></i><i style="background:var(--green)"></i><i style="background:var(--yellow)"></i><i style="background:var(--pink)"></i><i style="background:var(--purple)"></i></div><span class="hero-label">2026 最新 · 真实五迷角落</span><div class="hero-headline">鸟巢 55 场<br>毕业快乐</div><div class="hero-lyric">从无名高地到鸟巢的 10 年，谢谢你们对五月天的疼爱</div><div class="hero-meta"><span>12 个角落</span><span>·</span><span>4 座城市</span><span>·</span><span>持续更新</span></div></div></div>
+<div class="hero"><div class="hero-overlay"><div class="hero-balls"><i style="background-image:url('/static/assets/images/ui/blue.png')"></i><i style="background-image:url('/static/assets/images/ui/green.png')"></i><i style="background-image:url('/static/assets/images/ui/yellow.png')"></i><i style="background-image:url('/static/assets/images/ui/pink.png')"></i><i style="background-image:url('/static/assets/images/ui/red.png')"></i></div><span class="hero-label">2026 最新 · 真实五迷角落</span><div class="hero-headline">鸟巢 55 场<br>毕业快乐</div><div class="hero-lyric">从无名高地到鸟巢的 10 年，谢谢你们对五月天的疼爱</div><div class="hero-meta"><span>12 个角落</span><span>·</span><span>4 座城市</span><span>·</span><span>持续更新</span></div><img class="hero-logo" src="/static/assets/images/ui/%E4%BA%94%E7%89%88logo.png" alt=""></div></div>
 <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="searchInput" placeholder="搜歌词情绪：温柔 / 倔强 / 同款…"><span id="searchClear" style="display:none;color:#bbb;font-size:18px;padding:0 4px">×</span></div>
 <div class="city-selector" id="citySelector" onclick="openCityPanel()">🏙️ 当前城市：<span id="currentCityName">北京</span> <span class="city-arrow">▾</span></div>
 <div class="tag-row" id="tagRow"></div>

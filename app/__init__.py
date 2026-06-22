@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
+import os
 import config
 
 # 因MySQLDB不支持Python3，使用pymysql扩展库代替MySQLDB库
@@ -16,6 +17,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICAT
 
 # 初始化DB操作对象
 db = SQLAlchemy(app)
+
+# 静态资源：把仓库根目录 assets/ 暴露为 /static/assets/，避免重复存储
+_BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+_ASSETS_DIR = os.path.join(_BASE_DIR, 'assets')
+
+
+@app.route('/static/assets/<path:filename>')
+def _serve_assets(filename):
+    return send_from_directory(_ASSETS_DIR, filename)
+
 
 # 加载控制器
 from app import views
