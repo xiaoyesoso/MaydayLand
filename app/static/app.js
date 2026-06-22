@@ -231,14 +231,26 @@ function recommendCorner(){
   setTimeout(function(){ navigate('corner',pick.id); }, 800);
 }
 
-document.getElementById('searchInput').addEventListener('input',function(e){
-  state.keyword=e.target.value.trim();
-  document.getElementById('searchClear').style.display=state.keyword?'block':'none';
-  renderCornerList();
-});
-document.getElementById('searchClear').addEventListener('click',function(){
-  state.keyword=''; document.getElementById('searchInput').value=''; document.getElementById('searchClear').style.display='none'; renderCornerList();
-});
+/* 搜索框事件：同时监听 input / keyup / compositionend，兼容微信内置浏览器中文输入 */
+(function(){
+  var searchInput=document.getElementById('searchInput');
+  var searchClear=document.getElementById('searchClear');
+  if(!searchInput) return;
+  var isComposing=false;
+  function doSearch(){
+    var val=searchInput.value.trim();
+    state.keyword=val;
+    if(searchClear) searchClear.style.display=val?'block':'none';
+    renderCornerList();
+  }
+  searchInput.addEventListener('compositionstart',function(){ isComposing=true; });
+  searchInput.addEventListener('compositionend',function(){ isComposing=false; doSearch(); });
+  searchInput.addEventListener('input',function(){ if(!isComposing){ doSearch(); } });
+  searchInput.addEventListener('keyup',function(e){ if(e.key==='Enter'){ doSearch(); searchInput.blur(); } });
+  if(searchClear) searchClear.addEventListener('click',function(){
+    state.keyword=''; searchInput.value=''; searchClear.style.display='none'; renderCornerList(); searchInput.focus();
+  });
+})();
 
 /* ---- 地图标记 ---- */
 function renderMapPins(){
@@ -1384,10 +1396,11 @@ var quizPersonalities={
     songs:['如烟','后青春期的诗','咸鱼','突然好想你','顽固']}
 };
 
-var quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0}};
+var quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0},direction:1};
+var QUIZ_MASCOTS=[{key:'red',file:'red.png',color:'#dc3320'},{key:'pink',file:'pink.png',color:'#e86ca5'},{key:'yellow',file:'yellow.png',color:'#efce3e'},{key:'blue',file:'blue.png',color:'#29a7e1'},{key:'green',file:'green.png',color:'#22a93a'}];
 
 function startQuiz(){
-  quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0}};
+  quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0},direction:1};
   renderQuizQuestion();
 }
 function renderQuizQuestion(){
@@ -1396,7 +1409,11 @@ function renderQuizQuestion(){
   var progress=Math.round((i/total)*100);
   var q=quizQuestions[i];
   var letters=['A','B','C','D'];
-  var html='<div class="quiz-question">'+
+  var slideClass=quizState.direction>0?'slide-next':'slide-prev';
+  /* 每题随机一只吉祥物陪伴 */
+  var mascot=QUIZ_MASCOTS[Math.floor(Math.random()*QUIZ_MASCOTS.length)];
+  var html='<div class="quiz-mascot-side"><img src="/static/assets/images/ui/'+mascot.file+'" alt="" style="filter:drop-shadow(0 6px 12px '+mascot.color+'40)"></div>'+
+    '<div class="quiz-question '+slideClass+'">'+
     '<div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:'+progress+'%"></div></div>'+
     '<div class="quiz-progress-text">第 '+(i+1)+' / '+total+' 题</div>'+
     '<div class="quiz-q-title">'+q.q+'</div>'+
@@ -1425,6 +1442,7 @@ function selectQuizOption(idx){
   var newType=quizQuestions[i].opts[idx].type;
   quizState.scores[newType]=(quizState.scores[newType]||0)+1;
   quizState.answers[i]=idx;
+  quizState.direction=1;
   renderQuizQuestion();
   /* 自动跳转下一题 */
   setTimeout(function(){
@@ -1432,10 +1450,10 @@ function selectQuizOption(idx){
   }, 400);
 }
 function prevQuizQuestion(){
-  if(quizState.step>0){ quizState.step--; renderQuizQuestion(); }
+  if(quizState.step>0){ quizState.step--; quizState.direction=-1; renderQuizQuestion(); }
 }
 function nextQuizQuestion(){
-  if(quizState.step<quizQuestions.length-1){ quizState.step++; renderQuizQuestion(); }
+  if(quizState.step<quizQuestions.length-1){ quizState.step++; quizState.direction=1; renderQuizQuestion(); }
   else { showQuizResult(); }
 }
 function showQuizResult(){

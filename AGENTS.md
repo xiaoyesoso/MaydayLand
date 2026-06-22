@@ -14,7 +14,8 @@ MaydayLand · 五月天·城市漫游：移动端 H5 单页应用 + Flask 后端
 
 ```bash
 # 本地开发（SQLite）
-pip install -r requirements.txt
+# 推荐 Python 3.9–3.11；Python 3.12 需 greenlet>=3.0
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 USE_SQLITE=1 python seed.py
 USE_SQLITE=1 python run.py 0.0.0.0 8080
 
@@ -81,6 +82,15 @@ MaydayLand/
 - 人格测评主题色：A橙 `#dc3320` / B粉 `#e86ca5` / C黄 `#efce3e` / D蓝 `#29a7e1` / E绿 `#22a93a`
 - 卡片圆角 18-24px，按钮胶囊，图片 12px
 - 页面占满视口，最大宽度 480px 居中
+
+## OpenSpec Workflow
+
+本项目采用 OpenSpec 进行 spec-driven 开发，SDD 文档位于 [`openspec/changes/mayday-cityroam-mvp/`](openspec/changes/mayday-cityroam-mvp/)。
+
+- 实施前运行：`openspec validate mayday-cityroam-mvp`
+- 实施前阅读：[`openspec/changes/mayday-cityroam-mvp/tasks.md`](openspec/changes/mayday-cityroam-mvp/tasks.md) 与对应 `specs/<capability>/spec.md`
+- 实施完成后：同步更新 `tasks.md` 中对应任务的 `[ ]` → `[x]`
+- 当前仓库为 **Flask H5 单页应用**；openspec 中 1.x–9.x 为微信小程序原生工程任务，不在本仓库实施范围
 
 ## Critical Rules
 

