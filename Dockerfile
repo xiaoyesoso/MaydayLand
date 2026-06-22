@@ -1,5 +1,5 @@
 # 二开推荐阅读[如何提高项目构建效率](https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/scene/build/speed.html)
-FROM alpine:3.18
+FROM alpine:3.13
 
 # 容器默认时区为UTC，启用上海时间
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
@@ -18,7 +18,7 @@ COPY . /app
 # 设定当前的工作目录
 WORKDIR /app
 
-# 安装依赖（系统级安装，避免 --user 路径问题）
+# 安装依赖
 RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple \
 && pip config set global.trusted-host mirrors.cloud.tencent.com \
 && pip install --upgrade pip \
