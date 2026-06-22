@@ -138,3 +138,53 @@
 - [ ] 10.1 同城约伴 citywalk 调研（依赖 R-1 阶段数据）
 - [ ] 10.2 演唱会现场轻量弹幕同步评估
 - [ ] 10.3 接入 SK9 mayday-radio 输出"角落电台" tie-in 玩法
+
+## 11. v1.2 — 五月天全曲库人格测评（personality-quiz）
+
+### 11.1 数据建模与种子
+- [x] 11.1.1 在 `app/static/app.js` 定义 `quizQuestions[20]`（按 PRD §3.3.1）
+- [x] 11.1.2 定义 `quizPersonalities` 5 维度档案（A 追梦者 / B 治愈者 / C 燃烧者 / D 思想家 / E 探索者）
+- [x] 11.1.3 每档案包含：name / title / coreTag / song / album / color / mascot / member / archetype / lyric / subtitlePool / desc / traits / songs
+- [x] 11.1.4 后端 `app/model.py` 已有 `QuizResult` 表（user_id / result_type / song / personality / answers / created_at）
+- [x] 11.1.5 后端 `app/views.py` 已有 `GET/POST /api/quiz/result` 端点
+
+### 11.2 入口位置
+- [x] 11.2.1 在 `page-discover`（首页）Hero 横幅下方、搜索栏上方放置 `.quiz-entry-card`
+- [x] 11.2.2 从 `page-mine`（我的）移除测评入口卡片
+- [x] 11.2.3 入口卡片左侧展示 5 个吉祥物（red/pink/yellow/blue/green）叠放浮动动画
+- [x] 11.2.4 入口卡片点击调用 `navigate('quiz')`
+
+### 11.3 答题流程
+- [x] 11.3.1 `quizState = {step, answers, scores:{A,B,C,D,E}}`
+- [x] 11.3.2 进度条 + 题序文字（如「第 8 / 20 题」）
+- [x] 11.3.3 4 选项卡片，选中后 `scores[type] += 10`
+- [x] 11.3.4 自动跳转下一题（400ms 延迟）
+- [x] 11.3.5 「上一题」「下一题」导航，第 1 题禁用上一题
+- [x] 11.3.6 修改答案时正确撤销旧分加新分
+- [ ] 11.3.7 题目切换时滑入滑出动画
+- [ ] 11.3.8 每题随机展示 5 色吉祥物中的一只在题卡侧边
+
+### 11.4 结果页
+- [x] 11.4.1 按 scores 降序取 primary + secondary
+- [x] 11.4.2 结果页 Hero 主题色背景 + 人生代表曲名 + 歌词金句
+- [x] 11.4.3 人格描述长文 + 3 个特质 chips
+- [x] 11.4.4 同频歌单 5 首（点击 playSong）
+- [ ] 11.4.5 复合标题（「{副.coreTag} 的 {主.name}」）
+- [ ] 11.4.6 副人格档案 + 五月天成员卡（member 字段）
+- [ ] 11.4.7 共鸣 Top3（按 scores Top3 各取主代表曲）
+- [ ] 11.4.8 互补推荐（取 scores 最低维度的代表曲，作为「互补型」）
+
+### 11.5 持久化与分享
+- [x] 11.5.1 写 localStorage `ls.set('quizResult', ...)`
+- [x] 11.5.2 写后端 `api.post('/quiz/result', ...)`
+- [x] 11.5.3 首次完成解锁 primary.song（写 unlockedSongs + 后端）
+- [x] 11.5.4 分享按钮触发 navigator.share / clipboard fallback
+- [x] 11.5.5 分享 shareCount +1 同步后端
+- [ ] 11.5.6 「保存海报」按钮（Canvas 合成测评卡）
+
+### 11.6 验证
+- [ ] 11.6.1 浏览器跑通 20 题全流程
+- [ ] 11.6.2 5 种结果至少出现 3 种（手动构造极端答案集）
+- [ ] 11.6.3 后端 `/api/quiz/result` POST 200 OK
+- [ ] 11.6.4 重新测评后 scores 重置正确
+- [ ] 11.6.5 入口卡片在首页可见、「我的」页不可见

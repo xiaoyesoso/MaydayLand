@@ -60,6 +60,10 @@ mayday_land.db
 # 部署副本（图片源在仓库根 assets/，由 Flask 路由直接服务）
 app/static/assets/
 
+# 临时调研/参考资料（不入库）
+五月天人格测评-研发需求文档.md
+chaos_bundle.js
+
 # Misc
 *.tgz
 .eslintcache

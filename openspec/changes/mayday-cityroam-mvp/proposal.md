@@ -30,6 +30,7 @@
 - `comment-enhance`（v1.1 新增）：评论点赞、二级回复、评论数据结构升级、被点赞计数、多源评论合并。
 - `corner-detail-enhance`（v1.1 新增）：详情增强字段、查看大地图、一键导航、地址复制、底部三按钮组。
 - `song-unlock`（v1.1 新增）：歌单墙展示、8 类多维度解锁条件、解锁动画、数据持久化、触发点检查、下一首解锁提示。
+- `personality-quiz`（v1.2 新增）：五月天全曲库人格测评（首页入口）、20 道情景题、5 大维度（追梦者/治愈者/燃烧者/思想家/探索者）、主+副人格复合标题、人生代表曲匹配、5 色吉祥物动画、结果持久化与分享。
 
 ### Modified Capabilities
 <!-- 当前 MaydaySkills 仓库尚无 openspec/specs/ 既有规格，无现存 capability 的 requirement 变更。 -->

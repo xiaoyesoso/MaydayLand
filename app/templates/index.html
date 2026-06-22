@@ -360,6 +360,14 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .quiz-entry-bg{position:absolute;inset:0;background:linear-gradient(135deg,#3B7DD8 0%,#9B7EDE 50%,#FF6B9D 100%);opacity:.95}
 .quiz-entry-content{position:relative;padding:18px 20px;display:flex;align-items:center;gap:14px}
 .quiz-entry-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;backdrop-filter:blur(10px)}
+.quiz-entry-mascots{display:flex;align-items:center;flex-shrink:0;width:84px;height:54px;position:relative}
+.quiz-entry-mascots img{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.85);object-fit:contain;padding:3px;position:absolute;top:50%;transform:translateY(-50%);box-shadow:0 4px 10px rgba(0,0,0,.18);animation:qMascotFloat 2.4s ease-in-out infinite}
+.quiz-entry-mascots img:nth-child(1){left:0;animation-delay:0s}
+.quiz-entry-mascots img:nth-child(2){left:12px;animation-delay:.2s}
+.quiz-entry-mascots img:nth-child(3){left:24px;animation-delay:.4s}
+.quiz-entry-mascots img:nth-child(4){left:36px;animation-delay:.6s}
+.quiz-entry-mascots img:nth-child(5){left:48px;animation-delay:.8s}
+@keyframes qMascotFloat{0%,100%{transform:translateY(-50%)}50%{transform:translateY(calc(-50% - 5px))}}
 .quiz-entry-text{flex:1;color:#fff}
 .quiz-entry-title{font-size:16px;font-weight:800;margin-bottom:3px}
 .quiz-entry-sub{font-size:12px;opacity:.85}
@@ -414,9 +422,40 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .quiz-result-play{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,.25);border-radius:20px;font-size:12px;cursor:pointer;backdrop-filter:blur(10px)}
 .quiz-result-body{padding:24px;background:#fff}
 .quiz-result-personality{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.quiz-result-coretag{font-size:18px;font-weight:900;margin-bottom:14px}
 .quiz-result-desc{font-size:13px;line-height:1.8;color:var(--ink2);margin-bottom:20px}
 .quiz-result-traits{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .quiz-trait{font-size:12px;padding:6px 14px;border-radius:12px;font-weight:600}
+.quiz-result-section-title{font-size:14px;font-weight:800;color:var(--ink);margin:24px 0 12px;display:flex;align-items:center;gap:6px}
+.quiz-result-secondary{padding:14px 16px;border-radius:14px;margin-bottom:14px}
+.qrs-name{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.qrs-desc{font-size:12px;line-height:1.7;color:var(--ink2)}
+.quiz-result-member{display:flex;align-items:center;gap:14px;padding:14px;background:#f5f5f7;border-radius:14px;margin-bottom:20px}
+.qrm-mascot{width:48px;height:48px;border-radius:50%;background:#fff;padding:4px;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.qrm-label{font-size:11px;color:var(--ink3);margin-bottom:3px}
+.qrm-name{font-size:13px;font-weight:700;color:var(--ink)}
+.quiz-resonance-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.qres-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#f9fafb;border-radius:14px;cursor:pointer;transition:transform .15s}
+.qres-item:active{transform:scale(.98)}
+.qres-rank{font-size:14px;font-weight:900;color:#aaa;width:28px;flex-shrink:0}
+.qres-album{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.qres-info{flex:1;min-width:0}
+.qres-song{font-size:13px;font-weight:700;color:var(--ink)}
+.qres-album-name{font-size:11px;color:var(--ink3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qres-score{font-size:13px;font-weight:800;flex-shrink:0}
+.quiz-opposite{padding:16px;border-radius:14px;margin-bottom:20px;text-align:center;cursor:pointer;transition:transform .15s;position:relative}
+.quiz-opposite:active{transform:scale(.98)}
+.qopp-tag{display:inline-block;font-size:10px;color:#fff;padding:3px 10px;border-radius:10px;font-weight:700;margin-bottom:8px}
+.qopp-song{font-size:18px;font-weight:900;color:var(--ink);margin-bottom:6px}
+.qopp-desc{font-size:12px;line-height:1.6;color:var(--ink2)}
+.quiz-result-mascot{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.85);padding:6px;margin-bottom:14px;box-shadow:0 8px 20px rgba(0,0,0,.15);animation:qMascotFloat 2.6s ease-in-out infinite}
+.quiz-result-combo{font-size:22px;font-weight:900;margin-bottom:6px;letter-spacing:1px}
+.quiz-result-archetype{font-size:11px;opacity:.7;letter-spacing:1.5px;margin-bottom:18px;text-transform:uppercase}
+.quiz-result-divider{height:1px;background:rgba(0,0,0,.1);margin:14px 24px}
+.quiz-result-song-row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.6);padding:10px 14px;border-radius:14px;margin:0 12px 14px}
+.quiz-result-album{width:60px;height:60px;border-radius:10px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.quiz-result-song-info{flex:1;text-align:left;min-width:0}
+.quiz-result-album-name{font-size:11px;opacity:.7;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .quiz-result-songs-title{font-size:13px;font-weight:700;color:var(--ink3);margin-bottom:12px}
 .quiz-result-songs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px}
 .quiz-result-song-cell{padding:10px 8px;border-radius:10px;font-size:11px;text-align:center;color:#fff;font-weight:600}
@@ -435,6 +474,23 @@ input,textarea{font-family:inherit;outline:none;border:none}
 
 <div class="page active" id="page-discover"><div class="scroll">
 <div class="hero"><div class="hero-overlay"><div class="hero-balls"><i style="background-image:url('/static/assets/images/ui/blue.png')"></i><i style="background-image:url('/static/assets/images/ui/green.png')"></i><i style="background-image:url('/static/assets/images/ui/yellow.png')"></i><i style="background-image:url('/static/assets/images/ui/pink.png')"></i><i style="background-image:url('/static/assets/images/ui/red.png')"></i></div><span class="hero-label">2026 最新 · 真实五迷角落</span><div class="hero-headline">鸟巢 55 场<br>毕业快乐</div><div class="hero-lyric">从无名高地到鸟巢的 10 年，谢谢你们对五月天的疼爱</div><div class="hero-meta"><span>12 个角落</span><span>·</span><span>4 座城市</span><span>·</span><span>持续更新</span></div><img class="hero-logo" src="/static/assets/images/ui/%E4%BA%94%E7%89%88logo.png" alt=""></div></div>
+<div class="quiz-entry-card" onclick="navigate('quiz')">
+  <div class="quiz-entry-bg"></div>
+  <div class="quiz-entry-content">
+    <div class="quiz-entry-mascots">
+      <img src="/static/assets/images/ui/red.png" alt="">
+      <img src="/static/assets/images/ui/pink.png" alt="">
+      <img src="/static/assets/images/ui/yellow.png" alt="">
+      <img src="/static/assets/images/ui/blue.png" alt="">
+      <img src="/static/assets/images/ui/green.png" alt="">
+    </div>
+    <div class="quiz-entry-text">
+      <div class="quiz-entry-title">五月天全曲库人格测评 🎤</div>
+      <div class="quiz-entry-sub">20 道题，测出你的人生代表曲</div>
+    </div>
+    <div class="quiz-entry-arrow">›</div>
+  </div>
+</div>
 <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="searchInput" placeholder="搜歌词情绪：温柔 / 倔强 / 同款…"><span id="searchClear" style="display:none;color:#bbb;font-size:18px;padding:0 4px">×</span></div>
 <div class="city-selector" id="citySelector" onclick="openCityPanel()">🏙️ 当前城市：<span id="currentCityName">北京</span> <span class="city-arrow">▾</span></div>
 <div class="tag-row" id="tagRow"></div>
@@ -525,17 +581,6 @@ input,textarea{font-family:inherit;outline:none;border:none}
 <div class="page" id="page-mine"><div class="scroll">
 <div class="profile-header"><div class="profile-avatar">五</div><div class="profile-name">五迷 · 同好</div><div class="profile-id">MaydayLand ID · 2026</div><div class="profile-stats"><div class="ps-item"><div class="ps-num" id="statFootprint">0</div><div class="ps-label">打卡足迹</div></div><div class="ps-item"><div class="ps-num" id="statBadge">0</div><div class="ps-label">五迷徽章</div></div><div class="ps-item"><div class="ps-num" id="statCity">0</div><div class="ps-label">覆盖城市</div></div><div class="ps-item"><div class="ps-num" id="statShare">0</div><div class="ps-label">分享次数</div></div></div></div>
 <div class="mine-section"><div class="ms-title">打卡足迹 <span class="ms-more">按时间倒序</span></div><div class="footprint-list" id="footprintList"></div></div>
-<div class="quiz-entry-card" onclick="navigate('quiz')">
-  <div class="quiz-entry-bg"></div>
-  <div class="quiz-entry-content">
-    <div class="quiz-entry-icon">🎤</div>
-    <div class="quiz-entry-text">
-      <div class="quiz-entry-title">五月天全曲库人格测评</div>
-      <div class="quiz-entry-sub">20 道题，测出你的人生代表曲</div>
-    </div>
-    <div class="quiz-entry-arrow">›</div>
-  </div>
-</div>
 <div class="mine-section"><div class="ms-title">五迷徽章墙 <span class="ms-more">对暗号解锁</span></div><div class="badge-grid" id="badgeGrid"></div></div>
 <div class="song-unlock-section">
   <div class="song-unlock-header"><div class="song-unlock-title">🎵 歌单解锁</div><div class="song-unlock-progress" id="songUnlockProgress">0 / 0</div></div>

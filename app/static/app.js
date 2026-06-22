@@ -1260,44 +1260,124 @@ function closeRecommendCard(){
   setTimeout(function(){ card.style.display='none'; card.classList.remove('hide'); }, 400);
 }
 
-/* ---- 五月天全曲库人格测评 ---- */
+/* ---- 五月天全曲库人格测评（按 PRD v1.1 · 20 题 / 5 维度 ABCDE） ---- */
+/* 维度映射：A=追梦者 B=治愈者 C=燃烧者 D=思想家 E=探索者 */
 var quizQuestions=[
-  {q:'清晨醒来，你最想听到的第一首歌是？',opts:[{t:'节奏强烈的摇滚，点燃一天',type:'A'},{t:'温柔舒缓的抒情，慢慢醒来',type:'B'},{t:'热血励志的合唱，充满力量',type:'C'},{t:'轻快俏皮的流行，心情愉悦',type:'D'}]},
-  {q:'面对人生的挫折，你会？',opts:[{t:'不服输，倔强到底绝不投降',type:'C'},{t:'接受现实，潮落之后必有潮起',type:'E'},{t:'找朋友倾诉，一起干杯释怀',type:'F'},{t:'独自消化，不打扰是我的温柔',type:'B'}]},
-  {q:'你心目中的青春是？',opts:[{t:'操场上的合唱与汗水',type:'C'},{t:'暗恋时心跳的悸动',type:'B'},{t:'与好友并肩追梦的热血',type:'A'},{t:'课间哼唱的青涩时光',type:'D'}]},
-  {q:'爱情里你最认同的态度是？',opts:[{t:'不打扰是我的温柔',type:'B'},{t:'恋爱ing 让我疯狂爱上你',type:'D'},{t:'突然好想你 你会在哪里',type:'G'},{t:'我不愿让你一个人',type:'F'}]},
-  {q:'朋友对你来说意味着？',opts:[{t:'一起干杯 一起笑忘歌',type:'F'},{t:'并肩闯荡 任意门同行',type:'A'},{t:'各自倔强 互相支撑',type:'C'},{t:'私奔到月球的默契',type:'D'}]},
-  {q:'你如何看待梦想？',opts:[{t:'成名在望 坚持到底',type:'A'},{t:'有些事现在不做一辈子都不会做了',type:'E'},{t:'咸鱼也要有梦',type:'C'},{t:'放肆追 放肆去闯',type:'A'}]},
-  {q:'夜深人静时，你最容易？',opts:[{t:'回忆从前 突然好想你',type:'G'},{t:'思考人生 如烟般感叹',type:'E'},{t:'写下心事 转眼成诗',type:'B'},{t:'憧憬未来 星空下的约定',type:'A'}]},
-  {q:'你最向往的场景是？',opts:[{t:'鸟巢十万人合唱',type:'C'},{t:'外滩夜景下的浪漫',type:'B'},{t:'离开地球表面的狂欢',type:'D'},{t:'无名高地到鸟巢的征程',type:'A'}]},
-  {q:'面对离别，你会？',opts:[{t:'后来的我们 依然要好好',type:'G'},{t:'笑忘歌 唱到沙哑',type:'F'},{t:'好好 想把你写成一首歌',type:'B'},{t:'干杯 说好不分离',type:'F'}]},
-  {q:'你的人生信条最接近？',opts:[{t:'我不怕千万人阻挡 只怕自己投降',type:'C'},{t:'潮落之后一定有潮起',type:'E'},{t:'知足的快乐叫我忍受心痛',type:'B'},{t:'生命有一种绝对',type:'A'}]},
-  {q:'你最想拥有哪种超能力？',opts:[{t:'任意门 随时到达想去的地方',type:'A'},{t:'时光机 回到某个瞬间',type:'G'},{t:'超人力量 改变世界',type:'C'},{t:'读心术 懂得所有温柔',type:'B'}]},
-  {q:'演唱会现场你会？',opts:[{t:'最前排跳到最后一首歌',type:'D'},{t:'安静挥舞荧光棒 听完全场',type:'B'},{t:'跟着合唱 喊到失声',type:'C'},{t:'记录每个瞬间 珍藏回忆',type:'G'}]},
-  {q:'你如何看待"平凡"？',opts:[{t:'这一生志愿只要平凡快乐',type:'F'},{t:'咸鱼也要有梦 不甘平凡',type:'C'},{t:'平凡也是一种温柔',type:'B'},{t:'拒绝平凡 成名在望',type:'A'}]},
-  {q:'最打动你的歌词意象是？',opts:[{t:'星空下的约定',type:'A'},{t:'如烟般消散的青春',type:'E'},{t:'雨后的彩虹',type:'C'},{t:'月光下的拥抱',type:'B'}]},
-  {q:'你与五月天的故事开始于？',opts:[{t:'校园广播里的那首倔强',type:'C'},{t:'失恋时单曲循环的温柔',type:'B'},{t:'演唱会现场的震撼合唱',type:'F'},{t:'朋友推荐的那首任意门',type:'A'}]},
-  {q:'你最喜欢的专辑是？',opts:[{t:'《自传》— 回望与传承',type:'G'},{t:'《时光机》— 青春与回忆',type:'B'},{t:'《神的孩子都在跳舞》— 热血与倔强',type:'C'},{t:'《第二人生》— 重新出发',type:'E'}]},
-  {q:'面对选择困难时，你会？',opts:[{t:'跟随内心 任意门般果断',type:'A'},{t:'权衡利弊 知足常乐',type:'B'},{t:'倔强坚持自己的方向',type:'C'},{t:'问问朋友 一起商量',type:'F'}]},
-  {q:'你最想对过去的自己说？',opts:[{t:'谢谢你 倔强地走到现在',type:'C'},{t:'后来的我们 都很好',type:'G'},{t:'有些事你做对了',type:'E'},{t:'好好 珍惜当下',type:'B'}]},
-  {q:'你心中的五月天是？',opts:[{t:'青春的代名词',type:'D'},{t:'梦想的同行者',type:'A'},{t:'温柔的治愈者',type:'B'},{t:'倔强的力量源',type:'C'}]},
-  {q:'测评快结束了，你现在的心情？',opts:[{t:'期待属于我的人生代表曲',type:'A'},{t:'好奇我会是哪首歌',type:'D'},{t:'想立刻去听五月天',type:'C'},{t:'珍惜这段回忆',type:'G'}]}
+  {q:'如果你拥有一张没有终点的车票，你希望窗外的景色一直是：',opts:[
+    {t:'漫无边际的蓝天和大海',type:'D'},{t:'霓虹闪烁的深夜城市',type:'C'},
+    {t:'停留在落日熔金的黄昏',type:'B'},{t:'崩塌与重组的超现实景观',type:'E'}]},
+  {q:'临时决定的周末夜晚，你更想：',opts:[
+    {t:'冲去现场和人群一起合唱',type:'C'},{t:'和最亲近的人慢慢散步',type:'E'},
+    {t:'独自开车去看城市天际线',type:'A'},{t:'找个安静地方读完一本书',type:'D'}]},
+  {q:'面对"你不行"的评价，你第一反应是：',opts:[
+    {t:'马上证明给他看',type:'A'},{t:'先笑笑，转身继续做自己',type:'D'},
+    {t:'情绪会低落一阵，但会自我修复',type:'B'},{t:'我会问：谁定义了"行"',type:'E'}]},
+  {q:'你理想中的"家"更像：',opts:[
+    {t:'灯光温暖，有人等你回去',type:'B'},{t:'可以随时出发的补给站',type:'A'},
+    {t:'安静稳定，书和植物很多',type:'C'},{t:'有大量留白，适合思考生命',type:'E'}]},
+  {q:'倒数十秒迎接新年时，你更在意：',opts:[
+    {t:'许一个更大的目标',type:'A'},{t:'抱住身边重要的人',type:'B'},
+    {t:'把这一刻拍成最炸的视频',type:'C'},{t:'对过去一年真诚说谢谢',type:'D'}]},
+  {q:'当你突然想起旧人旧事，会：',opts:[
+    {t:'写进备忘录，不打扰谁',type:'B'},{t:'马上出门，让风吹散情绪',type:'C'},
+    {t:'把它变成继续前进的动力',type:'D'},{t:'思考它为何在此刻出现',type:'E'}]},
+  {q:'你在团队里更像哪种角色？',opts:[
+    {t:'带头冲锋的人',type:'A'},{t:'照顾气氛与情绪的人',type:'E'},
+    {t:'现场点火、负责快乐的人',type:'C'},{t:'理清逻辑与方向的人',type:'D'}]},
+  {q:'你最害怕哪一种"失去"？',opts:[
+    {t:'失去改变命运的机会',type:'A'},{t:'失去曾经真心的人',type:'B'},
+    {t:'失去对生活的热情',type:'D'},{t:'失去自我理解的能力',type:'E'}]},
+  {q:'压力爆棚时，你的解压方式是：',opts:[
+    {t:'运动到大汗淋漓',type:'C'},{t:'把计划拆解并逐个完成',type:'A'},
+    {t:'听歌发呆，慢慢消化',type:'B'},{t:'告诉自己再撑一下就会过',type:'E'}]},
+  {q:'你对"成功"的定义更接近：',opts:[
+    {t:'实现年少时的野心',type:'A'},{t:'身边的人都过得安心',type:'B'},
+    {t:'每天都活得热烈尽兴',type:'C'},{t:'内心稳定并与自己和解',type:'D'}]},
+  {q:'如果时间能倒流，你最想回到：',opts:[
+    {t:'第一次被梦想点燃的瞬间',type:'D'},{t:'那个没说再见的夏天',type:'B'},
+    {t:'和朋友通宵疯玩的夜晚',type:'C'},{t:'一个独自想通很多事的清晨',type:'E'}]},
+  {q:'你更相信哪句话？',opts:[
+    {t:'再难也要往前走',type:'A'},{t:'爱会在细节里发光',type:'D'},
+    {t:'人生要先开心再说',type:'C'},{t:'所有答案都在路上',type:'E'}]},
+  {q:'朋友失意时，你最可能说：',opts:[
+    {t:'走，我陪你把它赢回来',type:'A'},{t:'你不用坚强，我在',type:'B'},
+    {t:'先吃顿好的，明天再战',type:'E'},{t:'允许难过，也是成长',type:'D'}]},
+  {q:'你希望别人记住你哪一面？',opts:[
+    {t:'永远不服输的样子',type:'A'},{t:'真诚又柔软的心',type:'B'},
+    {t:'像太阳一样有感染力',type:'C'},{t:'看透却依然温和',type:'E'}]},
+  {q:'下雨天最触发你的是：',opts:[
+    {t:'想起曾经并偷偷难过',type:'B'},{t:'突然想奔跑和大喊',type:'C'},
+    {t:'觉得适合复盘与沉淀',type:'D'},{t:'会想到时间与命运',type:'A'}]},
+  {q:'面对未知城市，你会先：',opts:[
+    {t:'查好路线和节奏',type:'D'},{t:'随便走，交给偶遇',type:'C'},
+    {t:'直奔地标去打卡目标',type:'E'},{t:'找一条最有故事的老街',type:'B'}]},
+  {q:'当关系出现裂缝时，你通常：',opts:[
+    {t:'主动沟通并争取修复',type:'A'},{t:'先共情，再慢慢靠近',type:'C'},
+    {t:'不强求，顺其自然',type:'D'},{t:'思考是不是早有征兆',type:'E'}]},
+  {q:'你理想中的夜晚结尾是：',opts:[
+    {t:'写下明天的新目标',type:'A'},{t:'和重要的人互道晚安',type:'B'},
+    {t:'音乐开到最大跳一支舞',type:'D'},{t:'关灯后还在思考宇宙与人生',type:'E'}]},
+  {q:'你更向往哪种成长方式？',opts:[
+    {t:'在挑战中快速蜕变',type:'A'},{t:'在陪伴中慢慢丰盈',type:'B'},
+    {t:'在体验中拓宽边界',type:'C'},{t:'在理解中获得笃定',type:'E'}]},
+  {q:'你最想送给未来自己的话是：',opts:[
+    {t:'继续冲，你会抵达山顶',type:'A'},{t:'请一直温柔，也被温柔以待',type:'B'},
+    {t:'别忘了笑，别忘了爱玩',type:'C'},{t:'慢一点没关系，真实就好',type:'D'}]}
 ];
 
+/* 5 大维度人格档案（按 PRD §4.2） */
 var quizPersonalities={
-  A:{song:'任意门',album:'自传',color:'#3B7DD8',lyric:'你问我全世界是哪里最美？答案是你走过的那个地点',personality:'追梦旅人',desc:'你天生带着一股闯劲，相信"有些事现在不做一辈子都不会做了"。人生对你而言是一场任意的冒险，你敢于踏出舒适区，用脚步丈量世界。像《任意门》里从无名高地到鸟巢的征程，你深知每个平凡的自我都曾幻想过，而你选择把幻想变成现实。',traits:[{t:'勇敢',c:'#3B7DD8'},{t:'冒险',c:'#4ECDC4'},{t:'行动派',c:'#FFD23F'}],songs:['任意门','成名在望','有些事现在不做一辈子都不会做了','离开地球表面','放肆']},
-  B:{song:'温柔',album:'爱情万岁',color:'#FF6B9D',lyric:'不打扰 是我的温柔',personality:'温柔守护者',desc:'你有一颗细腻柔软的心，懂得在喧嚣中保持安静的力量。你相信"知足的快乐叫我忍受心痛"，愿意用不打扰的方式守护所爱之人。像《温柔》的旋律，你的存在本身就是一种治愈，让身边的人感到安心与温暖。',traits:[{t:'细腻',c:'#FF6B9D'},{t:'治愈',c:'#9B7EDE'},{t:'知足',c:'#4ECDC4'}],songs:['温柔','知足','突然好想你','好好','我不愿让你一个人']},
-  C:{song:'倔强',album:'神的孩子都在跳舞',color:'#FFD23F',lyric:'我不怕千万人阻挡 只怕自己投降',personality:'倔强战士',desc:'你骨子里有一股不服输的劲儿，"就算失望 不能绝望"。面对困难，你选择握紧双手绝对不放，因为你知道"我和我最后的倔强，握紧双手绝对不放"。你是那个在逆境中依然昂首阔步的人，用行动证明咸鱼也要有梦。',traits:[{t:'坚韧',c:'#FFD23F'},{t:'热血',c:'#FF6B9D'},{t:'不服输',c:'#3B7DD8'}],songs:['倔强','咸鱼','人生海海','顽固','超人']},
-  D:{song:'恋爱ing',album:'神的孩子都在跳舞',color:'#4ECDC4',lyric:'恋爱ing happy ing 心情就像是坐上一台喷射机',personality:'快乐精灵',desc:'你天生乐观，总能在平凡日子里找到快乐的光芒。"恋爱ing"的轻快节奏就是你的生活BGM，你愿意把每一刻都活成派对，用笑容感染身边的人。像《派对动物》里唱的，你是那个让气氛永远不冷场的存在。',traits:[{t:'乐观',c:'#4ECDC4'},{t:'活泼',c:'#FFD23F'},{t:'感染力',c:'#FF6B9D'}],songs:['恋爱ing','派对动物','私奔到月球','离开地球表面','轧车']},
-  E:{song:'人生海海',album:'人生海海',color:'#9B7EDE',lyric:'潮落之后一定有潮起 有什么了不起',personality:'豁达智者',desc:'你拥有超越年龄的豁达，懂得"人生海海"的起伏规律。面对得失，你能坦然说出"就让他去"，因为深信潮落之后一定有潮起。像《如烟》里对生命的叩问，你思考得比常人更深，也因此活得更通透自在。',traits:[{t:'豁达',c:'#9B7EDE'},{t:'深思',c:'#3B7DD8'},{t:'通透',c:'#4ECDC4'}],songs:['人生海海','如烟','笑忘歌','转眼','第二人生']},
-  F:{song:'干杯',album:'第二人生',color:'#FF6B9D',lyric:'能不能和你竭尽全力奔跑 向着海平线',personality:'友情使者',desc:'你把友情看得比什么都重，"干杯"是你最爱的仪式感。你愿意为朋友两肋插刀，一起笑忘歌、一起竭尽全力奔跑。你是那个总把大家聚在一起的人，深知"这一生志愿只要平凡快乐"的真谛，用真诚编织出最坚固的情谊网。',traits:[{t:'重情',c:'#FF6B9D'},{t:'真诚',c:'#FFD23F'},{t:'凝聚力',c:'#9B7EDE'}],songs:['干杯','笑忘歌','兄弟','终结孤单','能不能和你竭尽全力奔跑']},
-  G:{song:'后来的我们',album:'自传',color:'#3B7DD8',lyric:'只期待 后来的你 能快乐 那就是 后来的我',personality:'回忆诗人',desc:'你是天生的诗人，习惯在回忆里打捞闪光的碎片。"后来的我们"是你的主题歌，你相信每段经历都有意义，即使结局不如预期，也愿意温柔地说"那就是后来的我"。你像《如烟》般对时光敏感，把遗憾酿成诗。',traits:[{t:'念旧',c:'#3B7DD8'},{t:'诗意',c:'#9B7EDE'},{t:'深情',c:'#FF6B9D'}],songs:['后来的我们','如烟','突然好想你','转眼','好好']}
+  A:{name:'追梦者',title:'热血/倔强',coreTag:'逆风的倔强',song:'成名在望',album:'第二人生',
+    color:'#dc3320',containerBg:'#f5a99e',containerInk:'#8b2218',mascot:'red',
+    member:'怪兽 · 温尚翊 · 团长 & 吉他手',archetype:'Rebellious Dreamer Archetype',
+    lyric:'梦想，再見了。再見的時候，已經没有遗憾',
+    subtitlePool:['你把不可能当日常训练','你相信命运可以被改写'],
+    personality:'追梦者',
+    desc:'你并不擅长向世界解释自己，却总在关键时刻拿出最硬的骨气。面对不确定，你会先恐惧，再行动；面对否定，你会先沉默，再坚持。你不是天生无畏，而是愿意为重要的人和事一次次站起来。你心里一直有一束光，照着那个还没实现的版本。你的人生代表曲提醒你：真正的成名，不是被看见，而是终于活成自己相信的样子。',
+    traits:[{t:'热血',c:'#dc3320'},{t:'倔强',c:'#FF6B9D'},{t:'目标感',c:'#FFD23F'}],
+    songs:['成名在望','倔强','放肆','顽固','后来的我们']},
+  B:{name:'治愈者',title:'温柔/遗憾',coreTag:'温柔的守候',song:'温柔',album:'爱情万岁',
+    color:'#e86ca5',containerBg:'#f5b8d4',containerInk:'#8b3d66',mascot:'pink',
+    member:'阿信 · 陈信宏 · 主唱',archetype:'Gentle Healer Archetype',
+    lyric:'不打扰，是我的温柔',
+    subtitlePool:['你记得细节，也理解沉默','你用柔软承接世界的锋利'],
+    personality:'治愈者',
+    desc:'你拥有很强的共情力，总能在别人还没开口时先感受到情绪的波纹。你珍惜关系里的每一次靠近，也会认真对待每一次离开。你并不脆弱，只是习惯把锋芒折叠成温柔，把遗憾酿成理解。你相信爱不一定要占有，很多时候，成全也是一种深情。人生代表曲给你的答案是：温柔不是退让，而是你最坚韧的力量。',
+    traits:[{t:'温柔',c:'#e86ca5'},{t:'共情',c:'#9B7EDE'},{t:'守候',c:'#4ECDC4'}],
+    songs:['温柔','知足','突然好想你','好好','我不愿让你一个人']},
+  C:{name:'燃烧者',title:'狂欢/当下',coreTag:'燃烧的现在',song:'离开地球表面',album:'离开地球表面 Jump!',
+    color:'#efce3e',containerBg:'#f7ebb8',containerInk:'#8a7318',mascot:'yellow',
+    member:'玛莎 · 蔡升晏 · 贝斯手',archetype:'Living For Now Archetype',
+    lyric:'离开，离开地球表面 Jump！',
+    subtitlePool:['你把日子活成现场版','你擅长把平凡点燃成烟花'],
+    personality:'燃烧者',
+    desc:'你对生活的感知是即时而鲜活的。你相信快乐不是等来的，而是制造出来的；你也知道，真正的勇敢是允许自己在此刻尽兴。别人眼中的你很会玩、很会闹，但只有你知道，那是你对抗麻木的方式。你的能量会感染身边的人，让他们短暂忘掉重力和烦恼。人生代表曲提醒你：拥抱当下并不浅薄，它是你认真活过的证据。',
+    traits:[{t:'狂欢',c:'#efce3e'},{t:'当下',c:'#FF6B9D'},{t:'感染力',c:'#dc3320'}],
+    songs:['离开地球表面','派对动物','恋爱ing','轧车','私奔到月球']},
+  D:{name:'思想家',title:'豁达/哲思',coreTag:'平凡的伟大',song:'人生海海',album:'人生海海',
+    color:'#29a7e1',containerBg:'#a8ddf5',containerInk:'#156a94',mascot:'blue',
+    member:'冠佑 · 刘谚明 · 鼓手',archetype:'Wise Philosopher Archetype',
+    lyric:'人生海海，潮落之后一定有潮起',
+    subtitlePool:['你在生活褶皱里看见答案','你相信和解比输赢更重要'],
+    personality:'思想家',
+    desc:'你习惯把情绪放在更长的时间轴上理解，所以很少被一时的风浪击倒。你看重意义，重视秩序，也懂得在复杂里寻找简单。你不是没有锋芒，而是懂得什么时候该向前，什么时候该放下。你珍惜平凡日子的稳定与确定，也愿意在别人慌乱时给出清晰和安定。人生代表曲送给你的，是一种温和但坚定的信念。',
+    traits:[{t:'豁达',c:'#29a7e1'},{t:'哲思',c:'#9B7EDE'},{t:'平和',c:'#4ECDC4'}],
+    songs:['人生海海','第二人生','转眼','凡人歌','一颗苹果']},
+  E:{name:'探索者',title:'宿命/深邃',coreTag:'时间的回响',song:'如烟',album:'后青春期的诗',
+    color:'#22a93a',containerBg:'#a8e8b8',containerInk:'#167a2c',mascot:'green',
+    member:'石头 · 石锦航 · 吉他手',archetype:'Deep Explorer Archetype',
+    lyric:'有没有那么一种永远，永远不改变',
+    subtitlePool:['你总在追问生命的形状','你愿意直面孤独与真实'],
+    personality:'探索者',
+    desc:'你天生对"为什么"更敏感，习惯在热闹之外独自思考。你不满足于表面的答案，总想看见情绪背后的因果、关系背后的本质。你可能看起来安静，内心却一直在经历深层次的对话。你知道孤独并不浪漫，但也明白它能让人更诚实地认识自己。你珍惜每一次灵魂被击中的瞬间，那些片刻会成为你继续前行的坐标。人生代表曲回应你的，是时间与生命的辽阔：你走得慢，但你看得很深。',
+    traits:[{t:'深邃',c:'#22a93a'},{t:'宿命',c:'#9B7EDE'},{t:'真实',c:'#29a7e1'}],
+    songs:['如烟','后青春期的诗','咸鱼','突然好想你','顽固']}
 };
 
-var quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0,F:0,G:0}};
+var quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0}};
 
 function startQuiz(){
-  quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0,F:0,G:0}};
+  quizState={step:0,answers:[],scores:{A:0,B:0,C:0,D:0,E:0}};
   renderQuizQuestion();
 }
 function renderQuizQuestion(){
@@ -1349,38 +1429,111 @@ function nextQuizQuestion(){
   else { showQuizResult(); }
 }
 function showQuizResult(){
-  /* 找出得分最高的人格类型 */
-  var maxScore=0, maxType='A';
-  Object.keys(quizState.scores).forEach(function(k){
-    if(quizState.scores[k]>maxScore){ maxScore=quizState.scores[k]; maxType=k; }
-  });
+  /* 按 scores 降序排序，取主+副人格（PRD §4.3） */
+  var sorted=Object.keys(quizState.scores).map(function(k){
+    return {key:k,score:quizState.scores[k]};
+  }).sort(function(a,b){ return b.score-a.score; });
+  var maxType=sorted[0].key;
+  var secondType=sorted[1].key;
+  /* 最低分维度作为互补型 */
+  var oppositeType=sorted[sorted.length-1].key;
+
   var p=quizPersonalities[maxType];
+  var sec=quizPersonalities[secondType];
+  var opp=quizPersonalities[oppositeType];
+
+  /* 复合标题：{副.coreTag} 的 {主.name}（PRD §4.4） */
+  var comboTitle=sec.coreTag+'的'+p.name;
+
   /* 持久化测评结果 */
-  ls.set('quizResult',{type:maxType,song:p.song,personality:p.personality,date:new Date().toISOString().slice(0,10)});
+  ls.set('quizResult',{type:maxType,secondary:secondType,song:p.song,personality:p.personality,combo:comboTitle,date:new Date().toISOString().slice(0,10)});
   /* 同步到后端 */
   api.post('/quiz/result',{type:maxType,song:p.song,personality:p.personality,answers:quizState.answers});
+
+  /* 主题色集合 */
+  var mascotUrl='/static/assets/images/ui/'+p.mascot+'.png';
+  var albumUrl=ALBUM_BY_SONG[p.song]||DEFAULT_ALBUM;
+
+  /* 共鸣 Top3：取 sorted 前 3 个维度的代表曲 */
+  var resonance=sorted.slice(0,3).map(function(s,i){
+    var prof=quizPersonalities[s.key];
+    return {song:prof.song,album:prof.album,name:prof.name,score:Math.round(s.score*5)};
+  });
+
   var html='<div class="quiz-result">'+
+    /* ===== Hero ===== */
     '<div class="quiz-result-card">'+
-      '<div class="quiz-result-hero" style="background:linear-gradient(135deg,'+p.color+',#9B7EDE)">'+
+      '<div class="quiz-result-hero" style="background:linear-gradient(135deg,'+p.color+' 0%,'+p.containerBg+' 100%);color:'+p.containerInk+'">'+
+        '<img class="quiz-result-mascot" src="'+mascotUrl+'" alt="">'+
+        '<div class="quiz-result-combo">'+comboTitle+'</div>'+
+        '<div class="quiz-result-archetype">'+p.archetype+'</div>'+
+        '<div class="quiz-result-divider"></div>'+
         '<div class="quiz-result-label">你的人生代表曲</div>'+
-        '<div class="quiz-result-song">《'+p.song+'》</div>'+
+        '<div class="quiz-result-song-row">'+
+          '<img class="quiz-result-album" src="'+albumUrl+'" alt="">'+
+          '<div class="quiz-result-song-info">'+
+            '<div class="quiz-result-song">《'+p.song+'》</div>'+
+            '<div class="quiz-result-album-name">'+p.album+'</div>'+
+          '</div>'+
+        '</div>'+
         '<div class="quiz-result-lyric">「'+p.lyric+'」</div>'+
-        '<div class="quiz-result-play" onclick="playSong(\''+p.song+'\')">▶ 试听这首歌</div>'+
+        '<div class="quiz-result-play" onclick="playSong(\''+p.song+'\')" style="color:'+p.color+'">▶ 试听这首歌</div>'+
       '</div>'+
+      /* ===== 主人格描述 ===== */
       '<div class="quiz-result-body">'+
-        '<div class="quiz-result-personality">'+p.personality+'</div>'+
+        '<div class="quiz-result-personality">'+p.personality+' · '+p.title+'</div>'+
+        '<div class="quiz-result-coretag" style="color:'+p.color+'">「'+p.coreTag+'」</div>'+
         '<div class="quiz-result-desc">'+p.desc+'</div>'+
         '<div class="quiz-result-traits">'+p.traits.map(function(t){ return '<span class="quiz-trait" style="background:'+t.c+'20;color:'+t.c+'">'+t.t+'</span>'; }).join('')+'</div>'+
-        '<div class="quiz-result-songs-title">🎵 同频歌单</div>'+
+
+        /* ===== 副人格 + 成员卡 ===== */
+        '<div class="quiz-result-section-title">🌗 副人格 · '+sec.name+'</div>'+
+        '<div class="quiz-result-secondary" style="background:'+sec.containerBg+'30;border-left:4px solid '+sec.color+'">'+
+          '<div class="qrs-name">'+sec.coreTag+'</div>'+
+          '<div class="qrs-desc">'+sec.subtitlePool[0]+'。'+sec.subtitlePool[1]+'。</div>'+
+        '</div>'+
+        '<div class="quiz-result-member">'+
+          '<img class="qrm-mascot" src="/static/assets/images/ui/'+p.mascot+'.png">'+
+          '<div class="qrm-info">'+
+            '<div class="qrm-label">五月天成员映射</div>'+
+            '<div class="qrm-name">'+p.member+'</div>'+
+          '</div>'+
+        '</div>'+
+
+        /* ===== 共鸣 Top3 ===== */
+        '<div class="quiz-result-section-title">🎵 共鸣 Top3</div>'+
+        '<div class="quiz-resonance-list">'+
+          resonance.map(function(r,i){
+            var albImg=ALBUM_BY_SONG[r.song]||DEFAULT_ALBUM;
+            return '<div class="qres-item" onclick="playSong(\''+r.song+'\')">'+
+              '<div class="qres-rank">#'+(i+1)+'</div>'+
+              '<img class="qres-album" src="'+albImg+'">'+
+              '<div class="qres-info"><div class="qres-song">《'+r.song+'》</div>'+
+              '<div class="qres-album-name">'+r.album+' · '+r.name+'型</div></div>'+
+              '<div class="qres-score" style="color:'+p.color+'">'+r.score+'分</div>'+
+            '</div>';
+          }).join('')+
+        '</div>'+
+
+        /* ===== 匹配 Top5 同频歌单 ===== */
+        '<div class="quiz-result-section-title">🎧 匹配 Top5 · 同频歌单</div>'+
         '<div class="quiz-result-songs">'+p.songs.map(function(s,i){
-          var colors=[p.color,'#9B7EDE','#FF6B9D','#4ECDC4','#FFD23F'];
+          var colors=[p.color,sec.color,'#FF6B9D','#4ECDC4','#FFD23F'];
           return '<div class="quiz-result-song-cell" style="background:'+colors[i%5]+'" onclick="playSong(\''+s+'\')">'+s+'</div>';
         }).join('')+'</div>'+
+
+        /* ===== 互补推荐 ===== */
+        '<div class="quiz-result-section-title">🔄 互补推荐</div>'+
+        '<div class="quiz-opposite" style="background:'+opp.containerBg+'30;border:1px dashed '+opp.color+'" onclick="playSong(\''+opp.song+'\')">'+
+          '<div class="qopp-tag" style="background:'+opp.color+'">互补型</div>'+
+          '<div class="qopp-song">《'+opp.song+'》</div>'+
+          '<div class="qopp-desc">来自「'+opp.name+'」维度的视角，可以帮你看见自己缺失的另一面</div>'+
+        '</div>'+
       '</div>'+
     '</div>'+
     '<div class="quiz-result-actions">'+
       '<button class="quiz-result-btn secondary" onclick="startQuiz()">重新测评</button>'+
-      '<button class="quiz-result-btn primary" onclick="shareQuizResult(\''+maxType+'\')">分享结果</button>'+
+      '<button class="quiz-result-btn primary" style="background:'+p.color+'" onclick="shareQuizResult(\''+maxType+'\')">分享结果</button>'+
     '</div>'+
   '</div>';
   document.getElementById('quizBody').innerHTML=html;
