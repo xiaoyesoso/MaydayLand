@@ -105,8 +105,8 @@ var ls = {
 /* ---- Toast ---- */
 function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },1800); }
 
-/* ---- 时钟 ---- */
-function tick(){ var d=new Date(); document.getElementById('clock').textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); }
+/* ---- 时钟（状态栏已移除，保留空函数避免报错） ---- */
+function tick(){ var el=document.getElementById('clock'); if(el){ var d=new Date(); el.textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); } }
 setInterval(tick,30000); tick();
 
 /* ---- 路由 ---- */
