@@ -35,9 +35,10 @@
 | ORM | SQLAlchemy 1.4 | `app/model.py` 10 张表 |
 | API | RESTful，统一 `{code, data, errorMsg}` | `app/views.py` 22 个端点 |
 | 前端 | 原生 HTML + ES5 JS + CSS | `app/templates/index.html` + `app/static/app.js` |
-| 静态资源 | Flask static + 自定义 `/static/assets/` 路由（指向根 `assets/`） | 避免重复占空间 |
-| 容器 | Alpine + Python3 | `Dockerfile`（端口 80） |
+| 静态资源 | Flask static + 自定义 `/static/assets/` 路由（指向根 `assets/`） | 避免重复占空间；生产带 `?v=build_time` cache busting |
+| 容器 | Alpine 3.13 + Python3 | `Dockerfile`（端口 80） |
 | 部署 | 微信云托管 | `container.config.json` |
+| 服务保活 | `app/keepalive.py` 定时 ping 云托管域名 | 避免 30 分钟无访问被回收 |
 
 ### 禁止引入
 - 禁止引入前端框架（React / Vue / Taro），保持单文件零依赖
@@ -49,15 +50,18 @@
 ```
 MaydayLand/
 ├── app/                              # Flask 应用包
-│   ├── __init__.py                   # 应用初始化 + /static/assets/ 路由
-│   ├── model.py                      # 10 张表（Corner/Concert/News/Comment/Footprint/PasscodeLog/SongUnlock/QuizResult/UserStat/Badge）
+│   ├── __init__.py                   # 应用初始化 + /static/assets/ 路由 + 模板变量
+│   ├── model.py                      # 10 张表（Corner/Concert/News/Comment/Footprint/PasscodeLog/SongUnlock/QuizResult/UserStat）
 │   ├── dao.py                        # 数据访问层
 │   ├── views.py                      # 22 个 RESTful API
 │   ├── response.py                   # 统一响应格式
+│   ├── keepalive.py                  # 生产环境服务保活
 │   ├── templates/index.html          # 单页 HTML（Jinja2 模板）
-│   └── static/app.js                 # 前端交互逻辑（fetch 调后端 API）
+│   └── static/                       # 前端交互逻辑与微信验证文件
+│       ├── app.js                    # 前端交互逻辑（fetch 调后端 API）
+│       └── f342dd5a3c7a9653bcaddc5ee5ca998c.txt  # 微信公众平台域名验证文件
 ├── assets/images/                    # 图片素材源（唯一存储）
-│   ├── ui/                           # 5 色球 PNG + 五版logo.png + favicon.svg
+│   ├── ui/                           # 5 色球 PNG + 五版logo + 吉祥物 + 二维码
 │   └── albums/                       # 28 张专辑封面（按歌名匹配）
 ├── openspec/                         # SDD 规格
 │   └── changes/mayday-cityroam-mvp/
@@ -65,12 +69,12 @@ MaydayLand/
 │       ├── design.md
 │       ├── tasks.md
 │       └── specs/                    # 11 个 capability spec
-├── html-demo/                        # 零依赖纯前端 Demo（保留评审用）
 ├── seed.py                           # 种子数据导入（12 角落 + 4 演唱会 + 5 资讯 + 9 评论）
 ├── config.py                         # 配置（DB URI / DEBUG / SQLite fallback）
-├── run.py                            # 应用入口（端口 80）
+├── run.py                            # 应用入口：自动建库建表 + 导入种子数据
 ├── requirements.txt                  # Python 依赖
 ├── Dockerfile                        # 微信云托管容器镜像
+├── .dockerignore                     # 排除 .git/__pycache__/*.db 等
 ├── container.config.json             # 微信云托管配置
 ├── README.md
 └── AGENTS.md                         # 本文件
@@ -85,6 +89,7 @@ MaydayLand/
 - 所有 API 返回必须用 `make_succ_response` / `make_err_response`，格式 `{code:0,data}` 或 `{code:-1,errorMsg}`
 - 数据库字段：Python 属性下划线，列名驼峰（`db.Column('cornerId', ...)`）
 - 表名 PascalCase（`__tablename__ = 'Corner'`）
+- MySQL 严格模式下 TIMESTAMP 列使用 `server_default=db.text('CURRENT_TIMESTAMP')`，避免 `default=datetime.now` 报 1067
 - 错误用 `OperationalError` 捕获并 logger.info，不抛 500
 
 ### 4.2 前端（HTML + 原生 JS）
@@ -96,6 +101,7 @@ MaydayLand/
 - 所有功能必须先写 localStorage 兜底，API 调用作为同步副作用
 - 图片优先用本地 `/static/assets/`，禁止引入 unsplash 等远程占位图
 - 关键交互打日志：`console.log('[模块]', payload)`
+- 静态资源引用通过 Jinja2 `url_for` 并带 `?v={{ build_time }}`，避免微信/浏览器缓存旧版
 
 ### 4.3 视觉规范
 
@@ -126,11 +132,14 @@ MaydayLand/
 - [x] 暗号核销 + 徽章墙 `fan-passcode`
 
 ### P1 — v1.2 新增
-- [ ] 🆕 **五月天全曲库人格测评**（首页入口，非"我的"）`personality-quiz`
+- [x] 🆕 **五月天全曲库人格测评**（首页入口，非"我的"）`personality-quiz`
   - 20 道题、5 大维度（追梦者 A / 治愈者 B / 燃烧者 C / 思想家 D / 探索者 E）
   - 主+副人格、复合标题、人生代表曲、共鸣 Top3、匹配 Top5
   - 5 色吉祥物动画 + 主题色随人格切换
   - 结果可分享、可保存（Canvas 海报）
+  - 题目与选项融入五月天歌词韵味
+- [x] 🆕 **赞赏支持**：赞赏入口 + 微信收款码弹窗
+- [x] 🆕 **服务保活**：生产环境定时访问自身域名，防止实例被回收
 
 ## 6. 质量门禁
 
@@ -141,8 +150,8 @@ MaydayLand/
 | 数据初始化 | `USE_SQLITE=1 python seed.py` 全部"已导入" |
 | API 健康 | `curl /api/corners?city=北京` 返回 `code:0` |
 | 前端无错 | 浏览器 console 无红色 error |
-| 静态资源 | `/static/assets/images/ui/blue.png` 等 200 OK |
-| OpenSpec | `openspec validate mayday-cityroam-mvp` 通过 |
+| 静态资源 | `/static/assets/images/ui/blue.png` 等 200 OK；带 `?v=` 参数正常 |
+| 生产部署 | 微信云托管构建成功，服务健康检查通过 |
 
 ## 7. 本地预览
 
@@ -164,6 +173,7 @@ USE_SQLITE=1 python run.py 0.0.0.0 8080
 ```bash
 # 仓库根作为云托管服务源码，自动按 Dockerfile 构建
 # 需要 MySQL 实例 + 环境变量：MYSQL_USERNAME / MYSQL_PASSWORD / MYSQL_ADDRESS
+# run.py 启动时会自动 CREATE DATABASE / db.create_all() / seed_all()
 # 详见 container.config.json
 ```
 
@@ -175,7 +185,6 @@ USE_SQLITE=1 python run.py 0.0.0.0 8080
 | OpenSpec 提案 | [openspec/changes/mayday-cityroam-mvp/proposal.md](openspec/changes/mayday-cityroam-mvp/proposal.md) |
 | 技术设计 | [openspec/changes/mayday-cityroam-mvp/design.md](openspec/changes/mayday-cityroam-mvp/design.md) |
 | 任务清单 | [openspec/changes/mayday-cityroam-mvp/tasks.md](openspec/changes/mayday-cityroam-mvp/tasks.md) |
-| HTML Demo | [html-demo/](html-demo/) |
 
 ### OpenSpec Capability 清单
 
@@ -191,4 +200,19 @@ USE_SQLITE=1 python run.py 0.0.0.0 8080
 | comment-enhance | v1.1 |
 | corner-detail-enhance | v1.1 |
 | song-unlock | v1.1 |
-| **personality-quiz** | **v1.2 新增** |
+| personality-quiz | v1.2 已完成 |
+
+## 10. 常见问题排查
+
+### 部署后前端仍是旧代码
+- 原因：微信/浏览器缓存了 `app.js`
+- 方案：已启用 `?v={{ build_time }}` cache busting，每次 Docker 构建 URL 都会变化
+- 手动验证：访问 `https://你的域名/static/app.js?v=...` 查看最新内容
+
+### MySQL 报 `Unknown database` / `Invalid default value for 'updatedAt'`
+- 原因：容器首次启动未建库，或 TIMESTAMP 默认值不兼容严格模式
+- 方案：`run.py` 自动建库建表；`model.py` 已改用 `server_default=CURRENT_TIMESTAMP`
+
+### 服务 30 分钟无访问被回收
+- 原因：微信云托管默认冷启动策略
+- 方案：`app/keepalive.py` 每 20 分钟 ping 一次 `/api/health`
