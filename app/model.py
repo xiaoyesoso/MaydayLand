@@ -15,6 +15,10 @@
 from datetime import datetime
 from app import db
 
+# MySQL 严格模式下 TIMESTAMP 列需要数据库端默认值
+_TS_DEFAULT = db.text('CURRENT_TIMESTAMP')
+_TS_UPDATE = db.text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+
 
 class Corner(db.Model):
     """歌词角落"""
@@ -42,8 +46,8 @@ class Corner(db.Model):
     phone = db.Column(db.String(32))
     tags = db.Column(db.JSON)
     tips = db.Column(db.Text)
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
-    updated_at = db.Column('updatedAt', db.TIMESTAMP, nullable=False, default=datetime.now, onupdate=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
+    updated_at = db.Column('updatedAt', db.TIMESTAMP, nullable=False, server_default=_TS_UPDATE)
 
 
 class Concert(db.Model):
@@ -61,7 +65,7 @@ class Concert(db.Model):
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
     concert_date = db.Column('concertDate', db.Date)
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class News(db.Model):
@@ -74,7 +78,7 @@ class News(db.Model):
     type = db.Column(db.String(16))
     type_label = db.Column('typeLabel', db.String(16))
     time = db.Column(db.String(32))
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class Comment(db.Model):
@@ -92,7 +96,7 @@ class Comment(db.Model):
     time = db.Column(db.String(32))
     likes = db.Column(db.Integer, default=0)
     is_seed = db.Column('isSeed', db.Boolean, default=False)
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class Footprint(db.Model):
@@ -107,7 +111,7 @@ class Footprint(db.Model):
     mode = db.Column(db.String(16))  # strict / loose
     tpl = db.Column(db.String(16))  # polaroid / ticket / postcard
     photo = db.Column(db.Text)
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class PasscodeLog(db.Model):
@@ -120,7 +124,7 @@ class PasscodeLog(db.Model):
     corner_name = db.Column('cornerName', db.String(64))
     passcode = db.Column(db.String(64))
     song = db.Column(db.String(64))
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class SongUnlock(db.Model):
@@ -131,7 +135,7 @@ class SongUnlock(db.Model):
     user_id = db.Column('userId', db.String(32), default='local_user')
     song = db.Column(db.String(64), nullable=False, index=True)
     unlock_action = db.Column('unlockAction', db.String(32))
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class QuizResult(db.Model):
@@ -144,7 +148,7 @@ class QuizResult(db.Model):
     song = db.Column(db.String(64), nullable=False)
     personality = db.Column(db.String(32), nullable=False)
     answers = db.Column(db.JSON)
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
 
 
 class UserStat(db.Model):
@@ -158,5 +162,5 @@ class UserStat(db.Model):
     city_switch_count = db.Column('citySwitchCount', db.Integer, default=0)
     current_city = db.Column('currentCity', db.String(16), default='北京')
     comment_liked_count = db.Column('commentLikedCount', db.Integer, default=0)
-    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, default=datetime.now)
-    updated_at = db.Column('updatedAt', db.TIMESTAMP, nullable=False, default=datetime.now, onupdate=datetime.now)
+    created_at = db.Column('createdAt', db.TIMESTAMP, nullable=False, server_default=_TS_DEFAULT)
+    updated_at = db.Column('updatedAt', db.TIMESTAMP, nullable=False, server_default=_TS_UPDATE)
