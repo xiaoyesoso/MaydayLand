@@ -1,0 +1,46 @@
+.git/
+.gitignore
+.vscode/
+.idea/
+.trae/
+.pai/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.Python
+.pytest_cache/
+.venv/
+venv/
+env/
+instance/
+
+# SQLite 本地数据库
+*.db
+*.sqlite
+*.sqlite3
+mayday_land.db
+
+# 日志
+*.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# 临时调研文件
+五月天人格测评-研发需求文档.md
+chaos_bundle.js
+
+# 构建产物
+dist/
+build/
+node_modules/
+
+# OpenSpec 文档不需要进镜像
+openspec/
+
+# 文档
+README.md
+AGENTS.md

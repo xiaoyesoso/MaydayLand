@@ -1609,16 +1609,23 @@ function openQuizPosterModal(type){
   mask.style.display='flex';
   setTimeout(function(){ mask.classList.add('show'); },10);
   drawQuizPoster(p,sec,comboTitle,function(){
-    /* 绘制完成后把 canvas 转 dataURL 给 img，便于微信长按保存 */
+    /* 绘制完成后把 canvas 转 dataURL 给 img，便于微信长按保存。
+       注意：不能隐藏 canvas，否则 qpm-canvas-wrap 高度塌陷，
+       position:absolute 的 img 会变成 0 高度不可见。
+       img 有 z-index:2 会覆盖在 canvas 上层，canvas 保持 display:block 撑住容器高度。 */
     try{
       var canvas=document.getElementById('quizPosterCanvas');
       var img=document.getElementById('quizPosterImg');
       if(canvas && img){
         img.src=canvas.toDataURL('image/png');
         img.style.display='block';
-        canvas.style.display='none';
+        /* 不隐藏 canvas，让它继续撑住 wrap 高度 */
       }
-    }catch(e){ console.warn('[quiz-poster] canvas->img failed',e); }
+    }catch(e){
+      console.warn('[quiz-poster] canvas->img failed',e);
+      /* toDataURL 失败（canvas 被污染）时，直接展示 canvas 本身 */
+      if(canvas){ canvas.style.display='block'; }
+    }
   });
   console.log('[quiz-poster] open type=%s combo=%s wx=%s',type,comboTitle,inWX);
 }
