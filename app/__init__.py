@@ -25,7 +25,9 @@ _ASSETS_DIR = os.path.join(_BASE_DIR, 'assets')
 
 @app.route('/static/assets/<path:filename>')
 def _serve_assets(filename):
-    return send_from_directory(_ASSETS_DIR, filename)
+    resp = send_from_directory(_ASSETS_DIR, filename)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 # 微信公众平台域名验证文件（如 f342dd5a3c7a9653bcaddc5ee5ca998c.txt）

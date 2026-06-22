@@ -1806,7 +1806,13 @@ function wrapLine(ctx,text,maxWidth){
 
 function drawImageSafe(src,cb){
   var img=new Image();
-  img.crossOrigin='anonymous';
+  /* 同源资源不强制跨域，避免微信内置浏览器因缺失 CORS 头导致加载失败 */
+  try{
+    var a=document.createElement('a'); a.href=src;
+    if(a.hostname!==location.hostname || a.protocol!==location.protocol){
+      img.crossOrigin='anonymous';
+    }
+  }catch(e){ img.crossOrigin='anonymous'; }
   img.onload=function(){ cb(img); };
   img.onerror=function(){ cb(null); };
   img.src=src;
