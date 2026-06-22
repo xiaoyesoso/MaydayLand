@@ -1642,11 +1642,30 @@ function drawQuizPoster(p,sec,comboTitle,onComplete){
 
   /* 3) 顶部 logo */
   drawImageSafe('/static/assets/images/ui/%E4%BA%94%E7%89%88logo.png',function(img){
-    if(img) ctx.drawImage(img,W/2-60,50,120,40);
+    /* logo 原图是 776x776 正方形，按比例绘制 80x80 圆形 logo（左上角） */
+    if(img){
+      var logoSize=72;
+      var lx=42, ly=42;
+      /* 白色描边圆底（提升对比度） */
+      ctx.fillStyle='rgba(255,255,255,.95)';
+      ctx.beginPath();
+      ctx.arc(lx+logoSize/2, ly+logoSize/2, logoSize/2+4, 0, Math.PI*2);
+      ctx.fill();
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(lx+logoSize/2, ly+logoSize/2, logoSize/2, 0, Math.PI*2);
+      ctx.clip();
+      ctx.drawImage(img, lx, ly, logoSize, logoSize);
+      ctx.restore();
+    }
+    /* 标题文字（不再依赖 logo 撑场面） */
+    ctx.fillStyle='#ffffff';
+    ctx.font='900 30px -apple-system,system-ui,"PingFang SC",sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText('MaydayLand', 130, 78);
+    ctx.font='500 18px -apple-system,system-ui,"PingFang SC",sans-serif';
     ctx.fillStyle='rgba(255,255,255,.85)';
-    ctx.font='600 22px -apple-system,system-ui,sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText('五月天全曲库人格测评',W/2,120);
+    ctx.fillText('五月天全曲库人格测评', 130, 108);
 
     /* 4) 吉祥物 */
     drawImageSafe('/static/assets/images/ui/'+p.mascot+'.png',function(mascot){
