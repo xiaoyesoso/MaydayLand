@@ -28,6 +28,16 @@ def _serve_assets(filename):
     return send_from_directory(_ASSETS_DIR, filename)
 
 
+# 微信公众平台域名验证文件（如 f342dd5a3c7a9653bcaddc5ee5ca998c.txt）
+@app.route('/<filename>')
+def _serve_verify(filename):
+    if not filename.endswith('.txt'):
+        from flask import abort
+        abort(404)
+    _STATIC_DIR = os.path.join(_BASE_DIR, 'app', 'static')
+    return send_from_directory(_STATIC_DIR, filename)
+
+
 # 加载控制器
 from app import views
 
