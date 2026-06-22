@@ -161,6 +161,15 @@ function showPage(p){
   setTimeout(function(){ el.classList.remove('slide-in'); },350);
   if(['discover','concert','mine'].indexOf(p)<0){ document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); }); }
   state.tab=p;
+  /* 答题页隐藏底部 tabbar 与赞赏 FAB，避免遮挡固定导航；非答题页恢复 */
+  var tabbar=document.querySelector('.tabbar');
+  var tipFab=document.querySelector('.tip-fab');
+  var isQuiz=(p==='quiz');
+  if(tabbar) tabbar.classList.toggle('tabbar-hidden', isQuiz);
+  if(tipFab) tipFab.classList.toggle('tip-fab-hidden', isQuiz);
+  /* 答题页时 body 也隐藏 tabbar 占位 */
+  if(isQuiz) document.body.classList.add('in-quiz');
+  else document.body.classList.remove('in-quiz');
 }
 function navigate(page,cornerId){
   showPage(page);
