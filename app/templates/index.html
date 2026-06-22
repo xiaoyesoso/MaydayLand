@@ -470,7 +470,7 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .qpm-panel{background:#fff;border-radius:24px;width:100%;max-width:380px;padding:18px 16px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:qpmSlideUp .3s cubic-bezier(.32,.72,0,1)}
 @keyframes qpmSlideUp{0%{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
 .qpm-title{font-size:16px;font-weight:900;color:var(--ink);text-align:center;margin-bottom:12px}
-#quizPosterCanvas{width:100%;height:auto;display:block;border-radius:12px;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.12);margin-bottom:12px}
+#quizPosterCanvas{width:100%;height:auto;display:block;border-radius:12px;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.12)}
 .qpm-tip{font-size:12px;color:#999;text-align:center;margin-bottom:14px;line-height:1.5}
 .qpm-actions{display:flex;gap:10px}
 .qpm-btn{flex:1;padding:12px 0;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:transform .12s}
@@ -478,6 +478,9 @@ input,textarea{font-family:inherit;outline:none;border:none}
 .qpm-btn.primary{background:linear-gradient(135deg,#3B7DD8,#9B7EDE);color:#fff}
 .qpm-btn.save{background:#4ECDC4;color:#fff}
 .qpm-btn.secondary{background:#f5f5f7;color:var(--ink)}
+.qpm-canvas-wrap{position:relative;margin-bottom:12px}
+.qpm-canvas-wrap canvas{width:100%;height:auto;display:block;border-radius:12px;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.qpm-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:12px;display:none;z-index:2;/* 确保在 canvas 上层，可长按 */}
 /* 赞赏入口卡（我的页底部） */
 .tip-card{display:flex;align-items:center;gap:14px;margin:18px 16px 0;padding:16px 18px;border-radius:20px;background:linear-gradient(135deg,#fff5e6 0%,#ffe9d6 60%,#fff5e6 100%);box-shadow:0 4px 16px rgba(231,148,68,.12);cursor:pointer;transition:transform .15s}
 .tip-card:active{transform:scale(.98)}

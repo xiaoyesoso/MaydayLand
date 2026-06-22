@@ -1555,6 +1555,8 @@ function shareQuizResult(type){
 }
 
 /* ---- 测评海报弹层 ---- */
+function isWechat(){ return /MicroMessenger/i.test(navigator.userAgent||''); }
+
 function openQuizPosterModal(type){
   var p=quizPersonalities[type];
   /* 取副人格做复合标题 */
@@ -1562,6 +1564,7 @@ function openQuizPosterModal(type){
   var sec=quizPersonalities[(sorted[1]&&sorted[1].k)||type];
   var comboTitle=sec.coreTag+'的'+p.name;
 
+  var inWX=isWechat();
   var mask=document.getElementById('quizPosterMask');
   if(!mask){
     mask=document.createElement('div');
@@ -1570,21 +1573,45 @@ function openQuizPosterModal(type){
     mask.innerHTML=
       '<div class="qpm-panel">'+
         '<div class="qpm-title">我的测评海报</div>'+
-        '<canvas id="quizPosterCanvas" width="720" height="1280"></canvas>'+
-        '<div class="qpm-tip">长按图片可保存到相册，或点击下方按钮分享</div>'+
+        '<div class="qpm-canvas-wrap">'+
+          '<canvas id="quizPosterCanvas" width="720" height="1280"></canvas>'+
+          '<img id="quizPosterImg" class="qpm-img" alt="测评海报，长按保存到相册">'+
+        '</div>'+
+        '<div class="qpm-tip" id="qpmTip">'+(inWX?'👇 长按上方海报图片，选择「保存到手机」':'长按图片保存到相册，或点击下方按钮分享')+'</div>'+
         '<div class="qpm-actions">'+
           '<button class="qpm-btn secondary" onclick="closeQuizPoster()">关闭</button>'+
-          '<button class="qpm-btn save" onclick="saveQuizPoster()">保存图片</button>'+
+          (inWX?'':'<button class="qpm-btn save" onclick="saveQuizPoster()">保存图片</button>')+
           '<button class="qpm-btn primary" onclick="shareQuizPoster()">分享</button>'+
         '</div>'+
       '</div>';
     document.body.appendChild(mask);
     mask.addEventListener('click',function(e){ if(e.target===mask) closeQuizPoster(); });
+  } else {
+    /* 切换状态时刷新提示 */
+    var tip=document.getElementById('qpmTip');
+    if(tip) tip.textContent=inWX?'👇 长按上方海报图片，选择「保存到手机」':'长按图片保存到相册，或点击下方按钮分享';
   }
+  /* 重置 img，避免上一次缓存影响 */
+  var oldImg=document.getElementById('quizPosterImg');
+  if(oldImg){ oldImg.removeAttribute('src'); oldImg.style.display='none'; }
+  var oldCanvas=document.getElementById('quizPosterCanvas');
+  if(oldCanvas){ oldCanvas.style.display='block'; }
+
   mask.style.display='flex';
   setTimeout(function(){ mask.classList.add('show'); },10);
-  drawQuizPoster(p,sec,comboTitle);
-  console.log('[quiz-poster] open type=%s combo=%s',type,comboTitle);
+  drawQuizPoster(p,sec,comboTitle,function(){
+    /* 绘制完成后把 canvas 转 dataURL 给 img，便于微信长按保存 */
+    try{
+      var canvas=document.getElementById('quizPosterCanvas');
+      var img=document.getElementById('quizPosterImg');
+      if(canvas && img){
+        img.src=canvas.toDataURL('image/png');
+        img.style.display='block';
+        canvas.style.display='none';
+      }
+    }catch(e){ console.warn('[quiz-poster] canvas->img failed',e); }
+  });
+  console.log('[quiz-poster] open type=%s combo=%s wx=%s',type,comboTitle,inWX);
 }
 
 function closeQuizPoster(){
@@ -1594,7 +1621,7 @@ function closeQuizPoster(){
   setTimeout(function(){ mask.style.display='none'; },300);
 }
 
-function drawQuizPoster(p,sec,comboTitle){
+function drawQuizPoster(p,sec,comboTitle,onComplete){
   var canvas=document.getElementById('quizPosterCanvas');
   if(!canvas) return;
   var W=720,H=1280;
@@ -1720,6 +1747,8 @@ function drawQuizPoster(p,sec,comboTitle){
         ctx.font='400 14px -apple-system,sans-serif';
         ctx.fillText('MaydayLand · 跟着歌词',80,H-105);
         ctx.fillText('发现自己',80,H-85);
+        /* 全部绘制完成（二维码是最后一张图） */
+        if(typeof onComplete==='function') onComplete();
       });
     });
   }
