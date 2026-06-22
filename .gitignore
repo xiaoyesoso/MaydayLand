@@ -37,6 +37,26 @@ Thumbs.db
 # 独立子项目（隶属 https://github.com/xiaoyesoso/MaydaySkills，不纳入本仓库）
 MaydaySkills/
 
+# Python / Flask
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.Python
+*.so
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+instance/
+
+# SQLite 本地数据库（可由 seed.py 重新生成）
+*.db
+*.sqlite
+*.sqlite3
+mayday_land.db
+
 # Misc
 *.tgz
 .eslintcache

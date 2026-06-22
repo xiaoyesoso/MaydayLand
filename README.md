@@ -42,29 +42,28 @@ MaydayLand 用 **"歌词情绪标签 + LBS 城市角落 + 同好暗号"** 三位
 
 ```
 MaydayLand/
-├── html-demo/                       # 🎁 比赛评审交付物（零依赖单文件 Demo）
-│   ├── index.html                   # 主页面（CSS 样式与页面结构）
-│   ├── app.js                       # 交互逻辑（种子数据 / 路由 / Canvas / localStorage）
-│   └── README.txt                   # Demo 使用说明
-├── html-demo.zip                    # html-demo 打包文件
-├── 五月天粉丝互动MVP需求文档.md       # 产品需求文档（PRD）
+├── app/                             # 🐍 Flask 后端应用（仿 wxcloudrun-flask 架构）
+│   ├── __init__.py                  # Flask 应用初始化 + SQLAlchemy
+│   ├── model.py                     # 10 张表数据模型（Corner/Concert/News/Comment/Footprint/...）
+│   ├── dao.py                       # 数据访问层（CRUD 封装）
+│   ├── views.py                     # 22 个 RESTful API 路由
+│   ├── response.py                  # 统一响应格式（code/data/errorMsg）
+│   ├── templates/index.html         # 前端单页 HTML（Jinja2 模板）
+│   └── static/app.js                # 前端交互逻辑（fetch 调用后端 API）
+├── html-demo/                       # 🎁 零依赖纯前端 Demo（保留用于评审）
 ├── openspec/                        # OpenSpec 规格文档
 │   └── changes/mayday-cityroam-mvp/
 │       ├── proposal.md              # 变更提案（Why / What / Capabilities）
 │       ├── design.md                # 技术设计（D1–D9）
 │       ├── tasks.md                 # 任务清单与验收标准
 │       └── specs/                   # 六大 capability 的 spec.md
-├── src/                             # Taro + React + TypeScript 源码（小程序工程）
-│   ├── pages/                       # 7 个页面：discover/corner/checkin/concert/mine/map/submit
-│   ├── components/                  # 10+ 复用组件
-│   ├── data/                        # corners / concerts / badges 种子数据
-│   ├── utils/                       # storage / share / image
-│   └── styles/                      # 五球配色主题 + 设计令牌
-├── dist/                            # Taro 编译产物（微信小程序原生代码）
-├── pages/                           # 微信小程序原生入口（编译用）
-├── mock/                            # 模拟数据（news / schedule）
-├── config/                          # Taro 构建配置
-├── package.json                     # Taro / React 依赖
+├── seed.py                          # 种子数据导入脚本（12 角落 / 4 演唱会 / 5 资讯 / 9 评论）
+├── config.py                        # 配置（DB URI / DEBUG / MySQL / SQLite fallback）
+├── run.py                           # 应用入口
+├── requirements.txt                 # Python 依赖
+├── Dockerfile                       # 微信云托管容器化部署
+├── container.config.json            # 微信云托管配置（端口 / CPU / DB 初始化 SQL）
+├── AGENT.md                         # 项目研发指引（含 v1.1 需求清单）
 └── README.md                        # 本文件
 ```
 
@@ -72,30 +71,56 @@ MaydayLand/
 
 ## 🚀 快速体验
 
-### 方案 A：HTML Demo（零依赖，推荐评审使用）
+### 方案 A：Flask 后端 + 前端一体化（推荐 ✨）
+
+参照 [`wxcloudrun-flask`](https://github.com/WeixinCloud/wxcloudrun-flask) 微信云托管模板改造，前端 HTML 由 Flask 渲染，所有数据持久化到数据库。
 
 ```bash
-# 解压 html-demo.zip 后双击 index.html
-# 或：
+# 1. 安装依赖
+pip install -r requirements.txt
+
+# 2. 本地开发（使用 SQLite，无需 MySQL）
+USE_SQLITE=1 python seed.py        # 导入种子数据
+USE_SQLITE=1 python run.py 0.0.0.0 8080
+
+# 3. 浏览器打开 http://127.0.0.1:8080/
+```
+
+**生产部署（微信云托管）**：直接将仓库根目录作为云托管服务源码，依据 `Dockerfile` 和 `container.config.json` 自动构建容器，连接 MySQL 即可。
+
+### 方案 B：HTML Demo（零依赖纯前端）
+
+```bash
 cd html-demo
 open index.html        # macOS
 # start index.html     # Windows
 ```
 
-无需 Node.js、无需服务器、无需安装任何依赖，浏览器（Chrome / Safari / Edge 最新版）打开即用。
+无需 Node.js、无需服务器、无需安装任何依赖，浏览器（Chrome / Safari / Edge 最新版）打开即用。数据仅持久化在 `localStorage`。
 
-### 方案 B：Taro 小程序工程（开发模式）
+---
 
-```bash
-# 安装依赖
-npm install
+## 🔌 后端 API 一览
 
-# 编译微信小程序
-npm run dev:weapp
-# 然后用微信开发者工具打开本目录
-```
+22 个 RESTful 接口，统一 `{code, data, errorMsg}` 响应格式：
 
-支持的端：`weapp` / `swan` / `alipay` / `tt` / `h5` / `rn` / `qq` / `jd`。
+| 接口 | 方法 | 功能 |
+| :--- | :--- | :--- |
+| `/api/corners` | GET | 角落列表（`?city=`） |
+| `/api/corners/<id>` | GET | 角落详情 |
+| `/api/concerts` | GET | 演唱会列表 |
+| `/api/news` | GET | 资讯动态 |
+| `/api/cities` | GET | 可用城市列表 |
+| `/api/comments/<cornerId>` | GET | 角落评论（含回复） |
+| `/api/comments` | POST | 发表评论 / 回复 |
+| `/api/comments/<id>/like` | POST | 评论点赞 / 取消 |
+| `/api/footprints` | GET/POST | 打卡足迹 |
+| `/api/passcode-logs` | GET/POST | 暗号核销 |
+| `/api/songs/unlocked` | GET | 已解锁歌曲 |
+| `/api/songs/unlock` | POST | 解锁歌曲 |
+| `/api/quiz/result` | GET/POST | 人格测评结果 |
+| `/api/user/stat` | GET/PUT | 用户统计（切城/分享） |
+| `/api/tonight/<concertId>` | GET/POST | 今晚同场留言 |
 
 ---
 
@@ -120,7 +145,7 @@ npm run dev:weapp
 
 ## 📚 文档导航
 
-- [产品需求文档（PRD）](./五月天粉丝互动MVP需求文档.md)
+- [项目研发指引（AGENT.md）](./AGENT.md)
 - [OpenSpec 变更提案](./openspec/changes/mayday-cityroam-mvp/proposal.md)
 - [技术设计文档](./openspec/changes/mayday-cityroam-mvp/design.md)
 - [任务清单与验收标准](./openspec/changes/mayday-cityroam-mvp/tasks.md)

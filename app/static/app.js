@@ -102,6 +102,14 @@ var ls = {
   set:function(k,v){ localStorage.setItem('ml_'+k, JSON.stringify(v)); }
 };
 
+/* ---- API 工具（微信云托管 Flask 后端） ---- */
+var api = {
+  base: '/api',
+  get: function(path){ return fetch(this.base+path).then(function(r){ return r.json(); }).then(function(d){ return d.code===0?d.data:null; }).catch(function(e){ console.error('[api.get]',path,e); return null; }); },
+  post: function(path, body){ return fetch(this.base+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }).then(function(d){ return d.code===0?d.data:null; }).catch(function(e){ console.error('[api.post]',path,e); return null; }); },
+  put: function(path, body){ return fetch(this.base+path,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }).then(function(d){ return d.code===0?d.data:null; }).catch(function(e){ console.error('[api.put]',path,e); return null; }); }
+};
+
 /* ---- Toast ---- */
 function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },1800); }
 
@@ -306,6 +314,8 @@ function toggleCommentLike(cid){
   } else if(!isAdding && cm.user!=='我'){
     ls.set('commentLikedCount', Math.max(0, ls.get('commentLikedCount',0)-1));
   }
+  /* 同步到后端 */
+  api.post('/comments/'+cid+'/like',{});
   renderComments();
   checkSongUnlock('commentLiked');
 }
@@ -320,6 +330,8 @@ function toggleReplyLike(cid,rid){
   if(idx>=0){ likedIds.splice(idx,1); r.likes=Math.max(0,(r.likes||0)-1); }
   else { likedIds.push(rid); r.likes=(r.likes||0)+1; }
   ls.set('likedCommentIds',likedIds);
+  /* 同步到后端 */
+  api.post('/comments/'+rid+'/like',{});
   renderComments();
 }
 function showReplyInput(cid){
@@ -333,8 +345,11 @@ function sendReply(cid){
   var cm=list.find(function(c){ return c.id===cid; });
   if(!cm){ /* 种子评论：克隆到本地再添加回复 */ cm=seedComments.find(function(c){ return c.id===cid; }); cm=JSON.parse(JSON.stringify(cm)); list.push(cm); }
   if(!cm.replies) cm.replies=[];
-  cm.replies.push({id:'rpl_'+Date.now(),user:'我',text:text,time:'刚刚',likes:0});
+  var reply={id:'rpl_'+Date.now(),user:'我',text:text,time:'刚刚',likes:0};
+  cm.replies.push(reply);
   ls.set('comments_'+state.currentCorner.id,list.slice(0,50));
+  /* 同步到后端 */
+  api.post('/comments',{cornerId:state.currentCorner.id,parentId:cid,text:text,user:'我'});
   renderComments(); toast('回复成功 💬');
 }
 function sendComment(){
@@ -343,7 +358,10 @@ function sendComment(){
   var c=state.currentCorner; var list=ls.get('comments_'+c.id,[]);
   list.unshift({id:'cmt_'+Date.now(),cornerId:c.id,user:'我',text:text,time:'刚刚',likes:0,replies:[]});
   ls.set('comments_'+c.id,list.slice(0,50));
-  input.value=''; renderComments(); toast('留言已发送 ❤');
+  input.value='';
+  /* 同步到后端 */
+  api.post('/comments',{cornerId:c.id,text:text,user:'我'});
+  renderComments(); toast('留言已发送 ❤');
 }
 
 /* ---- 打卡卡片 ---- */
@@ -594,6 +612,8 @@ function addFootprint(){
   if(!fp.some(function(f){ return f.cornerId===c.id; })){
     fp.unshift({cornerId:c.id,cornerName:c.name,city:c.city,song:c.song,lyric:c.lyric,imageId:c.imageId,date:new Date().toISOString().slice(0,10),mode:state.checkinMode||'strict'});
     ls.set('footprints',fp);
+    /* 同步到后端 */
+    api.post('/footprints',{cornerId:c.id,mode:state.checkinMode||'strict',tpl:state.checkinTpl||'polaroid'});
     checkSongUnlock('checkin');
   }
 }
@@ -617,6 +637,7 @@ function shareCard(){
   document.getElementById('shareText').textContent=text;
   document.getElementById('shareTextBox').style.display='block';
   ls.set('shareCount', ls.get('shareCount',0)+1);
+  api.put('/user/stat',{shareCount:ls.get('shareCount',0)});
   checkSongUnlock('share');
   if(navigator.share){
     navigator.share({title:'MaydayLand · 五月天城市漫游', text:text}).then(function(){ toast('分享成功 ❤'); confetti(); }).catch(function(){});
@@ -708,6 +729,8 @@ function verifyPasscode(){
   /* 记录核销日志 */
   passcodeLog.push({cornerId:c.id, song:c.song, date:today, ts:Date.now()});
   ls.set('passcodeLog',passcodeLog.slice(0,200));
+  /* 同步到后端 */
+  api.post('/passcode-logs',{cornerId:c.id,passcode:c.passcode});
   checkSongUnlock('passcode');
   if(state.countdownTimer) clearInterval(state.countdownTimer);
   document.getElementById('passcodeModalContent').innerHTML=
@@ -1016,6 +1039,8 @@ function checkSongUnlock(triggerAction){
 
   if(newlyUnlocked.length){
     ls.set('unlockedSongs',unlockedSongs);
+    /* 同步到后端 */
+    newlyUnlocked.forEach(function(s){ api.post('/songs/unlock',{song:s.name,action:action}); });
     showUnlockAnimation(newlyUnlocked[0]);
     renderSongUnlock();
   }
@@ -1111,6 +1136,8 @@ function init(){
   renderConcert();
   showGuide();
   requestLocation();
+  /* 从后端 API 加载数据（失败则用前端常量 fallback） */
+  loadRemoteData();
   /* 新用户分享落地页（share-growth spec：推荐人提示卡 + 2s 自动收起） */
   var urlParams=new URLSearchParams(window.location.search);
   var ref=urlParams.get('ref');
@@ -1119,6 +1146,25 @@ function init(){
   }
   /* 隐藏启动页 */
   setTimeout(function(){ document.getElementById('splash').classList.add('hide'); }, 1400);
+}
+
+/* ---- 从后端 API 异步加载数据 ---- */
+function loadRemoteData(){
+  /* 加载角落列表 */
+  api.get('/corners?city='+encodeURIComponent(state.currentCity)).then(function(data){
+    if(data && data.length){ corners=data; renderCornerList(); renderMapPins(); console.log('[api] corners loaded:',data.length); }
+  });
+  /* 加载演唱会列表 */
+  api.get('/concerts?city='+encodeURIComponent(state.currentCity)).then(function(data){
+    if(data && data.length){ concerts=data; renderConcert(); console.log('[api] concerts loaded:',data.length); }
+  });
+  /* 加载用户统计 */
+  api.get('/user/stat').then(function(data){
+    if(data){
+      if(data.currentCity){ state.currentCity=data.currentCity; updateCitySelector(); renderCornerList(); renderMapPins(); renderConcert(); }
+      console.log('[api] user stat loaded:',data);
+    }
+  });
 }
 
 /* ---- v1.1：城市切换 ---- */
@@ -1155,6 +1201,11 @@ function switchCity(name){
   state.currentCity=name;
   ls.set('currentCity',name);
   var count=ls.get('citySwitchCount',0)+1; ls.set('citySwitchCount',count);
+  /* 同步到后端 */
+  api.put('/user/stat',{currentCity:name, citySwitchCount:count});
+  /* 重新加载该城市数据 */
+  api.get('/corners?city='+encodeURIComponent(name)).then(function(data){ if(data&&data.length){ corners=data; renderCornerList(); renderMapPins(); } });
+  api.get('/concerts?city='+encodeURIComponent(name)).then(function(data){ if(data&&data.length){ concerts=data; renderConcert(); } });
   updateCitySelector();
   closeCityPanel();
   renderCornerList();
@@ -1278,6 +1329,8 @@ function showQuizResult(){
   var p=quizPersonalities[maxType];
   /* 持久化测评结果 */
   ls.set('quizResult',{type:maxType,song:p.song,personality:p.personality,date:new Date().toISOString().slice(0,10)});
+  /* 同步到后端 */
+  api.post('/quiz/result',{type:maxType,song:p.song,personality:p.personality,answers:quizState.answers});
   var html='<div class="quiz-result">'+
     '<div class="quiz-result-card">'+
       '<div class="quiz-result-hero" style="background:linear-gradient(135deg,'+p.color+',#9B7EDE)">'+
@@ -1306,12 +1359,13 @@ function showQuizResult(){
   document.getElementById('quizScroll').scrollTop=0;
   /* 解锁测评相关歌曲 */
   var unlocked=ls.get('unlockedSongs',[]);
-  if(unlocked.indexOf(p.song)<0){ unlocked.push(p.song); ls.set('unlockedSongs',unlocked); }
+  if(unlocked.indexOf(p.song)<0){ unlocked.push(p.song); ls.set('unlockedSongs',unlocked); api.post('/songs/unlock',{song:p.song,action:'quiz'}); }
   checkSongUnlock('quiz');
 }
 function shareQuizResult(type){
   var p=quizPersonalities[type];
   ls.set('shareCount', ls.get('shareCount',0)+1);
+  api.put('/user/stat',{shareCount:ls.get('shareCount',0)});
   checkSongUnlock('share');
   if(navigator.share){
     navigator.share({title:'我的人生代表曲是《'+p.song+'》',text:'五月天全曲库人格测评 — 我是「'+p.personality+'」'+p.lyric,url:location.href}).catch(function(){});
