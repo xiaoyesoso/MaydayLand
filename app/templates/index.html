@@ -531,6 +531,179 @@ body.in-quiz .page{padding-bottom:0 !important}
 .tip-card{position:relative;overflow:hidden}
 .tip-card::before{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6) 0%,transparent 70%)}
 
+/* ===== 移动端门户 ===== */
+.portal-hero{margin:14px;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(135deg,#425AEF 0%,#7a60d2 50%,#FF7C7C 100%);min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 20px;color:#fff;box-shadow:0 10px 28px rgba(66,90,239,.28)}
+.portal-quiz-card{margin:0 14px 12px;border-radius:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .15s;box-shadow:0 4px 14px rgba(59,125,216,.25)}
+.portal-quiz-card:active{transform:scale(.98)}
+.portal-quiz-bg{position:absolute;inset:0;background:linear-gradient(135deg,#3B7DD8 0%,#9B7EDE 50%,#FF6B9D 100%);opacity:.95}
+.portal-quiz-content{position:relative;padding:16px 18px;display:flex;align-items:center;gap:14px}
+.portal-quiz-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;backdrop-filter:blur(10px)}
+.portal-quiz-text{flex:1;color:#fff}
+.portal-quiz-title{font-size:16px;font-weight:800;margin-bottom:3px}
+.portal-quiz-sub{font-size:12px;opacity:.85}
+.portal-quiz-arrow{color:#fff;font-size:24px;font-weight:300;opacity:.8}
+.portal-hero .ph-slogan{font-size:22px;font-weight:900;line-height:1.3;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.portal-hero .ph-sub{font-size:12px;opacity:.92;margin-top:6px}
+.portal-hero .ph-balls{position:absolute;top:14px;right:16px;display:flex;gap:5px}
+.portal-hero .ph-balls i{width:16px;height:16px;border-radius:50%;background-size:contain;background-repeat:no-repeat}
+.portal-section{padding:0 14px;margin-top:6px}
+.portal-section .ps-head{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 10px}
+.portal-section .ps-head h3{font-size:16px;font-weight:800}
+.portal-section .ps-head .ps-more{font-size:12px;color:#999;font-weight:500}
+.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.game-card{background:#fff;border-radius:16px;padding:14px 8px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s}
+.game-card:active{transform:scale(.96)}
+.game-card .gc-icon{width:46px;height:46px;border-radius:14px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}
+.game-card .gc-name{font-size:12px;font-weight:700;color:#363636}
+.game-card .gc-desc{font-size:10px;color:#999;margin-top:2px}
+.tool-row{display:flex;gap:10px}
+.tool-card{flex:1;background:#fff;border-radius:16px;padding:14px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 3px 12px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s}
+.tool-card:active{transform:scale(.97)}
+.tool-card .tc-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;flex-shrink:0}
+.tool-card .tc-name{font-size:13px;font-weight:700}
+.tool-card .tc-desc{font-size:10px;color:#999;margin-top:2px}
+.portal-stats-bar{display:flex;gap:8px;margin:0 14px 14px;background:#fff;border-radius:16px;padding:14px;box-shadow:0 3px 12px rgba(0,0,0,.04)}
+.portal-stats-bar .psb-item{flex:1;text-align:center}
+.portal-stats-bar .psb-num{font-size:18px;font-weight:900;color:#425AEF}
+.portal-stats-bar .psb-label{font-size:10px;color:#999;margin-top:2px}
+.portal-tabbar{height:62px;display:flex;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-top:1px solid #eee;flex-shrink:0;padding-bottom:14px}
+.portal-tabbar-hidden{display:none!important}
+.portal-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#999;font-size:10px;font-weight:500}
+.portal-tab svg{width:22px;height:22px}
+.portal-tab.active{color:#425AEF}
+.game-page{padding:14px}
+.game-header{display:flex;align-items:center;gap:12px;padding:6px 0 14px}
+.game-header .back-btn{background:#f0f0f2}
+.game-title{font-size:18px;font-weight:800}
+.game-sub{font-size:12px;color:#999;margin-top:2px}
+/* Wordle */
+.wordle-grid{display:flex;flex-direction:column;gap:6px;align-items:center;margin:16px 0}
+.wordle-row{display:flex;gap:6px}
+.wordle-cell{width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;border:2px solid #e0e0e0;background:#fff}
+.wordle-cell.green{background:#57bd6a;border-color:#57bd6a;color:#fff}
+.wordle-cell.yellow{background:#fbbf24;border-color:#fbbf24;color:#fff}
+.wordle-cell.gray{background:#bbb;border-color:#bbb;color:#fff}
+.wordle-cell.flip{animation:wFlip .5s}
+@keyframes wFlip{0%{transform:rotateX(0)}50%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
+.wordle-kb{display:flex;flex-direction:column;gap:5px;align-items:center;margin-top:14px}
+.wordle-kb-row{display:flex;gap:4px}
+.wordle-key{min-width:28px;height:42px;padding:0 8px;border-radius:6px;background:#f0f0f2;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.wordle-key:active{transform:scale(.94)}
+.wordle-key.green{background:#57bd6a;color:#fff}
+.wordle-key.yellow{background:#fbbf24;color:#fff}
+.wordle-key.gray{background:#bbb;color:#fff}
+.wordle-pool{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:320px}
+.wordle-key.wide{min-width:80px;flex:1}
+.wordle-key.primary{background:#425AEF;color:#fff}
+/* Choice */
+.choice-cards{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.choice-card{background:#fff;border-radius:18px;padding:24px 18px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.06);cursor:pointer;transition:transform .2s;border:3px solid transparent}
+.choice-card:active{transform:scale(.97)}
+.choice-card.picked{border-color:#FF7C7C;background:linear-gradient(135deg,rgba(255,124,124,.08),rgba(255,124,124,.02))}
+.choice-card .cc-emoji{font-size:36px}
+.choice-card .cc-name{font-size:18px;font-weight:800;margin-top:8px}
+.choice-card .cc-meta{font-size:11px;color:#999;margin-top:4px}
+.choice-toggle{text-align:center;margin:14px 0}
+.choice-rank-list{margin:10px 0}
+.cr-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:#f5f5f7;margin-bottom:6px}
+.cr-rank{width:32px;text-align:center;font-size:14px;font-weight:800;color:#666}
+.cr-info{flex:1}
+.cr-name{font-size:13px;font-weight:700;color:#363636}
+.cr-bar{height:6px;background:#e0e0e0;border-radius:3px;margin-top:4px;overflow:hidden}
+.cr-fill{height:100%;background:linear-gradient(90deg,#FF7C7C,#fbbf24);border-radius:3px}
+.cr-votes{font-size:12px;color:#999;font-weight:600}
+.choice-streak{position:fixed;top:14px;right:14px;background:#FF7C7C;color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;z-index:20}
+/* Emoji guess */
+.emoji-display{font-size:48px;text-align:center;padding:30px 14px;line-height:1.8;background:#fff;border-radius:18px;margin:14px 0;box-shadow:0 3px 12px rgba(0,0,0,.05);animation:emojiFloat 2s ease-in-out infinite alternate}
+@keyframes emojiFloat{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+.emoji-input-row{display:flex;gap:8px;margin-top:10px}
+.emoji-input-row input{flex:1;background:#fff;border-radius:12px;padding:12px 14px;font-size:14px;border:2px solid #eee}
+.emoji-input-row button{background:#425AEF;color:#fff;padding:0 18px;border-radius:12px;font-size:13px;font-weight:700}
+.emoji-btns{display:flex;gap:8px;margin-top:10px}
+.emoji-btns button{flex:1;padding:11px;border-radius:12px;font-size:12px;font-weight:600;background:#f0f0f2;color:#363636}
+.emoji-btns .hint{background:#fbbf24;color:#fff}
+.emoji-shake{animation:eShake .4s}
+@keyframes eShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+/* Ten seconds */
+.ten-balls{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.ten-ball{width:18px;height:18px;border-radius:50%;background:#425AEF;transition:all .3s}
+.ten-ball.gone{background:#eee;transform:scale(.6)}
+.ten-lyric{background:#fff;border-radius:18px;padding:24px 18px;margin:14px 0;box-shadow:0 3px 12px rgba(0,0,0,.05);text-align:center;font-size:16px;line-height:1.6;color:#363636}
+.ten-lyric.urgent{animation:tenPulse .5s infinite alternate}
+@keyframes tenPulse{from{box-shadow:0 0 0 0 rgba(240,74,99,.3)}to{box-shadow:0 0 0 12px rgba(240,74,99,0)}}
+.ten-score{font-size:28px;font-weight:900;color:#425AEF;text-align:center;margin:10px 0}
+/* Land */
+.land-card{background:#fff;border-radius:18px;padding:20px 18px;margin:10px 0;box-shadow:0 3px 12px rgba(0,0,0,.05)}
+.land-card .lc-lyric{font-size:16px;line-height:1.6;color:#363636;font-weight:600}
+.land-card .lc-credit{font-size:11px;color:#999;margin-top:8px}
+.land-options{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.land-opt{padding:14px;border-radius:12px;background:#f5f5f7;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:all .15s}
+.land-opt:active{transform:scale(.98)}
+.land-opt.correct{background:#57bd6a;color:#fff}
+.land-opt.wrong{background:#f04a63;color:#fff}
+/* Synthesis */
+#synCanvas{display:block;margin:0 auto;background:linear-gradient(180deg,#e8f5e9,#c8e6c9);border-radius:18px;touch-action:none}
+.syn-score{font-size:22px;font-weight:900;color:#57bd6a;text-align:center;margin:10px 0}
+.syn-next{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0}
+.syn-next .sn-label{font-size:12px;color:#999}
+.syn-next .sn-emoji{width:36px;height:36px;border-radius:50%;overflow:hidden}
+.syn-next .sn-emoji img{width:100%;height:100%;object-fit:cover}
+/* Memory */
+.mem-grid{display:grid;gap:8px;justify-content:center;margin:14px 0}
+.mem-card{width:64px;height:64px;perspective:600px;cursor:pointer}
+.mem-card-inner{position:relative;width:100%;height:100%;transition:transform .4s;transform-style:preserve-3d}
+.mem-card.flipped .mem-card-inner{transform:rotateY(180deg)}
+.mem-face{position:absolute;inset:0;border-radius:10px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.mem-front{background:linear-gradient(135deg,#425AEF,#7a60d2);color:#fff;font-size:22px}
+.mem-back{background:#fff;border:2px solid #eee;transform:rotateY(180deg);overflow:hidden}
+.mem-back img{width:100%;height:100%;object-fit:cover}
+.mem-back.matched{background:#57bd6a}
+.mem-info{display:flex;justify-content:space-around;margin:10px 14px;font-size:13px;font-weight:600}
+/* Moments */
+.moment-card{background:#fff;border-radius:16px;margin:10px 14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.moment-card .mc-head{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.moment-card .mc-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+.moment-card .mc-name{font-size:14px;font-weight:700}
+.moment-card .mc-time{font-size:11px;color:#999}
+.moment-card .mc-text{padding:0 14px 10px;font-size:14px;line-height:1.6;color:#363636}
+.moment-card .mc-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:0 14px 12px}
+.moment-card .mc-imgs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px}
+.mom-theme-toggle{width:36px;height:36px;border-radius:50%;background:#f0f0f2;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;margin-left:auto;flex-shrink:0}
+.mom-theme-toggle:active{transform:scale(.9)}
+#page-tool-moments.mom-dark{background:#1a1a2e}
+#page-tool-moments.mom-dark .scroll{background:#1a1a2e}
+#page-tool-moments.mom-dark .moment-card{background:#252540;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+#page-tool-moments.mom-dark .mc-name{color:#fff}
+#page-tool-moments.mom-dark .mc-text{color:#d0d0e0}
+#page-tool-moments.mom-dark .mc-time{color:#888}
+#page-tool-moments.mom-dark .game-header{background:#252540}
+#page-tool-moments.mom-dark .game-title{color:#fff}
+#page-tool-moments.mom-dark .game-sub{color:#aaa}
+#page-tool-moments.mom-dark .back-btn{color:#fff}
+#page-tool-moments.mom-dark .mom-theme-toggle{background:#3a3a5e}
+/* Scratch */
+.scratch-wrap{position:relative;margin:14px auto;width:300px;height:200px;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.scratch-prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#425AEF,#7a60d2);color:#fff;text-align:center;padding:20px}
+.scratch-prize .sp-title{font-size:20px;font-weight:900}
+.scratch-prize .sp-sub{font-size:13px;margin-top:6px;opacity:.9}
+#scratchCanvas{position:absolute;inset:0;cursor:pointer;touch-action:none}
+.scratch-input{margin:0 14px 14px}
+.scratch-input input{width:100%;background:#fff;border-radius:12px;padding:12px 14px;font-size:14px;border:2px solid #eee}
+.scratch-tpls{display:flex;gap:8px;margin:0 14px 14px;overflow-x:auto}
+.scratch-tpls .stp{flex-shrink:0;padding:8px 14px;border-radius:10px;background:#f0f0f2;font-size:12px;font-weight:600}
+.scratch-tpls .stp.active{background:#425AEF;color:#fff}
+/* Gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;padding:0 14px}
+.gallery-item{border-radius:10px;overflow:hidden;background:#eee;cursor:pointer}
+.gallery-item img{width:100%;display:block}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.show{display:flex}
+.lightbox img{max-width:100%;max-height:80vh;border-radius:8px}
+.lightbox .lb-close{position:absolute;top:40px;right:20px;color:#fff;font-size:28px}
+/* Nickname modal */
+.nick-modal{width:300px;background:#fff;border-radius:24px;padding:24px;text-align:center}
+.nick-modal input{width:100%;background:#f5f5f7;border-radius:12px;padding:12px 14px;font-size:14px;margin-top:12px}
+.nick-modal button{width:100%;margin-top:14px;padding:13px;border-radius:14px;background:#425AEF;color:#fff;font-size:14px;font-weight:700}
 </style>
 </head>
 <body>
@@ -540,23 +713,6 @@ body.in-quiz .page{padding-bottom:0 !important}
 
 <div class="page active" id="page-discover"><div class="scroll">
 <div class="hero"><div class="hero-overlay"><div class="hero-balls"><i style="background-image:url('/static/assets/images/ui/blue.png')"></i><i style="background-image:url('/static/assets/images/ui/green.png')"></i><i style="background-image:url('/static/assets/images/ui/yellow.png')"></i><i style="background-image:url('/static/assets/images/ui/pink.png')"></i><i style="background-image:url('/static/assets/images/ui/red.png')"></i></div><span class="hero-label">2026 最新 · 真实五迷角落</span><div class="hero-headline">鸟巢 55 场<br>毕业快乐</div><div class="hero-lyric">从无名高地到鸟巢的 10 年，谢谢你们对五月天的疼爱</div><div class="hero-meta"><span>12 个角落</span><span>·</span><span>4 座城市</span><span>·</span><span>持续更新</span></div><img class="hero-logo" src="/static/assets/images/ui/%E4%BA%94%E7%89%88logo.png" alt=""></div></div>
-<div class="quiz-entry-card" onclick="navigate('quiz')">
-  <div class="quiz-entry-bg"></div>
-  <div class="quiz-entry-content">
-    <div class="quiz-entry-mascots">
-      <img src="/static/assets/images/ui/red.png" alt="">
-      <img src="/static/assets/images/ui/pink.png" alt="">
-      <img src="/static/assets/images/ui/yellow.png" alt="">
-      <img src="/static/assets/images/ui/blue.png" alt="">
-      <img src="/static/assets/images/ui/green.png" alt="">
-    </div>
-    <div class="quiz-entry-text">
-      <div class="quiz-entry-title">五月天全曲库人格测评 🎤</div>
-      <div class="quiz-entry-sub">20 道题，测出你的人生代表曲</div>
-    </div>
-    <div class="quiz-entry-arrow">›</div>
-  </div>
-</div>
 <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="searchInput" placeholder="搜歌词情绪：温柔 / 倔强 / 同款…"><span id="searchClear" style="display:none;color:#bbb;font-size:18px;padding:0 4px">×</span></div>
 <div class="city-selector" id="citySelector" onclick="openCityPanel()">🏙️ 当前城市：<span id="currentCityName">北京</span> <span class="city-arrow">▾</span></div>
 <div class="tag-row" id="tagRow"></div>
@@ -645,7 +801,7 @@ body.in-quiz .page{padding-bottom:0 !important}
 </div></div>
 
 <div class="page" id="page-mine"><div class="scroll">
-<div class="profile-header"><div class="profile-avatar">五</div><div class="profile-name">五迷 · 同好</div><div class="profile-id">MaydayLand ID · 2026</div><div class="profile-stats"><div class="ps-item"><div class="ps-num" id="statFootprint">0</div><div class="ps-label">打卡足迹</div></div><div class="ps-item"><div class="ps-num" id="statBadge">0</div><div class="ps-label">五迷徽章</div></div><div class="ps-item"><div class="ps-num" id="statCity">0</div><div class="ps-label">覆盖城市</div></div><div class="ps-item"><div class="ps-num" id="statShare">0</div><div class="ps-label">分享次数</div></div></div></div>
+<div class="profile-header"><div class="profile-avatar" id="profileAvatar">五</div><div class="profile-name" id="profileName">五迷 · 同好</div><div class="profile-id" id="profileId">MaydayLand ID · 2026</div><div class="profile-stats"><div class="ps-item"><div class="ps-num" id="statFootprint">0</div><div class="ps-label">打卡足迹</div></div><div class="ps-item"><div class="ps-num" id="statBadge">0</div><div class="ps-label">五迷徽章</div></div><div class="ps-item"><div class="ps-num" id="statCity">0</div><div class="ps-label">覆盖城市</div></div><div class="ps-item"><div class="ps-num" id="statShare">0</div><div class="ps-label">分享次数</div></div></div></div>
 <div class="tip-card" onclick="openTipModal()">
   <div class="tip-icon">🧋</div>
   <div class="tip-main">
@@ -665,10 +821,141 @@ body.in-quiz .page{padding-bottom:0 !important}
 <div style="height:20px"></div>
 </div></div>
 
+<!-- ===== 移动端门户首页 ===== -->
+<div class="page" id="page-mobile-portal"><div class="scroll" id="portalScroll">
+<div class="portal-hero">
+<div class="ph-balls"><i style="background-image:url('/static/assets/images/ui/blue.png')"></i><i style="background-image:url('/static/assets/images/ui/yellow.png')"></i><i style="background-image:url('/static/assets/images/ui/pink.png')"></i></div>
+<div class="ph-slogan">回忆是你我<br>生存的地方</div>
+<div class="ph-sub">MaydayLand · 8 款游戏 + 3 款工具</div>
+</div>
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">游戏门户</div><div class="game-sub" id="portalNickname">点击设置昵称</div></div></div>
+<!-- 人格测评入口 -->
+<div class="portal-quiz-card" onclick="navigate('quiz')">
+  <div class="portal-quiz-bg"></div>
+  <div class="portal-quiz-content">
+    <div class="portal-quiz-icon">🎤</div>
+    <div class="portal-quiz-text">
+      <div class="portal-quiz-title">五月天全曲库人格测评</div>
+      <div class="portal-quiz-sub">20 道题，测出你的人生代表曲</div>
+    </div>
+    <div class="portal-quiz-arrow">›</div>
+  </div>
+</div>
+<div class="portal-stats-bar" id="portalStatsBar"></div>
+<div class="portal-section">
+<div class="ps-head"><h3>热门游戏</h3></div>
+<div class="game-grid" id="portalHotGames"></div>
+</div>
+<div class="portal-section">
+<div class="ps-head"><h3>更多游戏</h3></div>
+<div class="game-grid" id="portalMoreGames"></div>
+</div>
+<div class="portal-section">
+<div class="ps-head"><h3>实用工具</h3></div>
+<div class="tool-row" id="portalTools"></div>
+</div>
+<div style="height:80px"></div>
+</div></div>
+
+<!-- ===== 猜词 Wordle ===== -->
+<div class="page" id="page-game-wordle"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">猜歌名</div><div class="game-sub">5 次机会，颜色小球给你提示</div></div></div>
+<div id="wordleGrid" class="wordle-grid"></div>
+<div id="wordleKb" class="wordle-kb"></div>
+<div id="wordleStatus" style="text-align:center;margin:14px;font-size:14px;color:#999"></div>
+</div></div></div>
+
+<!-- ===== 二选一 Choice ===== -->
+<div class="page" id="page-game-choice"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">二选一</div><div class="game-sub">选出你更喜欢的那首</div></div></div>
+<div class="choice-streak" id="choiceStreak">连击 0</div>
+<div class="choice-cards" id="choiceCards"></div>
+<div class="choice-toggle"><button class="action-btn" style="display:inline-flex;padding:8px 18px;font-size:13px" onclick="choiceToggleRank()">🏆 本地排行榜</button></div>
+<div id="choiceRank" style="display:none"></div>
+</div></div></div>
+
+<!-- ===== Emoji 猜歌 ===== -->
+<div class="page" id="page-game-emoji"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">Emoji 猜歌</div><div class="game-sub">看 emoji 猜五月天歌名</div></div></div>
+<div class="emoji-display" id="emojiDisplay"></div>
+<div class="emoji-input-row"><input id="emojiInput" placeholder="输入歌名…"><button onclick="submitEmojiGuess()">猜</button></div>
+<div class="emoji-btns"><button class="hint" onclick="emojiHint()">提示 (-1)</button><button onclick="emojiNext()">换一题</button></div>
+<div id="emojiStatus" style="text-align:center;margin:14px;font-size:13px;color:#999"></div>
+</div></div></div>
+
+<!-- ===== 十秒猜歌 ===== -->
+<div class="page" id="page-game-ten"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">十秒猜歌</div><div class="game-sub">10 秒内猜出歌名</div></div></div>
+<div class="ten-balls" id="tenBalls"></div>
+<div class="ten-lyric" id="tenLyric">点击开始</div>
+<div class="ten-score" id="tenScore">0</div>
+<div class="emoji-input-row"><input id="tenInput" placeholder="输入歌名…" disabled><button id="tenBtn" onclick="tenStart()">开始</button></div>
+<div id="tenStatus" style="text-align:center;margin:14px;font-size:13px;color:#999"></div>
+</div></div></div>
+
+<!-- ===== 歌词选择 Land ===== -->
+<div class="page" id="page-game-land"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">歌词选择</div><div class="game-sub">选出歌词的下一句</div></div></div>
+<div id="landBody"></div>
+</div></div></div>
+
+<!-- ===== 合成大月天 Synthesis ===== -->
+<div class="page" id="page-game-synthesis"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">合成大月天</div><div class="game-sub">相同水果碰撞合成</div></div></div>
+<div class="syn-score" id="synScore">0</div>
+<div class="syn-next"><span class="sn-label">下一个：</span><div class="sn-emoji" id="synNext"><img src="/static/assets/MaydayLand/images/games/synthesis/emoji1.png" alt=""></div></div>
+<canvas id="synCanvas" width="320" height="420"></canvas>
+<div id="synStatus" style="text-align:center;margin:10px;font-size:13px;color:#999">点击屏幕释放水果</div>
+</div></div></div>
+
+<!-- ===== 记忆配对 Memory ===== -->
+<div class="page" id="page-game-memory"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">记忆配对</div><div class="game-sub">翻牌找到相同图案</div></div></div>
+<div class="mem-info"><span>关卡：<b id="memLevel">1</b></span><span>用时：<b id="memTime">0</b>s</span><span>配对：<b id="memMatched">0</b>/<b id="memTotal">8</b></span></div>
+<div class="mem-grid" id="memGrid"></div>
+<div style="text-align:center;margin:14px"><button class="action-btn primary" style="display:inline-flex;padding:10px 24px" onclick="memNextLevel()">下一关</button></div>
+</div></div></div>
+
+<!-- ===== 朋友圈 Moments ===== -->
+<div class="page" id="page-tool-moments"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">朋友圈</div><div class="game-sub">五月天主题动态</div></div><div class="mom-theme-toggle" id="momThemeToggle" onclick="momToggleTheme()">🌙</div></div>
+<div id="momentsList"></div>
+</div></div></div>
+
+<!-- ===== DIY 刮刮乐 Scratch ===== -->
+<div class="page" id="page-tool-scratch"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">DIY 刮刮乐</div><div class="game-sub">自定义刮奖文字</div></div></div>
+<div class="scratch-input"><input id="scratchText" placeholder="输入刮奖文字（如：温柔）…" value="温柔"></div>
+<div class="scratch-tpls" id="scratchTpls"></div>
+<div class="scratch-wrap">
+<div class="scratch-prize"><div class="sp-title" id="scratchPrize">温柔</div><div class="sp-sub">刮开看看你的运气</div></div>
+<canvas id="scratchCanvas" width="300" height="200"></canvas>
+</div>
+<div style="text-align:center;margin:14px"><button class="action-btn primary" style="display:inline-flex;padding:10px 24px" onclick="scratchReset()">重新刮</button> <button class="action-btn" style="display:inline-flex;padding:10px 24px;margin-left:8px" onclick="scratchShare()">📤 生成分享图</button></div>
+<div id="scratchSharePreview" style="display:none;text-align:center;margin:10px"></div>
+</div></div></div>
+
+<!-- ===== 图库 Gallery ===== -->
+<div class="page" id="page-tool-gallery"><div class="scroll">
+<div class="game-page">
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">图库</div><div class="game-sub">五月天主题图片</div></div></div>
+<div class="gallery-grid" id="galleryGrid"></div>
+</div></div></div>
+
 </div>
 <div class="tabbar">
 <div class="tab active" data-tab="discover" onclick="switchTab('discover')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>发现</span><div class="ball-dot"></div></div>
 <div class="tab" data-tab="concert" onclick="switchTab('concert')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>演唱会</span><div class="ball-dot"></div></div>
+<div class="tab" data-tab="mobile-portal" onclick="switchTab('mobile-portal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M7 12h4M7 15h2M13 12h4M13 15h2"/></svg><span>游戏</span><div class="ball-dot"></div></div>
 <div class="tab" data-tab="mine" onclick="switchTab('mine')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>我的</span><div class="ball-dot"></div></div>
 </div>
 </div></div>
@@ -705,6 +992,7 @@ body.in-quiz .page{padding-bottom:0 !important}
     </div>
   </div>
 </div>
+<div class="lightbox" id="galleryLightbox" onclick="if(event.target===this)closeLightbox()"><span class="lb-close" onclick="closeLightbox()">×</span><img id="lightboxImg" src="" alt=""></div>
 <script src="{{ url_for('static', filename='app.js') }}?v={{ build_time }}"></script>
 </body>
 </html>

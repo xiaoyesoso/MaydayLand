@@ -7,8 +7,9 @@
 MaydayLand · 五月天·城市漫游：移动端 H5 单页应用 + Flask 后端 API，面向五月天粉丝的城市漫游产品。
 
 - 创意主线：跟着歌词，发现城市里的五迷角落
-- 核心闭环：歌词地图 → 人格测评 → 打卡卡片 → 暗号/评论 → 微信分享
+- 核心闭环：歌词地图 → 人格测评 → 打卡卡片 → 暗号/评论 → 微信分享 → 游戏门户
 - 目标终端：移动端 H5（可嵌入微信小程序 WebView），最大宽度 480px 居中
+- 新增能力：移动端游戏门户（mobile-portal），聚合 8 款五月天主题小游戏 + 3 款工具 + 人格测评入口
 
 ## Quick Commands
 
@@ -85,10 +86,13 @@ MaydayLand/
 
 ## OpenSpec Workflow
 
-本项目采用 OpenSpec 进行 spec-driven 开发，SDD 文档位于 [`openspec/changes/mayday-cityroam-mvp/`](openspec/changes/mayday-cityroam-mvp/)。
+本项目采用 OpenSpec 进行 spec-driven 开发，SDD 文档位于：
 
-- 实施前运行：`openspec validate mayday-cityroam-mvp`
-- 实施前阅读：[`openspec/changes/mayday-cityroam-mvp/tasks.md`](openspec/changes/mayday-cityroam-mvp/tasks.md) 与对应 `specs/<capability>/spec.md`
+- 城市漫游 MVP：[`openspec/changes/mayday-cityroam-mvp/`](openspec/changes/mayday-cityroam-mvp/)
+- 移动端游戏门户：[`openspec/changes/maydayland-mobile-portal/`](openspec/changes/maydayland-mobile-portal/)
+
+- 实施前运行：`openspec validate mayday-cityroam-mvp` / `openspec validate maydayland-mobile-portal`
+- 实施前阅读：对应 `tasks.md` 与 `specs/<capability>/spec.md`
 - 实施完成后：同步更新 `tasks.md` 中对应任务的 `[ ]` → `[x]`
 - 当前仓库为 **Flask H5 单页应用**；openspec 中 1.x–9.x 为微信小程序原生工程任务，不在本仓库实施范围
 

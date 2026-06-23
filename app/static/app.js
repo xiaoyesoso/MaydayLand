@@ -151,15 +151,16 @@ function goBack(){
   if(state.stack.length>1){
     state.stack.pop();
     var p=state.stack[state.stack.length-1];
-    if(['discover','concert','mine'].indexOf(p)>=0){ switchTab(p); } else { showPage(p); }
+    if(['discover','concert','mine','mobile-portal'].indexOf(p)>=0){ switchTab(p); } else { showPage(p); }
   } else { switchTab('discover'); }
 }
 function showPage(p){
   document.querySelectorAll('.page').forEach(function(el){ el.classList.remove('active'); });
   var el=document.getElementById('page-'+p);
+  if(!el) return;
   el.classList.add('active','slide-in');
   setTimeout(function(){ el.classList.remove('slide-in'); },350);
-  if(['discover','concert','mine'].indexOf(p)<0){ document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); }); }
+  if(['discover','concert','mine','mobile-portal'].indexOf(p)<0){ document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); }); }
   state.tab=p;
   /* 答题页隐藏底部 tabbar 与赞赏 FAB，避免遮挡固定导航；非答题页恢复 */
   var tabbar=document.querySelector('.tabbar');
@@ -170,6 +171,7 @@ function showPage(p){
   /* 答题页时 body 也隐藏 tabbar 占位 */
   if(isQuiz) document.body.classList.add('in-quiz');
   else document.body.classList.remove('in-quiz');
+  if(window.portalOnShow) portalOnShow(p);
 }
 function navigate(page,cornerId){
   showPage(page);
@@ -180,10 +182,12 @@ function switchTab(tab){
   state.tab=tab;
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active', t.dataset.tab===tab); });
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  document.getElementById('page-'+tab).classList.add('active');
+  var el=document.getElementById('page-'+tab);
+  if(el) el.classList.add('active');
   state.stack=[tab];
   if(tab==='mine') renderMine();
   if(tab==='concert') renderConcert();
+  if(tab==='mobile-portal') renderPortal();
 }
 
 /* ---- 发现页 ---- */
@@ -947,6 +951,29 @@ function sendTonightMsg(){
 
 /* ---- 我的页 ---- */
 function renderMine(){
+  /* 身份信息：复用门户昵称，生成设备唯一 ID */
+  var user=ls.get('portal_user',{nickname:'',avatarColor:'#425AEF'});
+  var deviceId=ls.get('device_id','');
+  if(!deviceId){
+    deviceId='ML'+(Date.now().toString(36).toUpperCase().slice(-6))+Math.random().toString(36).toUpperCase().slice(2,5);
+    ls.set('device_id',deviceId);
+  }
+  var nameEl=document.getElementById('profileName');
+  if(nameEl){
+    nameEl.textContent=user.nickname||'点击设置昵称';
+    nameEl.style.cursor='pointer';
+    nameEl.onclick=function(){ if(!user.nickname){ openNickModal(); } else { openNickModal(); } };
+  }
+  var idEl=document.getElementById('profileId');
+  if(idEl) idEl.textContent='MaydayLand ID · '+deviceId;
+  var avatarEl=document.getElementById('profileAvatar');
+  if(avatarEl){
+    avatarEl.textContent=(user.nickname||'五').charAt(0);
+    avatarEl.style.background=user.avatarColor||'#425AEF';
+    avatarEl.style.cursor='pointer';
+    avatarEl.onclick=openNickModal;
+  }
+
   var fp=ls.get('footprints',[]);
   var badges=ls.get('badges',[]);
   var shareCount=ls.get('shareCount',0);
@@ -1910,3 +1937,984 @@ function saveTipQR(){
 }
 
 init();
+
+/* ============================================================
+ * MaydayLand 移动端门户 · 8 款游戏 + 3 款工具
+ * 零依赖 ES5 实现，状态走 localStorage（ml_ 前缀）
+ * ============================================================ */
+
+/* ---- 素材路径 ---- */
+var GAME_ASSET = '/static/assets/MaydayLand/images/games/';
+var SYN_EMOJI = [];
+for (var _i = 1; _i <= 10; _i++) { SYN_EMOJI.push(GAME_ASSET + 'synthesis/emoji' + _i + '.png'); }
+var TEN_EMOJI = [];
+for (var _j = 1; _j <= 10; _j++) { TEN_EMOJI.push(GAME_ASSET + 'ten/emoji' + _j + '.png'); }
+
+/* ---- 门户配置 ---- */
+var PORTAL_GAMES = [
+  { id: 'wordle', name: '猜歌名', desc: 'Wordle 猜词', icon: '🔤', color: '#425AEF', page: 'game-wordle' },
+  { id: 'choice', name: '二选一', desc: '歌曲对决', icon: '⚖️', color: '#FF7C7C', page: 'game-choice' },
+  { id: 'emoji', name: 'Emoji猜歌', desc: '看图猜名', icon: '🎯', color: '#fbbf24', page: 'game-emoji' },
+  { id: 'ten', name: '十秒猜歌', desc: '限时挑战', icon: '⏱️', color: '#f04a63', page: 'game-ten' },
+  { id: 'land', name: '歌词选择', desc: '选下一句', icon: '📜', color: '#7a60d2', page: 'game-land' },
+  { id: 'synthesis', name: '合成大月天', desc: '水果合成', icon: '🍉', color: '#57bd6a', page: 'game-synthesis' },
+  { id: 'memory', name: '记忆配对', desc: '翻牌配对', icon: '🃏', color: '#2d1b69', page: 'game-memory' }
+];
+var PORTAL_TOOLS = [
+  { id: 'moments', name: '朋友圈', desc: '主题动态', icon: '📸', color: '#425AEF', page: 'tool-moments' },
+  { id: 'scratch', name: 'DIY刮刮乐', desc: '自定义刮奖', icon: '🎟️', color: '#fbbf24', page: 'tool-scratch' },
+  { id: 'gallery', name: '图库', desc: '主题图片', icon: '🖼️', color: '#57bd6a', page: 'tool-gallery' }
+];
+
+/* ---- 页面显示钩子 ---- */
+function portalOnShow(p) {
+  if (p === 'mobile-portal') renderPortal();
+  else if (p === 'game-wordle') wordleInit();
+  else if (p === 'game-choice') choiceInit();
+  else if (p === 'game-emoji') emojiInit();
+  else if (p === 'game-ten') tenReset();
+  else if (p === 'game-land') landInit();
+  else if (p === 'game-synthesis') synInit();
+  else if (p === 'game-memory') memInit();
+  else if (p === 'tool-moments') momentsInit();
+  else if (p === 'tool-scratch') scratchInit();
+  else if (p === 'tool-gallery') galleryInit();
+}
+
+/* ---- 门户首页 ---- */
+function renderPortal() {
+  var user = ls.get('portal_user', null);
+  var nickEl = document.getElementById('portalNickname');
+  if (nickEl) nickEl.textContent = user && user.nickname ? user.nickname : '点击设置昵称';
+  if (nickEl) nickEl.onclick = openNickModal;
+
+  /* 战绩概览 */
+  var stats = [
+    { num: ls.get('wordle_stats', { wins: 0 }).wins, label: '猜歌名' },
+    { num: ls.get('choice_stats', { bestStreak: 0 }).bestStreak, label: '二选一连击' },
+    { num: ls.get('emoji_stats', { solved: 0 }).solved, label: 'Emoji通关' },
+    { num: ls.get('ten_stats', { bestScore: 0 }).bestScore, label: '十秒最高分' }
+  ];
+  var sb = document.getElementById('portalStatsBar');
+  if (sb) sb.innerHTML = stats.map(function (s) {
+    return '<div class="psb-item"><div class="psb-num">' + s.num + '</div><div class="psb-label">' + s.label + '</div></div>';
+  }).join('');
+
+  var hot = document.getElementById('portalHotGames');
+  if (hot) hot.innerHTML = PORTAL_GAMES.slice(0, 6).map(portalGameCard).join('');
+  var more = document.getElementById('portalMoreGames');
+  if (more) more.innerHTML = PORTAL_GAMES.slice(6).map(portalGameCard).join('');
+  var tools = document.getElementById('portalTools');
+  if (tools) tools.innerHTML = PORTAL_TOOLS.map(portalToolCard).join('');
+}
+function portalGameCard(g) {
+  return '<div class="game-card" onclick="navigate(\'' + g.page + '\')">' +
+    '<div class="gc-icon" style="background:' + g.color + '">' + g.icon + '</div>' +
+    '<div class="gc-name">' + g.name + '</div><div class="gc-desc">' + g.desc + '</div></div>';
+}
+function portalToolCard(t) {
+  return '<div class="tool-card" onclick="navigate(\'' + t.page + '\')">' +
+    '<div class="tc-icon" style="background:' + t.color + '">' + t.icon + '</div>' +
+    '<div><div class="tc-name">' + t.name + '</div><div class="tc-desc">' + t.desc + '</div></div></div>';
+}
+
+/* ---- 昵称设置 ---- */
+function openNickModal() {
+  var mask = document.getElementById('passcodeModal');
+  var box = document.getElementById('passcodeModalContent');
+  if (!mask || !box) return;
+  var user = ls.get('portal_user', { nickname: '', avatarColor: '#425AEF' });
+  box.innerHTML = '<div class="nick-modal"><div style="font-size:18px;font-weight:800">设置昵称</div>' +
+    '<input id="nickInput" value="' + (user.nickname || '') + '" placeholder="输入你的昵称…">' +
+    '<button onclick="saveNick()">确定</button></div>';
+  mask.classList.add('show');
+  mask.style.display = 'flex';
+}
+function saveNick() {
+  var inp = document.getElementById('nickInput');
+  if (!inp) return;
+  var name = inp.value.trim();
+  if (!name) { toast('请输入昵称'); return; }
+  var user = ls.get('portal_user', { avatarColor: '#425AEF' });
+  user.nickname = name;
+  ls.set('portal_user', user);
+  document.getElementById('passcodeModal').classList.remove('show');
+  document.getElementById('passcodeModal').style.display = 'none';
+  renderPortal();
+  if (state.tab === 'mine') renderMine();
+  toast('昵称已保存：' + name);
+}
+
+/* ============================================================
+ * 游戏 1：猜歌名 Wordle
+ * ============================================================ */
+var WORDLE_SONGS = ['温柔', '倔强', '拥抱', '任意门', '步步', '知足', '恋爱ing', '突然好想你', '志明与春娇', '离开地球表面'];
+var wordleState = { answer: '', len: 0, row: 0, col: 0, grid: [], over: false };
+
+function wordleInit() {
+  var pick = WORDLE_SONGS[Math.floor(Math.random() * WORDLE_SONGS.length)];
+  wordleState = { answer: pick, len: pick.length, row: 0, col: 0, grid: [], over: false };
+  var g = document.getElementById('wordleGrid');
+  if (g) g.innerHTML = '';
+  for (var r = 0; r < 5; r++) {
+    var row = document.createElement('div');
+    row.className = 'wordle-row';
+    var cells = [];
+    for (var c = 0; c < wordleState.len; c++) {
+      var cell = document.createElement('div');
+      cell.className = 'wordle-cell';
+      row.appendChild(cell);
+      cells.push(cell);
+    }
+    if (g) g.appendChild(row);
+    wordleState.grid.push(cells);
+  }
+  wordleRenderKb();
+  var st = document.getElementById('wordleStatus');
+  if (st) st.textContent = '猜一首 ' + wordleState.len + ' 字歌名（共 5 次机会）';
+}
+function wordleRenderKb() {
+  var kb = document.getElementById('wordleKb');
+  if (!kb) return;
+  /* 构建候选字池：答案字符 + 其他歌名中的干扰字 */
+  var pool = {};
+  var ans = wordleState.answer;
+  for (var i = 0; i < ans.length; i++) pool[ans.charAt(i)] = true;
+  WORDLE_SONGS.forEach(function (s) { for (var j = 0; j < s.length; j++) pool[s.charAt(j)] = true; });
+  var chars = Object.keys(pool);
+  /* 洗牌 */
+  for (var k = chars.length - 1; k > 0; k--) { var r = Math.floor(Math.random() * (k + 1)); var t = chars[k]; chars[k] = chars[r]; chars[r] = t; }
+  wordleState.pool = chars;
+  kb.innerHTML = '<div class="wordle-pool">' + chars.map(function (c) {
+    return '<div class="wordle-key" onclick="wordleKey(\'' + c + '\')">' + c + '</div>';
+  }).join('') + '</div><div class="wordle-kb-row"><div class="wordle-key wide" onclick="wordleKey(\'⌫\')">⌫ 删除</div><div class="wordle-key wide primary" onclick="wordleKey(\'⏎\')">提交</div></div>';
+}
+function wordleKey(k) {
+  if (wordleState.over) return;
+  if (k === '⌫') {
+    if (wordleState.col > 0) { wordleState.col--; wordleState.grid[wordleState.row][wordleState.col].textContent = ''; }
+    return;
+  }
+  if (k === '⏎') { wordleSubmit(); return; }
+  if (wordleState.col < wordleState.len) {
+    wordleState.grid[wordleState.row][wordleState.col].textContent = k;
+    wordleState.col++;
+  }
+}
+function wordleSubmit() {
+  if (wordleState.col < wordleState.len) { toast('请填满整行'); return; }
+  var guess = '';
+  for (var i = 0; i < wordleState.len; i++) guess += wordleState.grid[wordleState.row][i].textContent;
+  var ans = wordleState.answer;
+  var result = [];
+  var used = [];
+  for (var i2 = 0; i2 < ans.length; i2++) used.push(false);
+  /* 先标绿 */
+  for (var i3 = 0; i3 < ans.length; i3++) {
+    if (guess[i3] === ans[i3]) { result[i3] = 'green'; used[i3] = true; }
+  }
+  /* 再标黄/灰 */
+  for (var i4 = 0; i4 < ans.length; i4++) {
+    if (result[i4]) continue;
+    var found = false;
+    for (var j = 0; j < ans.length; j++) {
+      if (!used[j] && guess[i4] === ans[j]) { found = true; used[j] = true; break; }
+    }
+    result[i4] = found ? 'yellow' : 'gray';
+  }
+  /* 翻转动画 */
+  for (var i5 = 0; i5 < ans.length; i5++) {
+    (function (idx, cls) {
+      setTimeout(function () {
+        var cell = wordleState.grid[wordleState.row][idx];
+        if (cell) { cell.classList.add('flip'); setTimeout(function () { cell.classList.add(cls); }, 250); }
+      }, idx * 200);
+    })(i5, result[i5]);
+  }
+  var win = result.every(function (r) { return r === 'green'; });
+  setTimeout(function () {
+    if (win) {
+      wordleState.over = true;
+      var st = ls.get('wordle_stats', { played: 0, wins: 0, streak: 0, maxStreak: 0 });
+      st.played++; st.wins++; st.streak++; st.maxStreak = Math.max(st.maxStreak, st.streak);
+      ls.set('wordle_stats', st);
+      var s = document.getElementById('wordleStatus');
+      if (s) s.innerHTML = '🎉 猜对了！答案是《' + ans + '》<br><button class="action-btn primary" style="display:inline-flex;margin-top:10px;padding:10px 24px" onclick="wordleInit()">再来一局</button>';
+    } else if (wordleState.row >= 4) {
+      wordleState.over = true;
+      var st2 = ls.get('wordle_stats', { played: 0, wins: 0, streak: 0, maxStreak: 0 });
+      st2.played++; st2.streak = 0;
+      ls.set('wordle_stats', st2);
+      var s2 = document.getElementById('wordleStatus');
+      if (s2) s2.innerHTML = '😢 答案是《' + ans + '》<br><button class="action-btn primary" style="display:inline-flex;margin-top:10px;padding:10px 24px" onclick="wordleInit()">再来一局</button>';
+    } else {
+      wordleState.row++; wordleState.col = 0;
+    }
+  }, ans.length * 200 + 300);
+}
+
+/* ============================================================
+ * 游戏 2：二选一 Choice
+ * ============================================================ */
+var CHOICE_SONGS = ['温柔', '倔强', '拥抱', '任意门', '步步', '知足', '恋爱ing', '突然好想你', '志明与春娇', '离开地球表面', '伤心的人别听慢歌', '将军令', '如烟', '玫瑰少年', '勇敢', '人生海海', '盛夏光年', '派对动物', '成名在望', '如果我们不曾相遇', '因为你所以我', '后青春期的诗', '生存以上生活以下', '你不是真正的快乐', '小太阳', '垃圾车', '轧车', '爱情万岁', '凡人歌', 'DNA'];
+var choiceState = { streak: 0, pair: [] };
+function choiceInit() {
+  choiceState.streak = 0;
+  choiceNext();
+}
+function choiceNext() {
+  var a = CHOICE_SONGS[Math.floor(Math.random() * CHOICE_SONGS.length)];
+  var b = CHOICE_SONGS[Math.floor(Math.random() * CHOICE_SONGS.length)];
+  while (b === a) b = CHOICE_SONGS[Math.floor(Math.random() * CHOICE_SONGS.length)];
+  choiceState.pair = [a, b];
+  var el = document.getElementById('choiceCards');
+  if (!el) return;
+  el.innerHTML = choiceState.pair.map(function (s, i) {
+    return '<div class="choice-card" onclick="choicePick(' + i + ')"><div class="cc-emoji">🎵</div><div class="cc-name">' + s + '</div><div class="cc-meta">点击选择</div></div>';
+  }).join('');
+  var st = document.getElementById('choiceStreak');
+  if (st) st.textContent = '连击 ' + choiceState.streak;
+}
+function choicePick(i) {
+  choiceState.streak++;
+  var st = ls.get('choice_stats', { votes: 0, bestStreak: 0 });
+  st.votes++; st.bestStreak = Math.max(st.bestStreak, choiceState.streak);
+  ls.set('choice_stats', st);
+  /* 本地排行榜：累计每首歌的票数 */
+  var rankings = ls.get('choice_rankings', {});
+  var picked = choiceState.pair[i];
+  var other = choiceState.pair[1 - i];
+  rankings[picked] = (rankings[picked] || 0) + 1;
+  if (!rankings[other]) rankings[other] = 0;
+  ls.set('choice_rankings', rankings);
+  var cards = document.querySelectorAll('#choiceCards .choice-card');
+  if (cards[i]) cards[i].classList.add('picked');
+  setTimeout(choiceNext, 400);
+}
+function choiceToggleRank() {
+  var el = document.getElementById('choiceRank');
+  if (!el) return;
+  if (el.style.display === 'none') { choiceRenderRank(); el.style.display = 'block'; }
+  else { el.style.display = 'none'; }
+}
+function choiceRenderRank() {
+  var el = document.getElementById('choiceRank');
+  if (!el) return;
+  var rankings = ls.get('choice_rankings', {});
+  var arr = Object.keys(rankings).map(function (k) { return { song: k, votes: rankings[k] }; });
+  arr.sort(function (a, b) { return b.votes - a.votes; });
+  if (!arr.length) { el.innerHTML = '<div style="text-align:center;padding:20px;color:#999;font-size:13px">还没有投票数据，快去二选一吧～</div>'; return; }
+  var max = arr[0].votes || 1;
+  el.innerHTML = '<div class="choice-rank-list">' + arr.slice(0, 15).map(function (r, i) {
+    var pct = Math.round(r.votes / max * 100);
+    var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ('#' + (i + 1));
+    return '<div class="cr-item"><div class="cr-rank">' + medal + '</div><div class="cr-info"><div class="cr-name">' + r.song + '</div><div class="cr-bar"><div class="cr-fill" style="width:' + pct + '%"></div></div></div><div class="cr-votes">' + r.votes + '票</div></div>';
+  }).join('') + '</div>';
+}
+
+/* ============================================================
+ * 游戏 3：Emoji 猜歌
+ * ============================================================ */
+var EMOJI_QUIZ = [
+  { emoji: '🚪🚪🚪🚪🚪🚪🚪', answer: '任意门' },
+  { emoji: '🤗💙', answer: '拥抱' },
+  { emoji: '😤✊🔥', answer: '倔强' },
+  { emoji: '👣👣👣', answer: '步步' },
+  { emoji: '😌❤️', answer: '知足' },
+  { emoji: '❤️🎵ing', answer: '恋爱ing' },
+  { emoji: '😮💭😢', answer: '突然好想你' },
+  { emoji: '👨‍🦰👩‍🦰', answer: '志明与春娇' },
+  { emoji: '🚀🌍⬆️', answer: '离开地球表面' },
+  { emoji: '💔🎵🙅', answer: '伤心的人别听慢歌' },
+  { emoji: '🎖️📜', answer: '将军令' },
+  { emoji: '🥀👦', answer: '玫瑰少年' },
+  { emoji: '💪😤', answer: '勇敢' },
+  { emoji: '🌊🌊🌊', answer: '人生海海' },
+  { emoji: '☀️🌴', answer: '小太阳' },
+  { emoji: '🚬💨', answer: '如烟' },
+  { emoji: '🎉🐾', answer: '派对动物' },
+  { emoji: '🏆👀', answer: '成名在望' },
+  { emoji: '💙➡️我', answer: '因为你所以我' },
+  { emoji: '📖🎓', answer: '后青春期的诗' }
+];
+var emojiState = { idx: 0, hints: 3 };
+function emojiInit() {
+  emojiState.idx = Math.floor(Math.random() * EMOJI_QUIZ.length);
+  emojiState.hints = 3;
+  emojiRender();
+}
+function emojiRender() {
+  var q = EMOJI_QUIZ[emojiState.idx];
+  var d = document.getElementById('emojiDisplay');
+  if (d) d.textContent = q.emoji;
+  var inp = document.getElementById('emojiInput');
+  if (inp) inp.value = '';
+  var st = document.getElementById('emojiStatus');
+  if (st) st.textContent = '提示剩余：' + emojiState.hints;
+}
+function submitEmojiGuess() {
+  var inp = document.getElementById('emojiInput');
+  if (!inp) return;
+  var val = inp.value.trim();
+  if (!val) { toast('请输入歌名'); return; }
+  var q = EMOJI_QUIZ[emojiState.idx];
+  if (val === q.answer) {
+    var st = ls.get('emoji_stats', { solved: 0, hintsUsed: 0 });
+    st.solved++;
+    ls.set('emoji_stats', st);
+    toast('🎉 猜对了！《' + q.answer + '》');
+    emojiNext();
+  } else {
+    var d = document.getElementById('emojiDisplay');
+    if (d) { d.classList.add('emoji-shake'); setTimeout(function () { d.classList.remove('emoji-shake'); }, 400); }
+    toast('不对哦，再试试');
+  }
+}
+function emojiHint() {
+  if (emojiState.hints <= 0) { toast('提示已用完'); return; }
+  emojiState.hints--;
+  var q = EMOJI_QUIZ[emojiState.idx];
+  var st = ls.get('emoji_stats', { solved: 0, hintsUsed: 0 });
+  st.hintsUsed++;
+  ls.set('emoji_stats', st);
+  toast('提示：第 1 个字是「' + q.answer.charAt(0) + '」');
+  var s = document.getElementById('emojiStatus');
+  if (s) s.textContent = '提示剩余：' + emojiState.hints;
+}
+function emojiNext() {
+  emojiState.idx = (emojiState.idx + 1) % EMOJI_QUIZ.length;
+  emojiRender();
+}
+
+/* ============================================================
+ * 游戏 4：十秒猜歌
+ * ============================================================ */
+var TEN_QUIZ = [
+  { lyric: '走在风中 今天阳光 突然好温柔', answer: '温柔' },
+  { lyric: '我和我最后的倔强 握紧双手绝对不放', answer: '倔强' },
+  { lyric: '给我抱抱 把爱传出去', answer: '拥抱' },
+  { lyric: '任意门外我们都任意的飞', answer: '任意门' },
+  { lyric: '步步 都是一步一步走过来的', answer: '步步' },
+  { lyric: '怎么去拥有 一道彩虹', answer: '知足' },
+  { lyric: '恋爱ing happy ing', answer: '恋爱ing' },
+  { lyric: '最怕空气突然安静', answer: '突然好想你' },
+  { lyric: '既然青春留不住 还是做个大叔好', answer: '志明与春娇' },
+  { lyric: '丢掉手表丢外套 丢掉背包再丢唠叨', answer: '离开地球表面' },
+  { lyric: '伤心的人别听慢歌', answer: '伤心的人别听慢歌' },
+  { lyric: '将军令', answer: '将军令' },
+  { lyric: '你问我长大要做什么', answer: '勇敢' },
+  { lyric: '今天又是人生海海', answer: '人生海海' },
+  { lyric: '你是巨大的海洋 我是海上小船', answer: '小太阳' },
+  { lyric: '我坐在床前 望着窗外回忆满天', answer: '如烟' },
+  { lyric: '甩甩头 甩甩头 跟我一起摇头', answer: '派对动物' },
+  { lyric: '那黑的彩的红的黄的蓝的', answer: '成名在望' },
+  { lyric: '因为你 所以我 爱上那片天空', answer: '因为你所以我' },
+  { lyric: '我们都要把自己照顾好', answer: '后青春期的诗' }
+];
+var tenState = { idx: 0, timer: null, left: 14, score: 0, playing: false };
+function tenReset() {
+  if (tenState.timer) { clearInterval(tenState.timer); tenState.timer = null; }
+  tenState = { idx: 0, timer: null, left: 14, score: 0, playing: false };
+  var b = document.getElementById('tenBalls');
+  if (b) b.innerHTML = '';
+  for (var i = 0; i < 14; i++) { var s = document.createElement('span'); s.className = 'ten-ball'; if (b) b.appendChild(s); }
+  var l = document.getElementById('tenLyric');
+  if (l) { l.textContent = '点击开始'; l.classList.remove('urgent'); }
+  var sc = document.getElementById('tenScore');
+  if (sc) sc.textContent = '0';
+  var inp = document.getElementById('tenInput');
+  if (inp) inp.disabled = true;
+  var btn = document.getElementById('tenBtn');
+  if (btn) btn.textContent = '开始';
+  var st = document.getElementById('tenStatus');
+  if (st) st.textContent = '每题 14 秒，剩余秒数 × 10 = 得分';
+}
+function tenStart() {
+  if (tenState.playing) { tenSubmit(); return; }
+  tenState.playing = true;
+  tenState.left = 14;
+  tenState.idx = Math.floor(Math.random() * TEN_QUIZ.length);
+  var q = TEN_QUIZ[tenState.idx];
+  var l = document.getElementById('tenLyric');
+  if (l) { l.textContent = q.lyric; l.classList.remove('urgent'); }
+  var inp = document.getElementById('tenInput');
+  if (inp) { inp.disabled = false; inp.value = ''; inp.focus(); }
+  var btn = document.getElementById('tenBtn');
+  if (btn) btn.textContent = '提交';
+  tenRenderBalls();
+  tenState.timer = setInterval(function () {
+    tenState.left--;
+    tenRenderBalls();
+    if (tenState.left <= 3) { var ll = document.getElementById('tenLyric'); if (ll) ll.classList.add('urgent'); }
+    if (tenState.left <= 0) { tenEnd(false); }
+  }, 1000);
+}
+function tenRenderBalls() {
+  var balls = document.querySelectorAll('#tenBalls .ten-ball');
+  for (var i = 0; i < balls.length; i++) {
+    if (i < 14 - tenState.left) balls[i].classList.add('gone'); else balls[i].classList.remove('gone');
+  }
+}
+function tenSubmit() {
+  if (!tenState.playing) return;
+  var inp = document.getElementById('tenInput');
+  if (!inp) return;
+  var val = inp.value.trim();
+  var q = TEN_QUIZ[tenState.idx];
+  if (val === q.answer) { tenEnd(true); } else { toast('不对哦'); }
+}
+function tenEnd(win) {
+  if (tenState.timer) { clearInterval(tenState.timer); tenState.timer = null; }
+  tenState.playing = false;
+  var q = TEN_QUIZ[tenState.idx];
+  if (win) {
+    var gain = tenState.left * 10;
+    tenState.score += gain;
+    var sc = document.getElementById('tenScore');
+    if (sc) sc.textContent = tenState.score;
+    toast('🎉 +' + gain + ' 分！');
+  }
+  var st = ls.get('ten_stats', { played: 0, totalScore: 0, bestScore: 0 });
+  st.played++; st.totalScore += tenState.score;
+  st.bestScore = Math.max(st.bestScore, tenState.score);
+  ls.set('ten_stats', st);
+  var l = document.getElementById('tenLyric');
+  if (l) { l.textContent = '答案是《' + q.answer + '》'; l.classList.remove('urgent'); }
+  var inp = document.getElementById('tenInput');
+  if (inp) inp.disabled = true;
+  var btn = document.getElementById('tenBtn');
+  if (btn) btn.textContent = '开始';
+  var stEl = document.getElementById('tenStatus');
+  if (stEl) stEl.innerHTML = '本轮得分：' + tenState.score + ' · 最高：' + st.bestScore + '<br>点击「开始」再来一题';
+}
+
+/* ============================================================
+ * 游戏 5：歌词选择 Land
+ * ============================================================ */
+var LAND_QUIZ = [
+  { lyric: '走在风中 今天阳光', options: ['突然好温柔', '突然好想你', '突然下雨', '突然好冷'], answer: 0, song: '温柔' },
+  { lyric: '我和我最后的倔强', options: ['握紧双手绝对不放', '松开双手让你走', '抬起头向前走', '闭上眼不回头'], answer: 0, song: '倔强' },
+  { lyric: '给我抱抱', options: ['把爱传出去', '把心交出来', '把手举起来', '把泪擦干净'], answer: 0, song: '拥抱' },
+  { lyric: '怎么去拥有', options: ['一道彩虹', '一片天空', '一阵清风', '一束阳光'], answer: 0, song: '知足' },
+  { lyric: '最怕空气', options: ['突然安静', '突然变冷', '突然稀薄', '突然凝固'], answer: 0, song: '突然好想你' },
+  { lyric: '丢掉手表丢外套', options: ['丢掉背包再丢唠叨', '丢掉烦恼再丢忧伤', '丢掉手机再丢信号', '丢掉回忆再丢过往'], answer: 0, song: '离开地球表面' },
+  { lyric: '任意门外我们', options: ['都任意的飞', '都任意地走', '都任意地笑', '都任意地唱'], answer: 0, song: '任意门' },
+  { lyric: '步步', options: ['都是一步一步走过来的', '都是一步一步走过去的', '都是一步一步走下去的', '都是一步一步走回来的'], answer: 0, song: '步步' },
+  { lyric: '今天又是', options: ['人生海海', '人生漫漫', '人生如梦', '人生如戏'], answer: 0, song: '人生海海' },
+  { lyric: '你问我', options: ['长大要做什么', '未来在哪里', '快乐是什么', '梦想是什么'], answer: 0, song: '勇敢' },
+  { lyric: '我坐在床前', options: ['望着窗外回忆满天', '看着天花板发呆', '数着星星到天亮', '听着雨声到天明'], answer: 0, song: '如烟' },
+  { lyric: '因为你', options: ['所以我爱上那片天空', '所以我不再孤单', '所以我勇敢前行', '所以我愿意等待'], answer: 0, song: '因为你所以我' },
+  { lyric: '我们都要', options: ['把自己照顾好', '把彼此记心里', '把过去放下', '把未来拥抱'], answer: 0, song: '后青春期的诗' },
+  { lyric: '甩甩头', options: ['跟我一起摇头', '跟我一起跳舞', '跟我一起唱歌', '跟我一起疯狂'], answer: 0, song: '派对动物' },
+  { lyric: '那黑的彩的红的', options: ['黄的蓝的', '白的灰的', '紫的粉的', '金的银的'], answer: 0, song: '成名在望' },
+  { lyric: '伤心的人', options: ['别听慢歌', '别回头看', '别再流泪', '别再执着'], answer: 0, song: '伤心的人别听慢歌' },
+  { lyric: '你是巨大的海洋', options: ['我是海上小船', '我是岸边的树', '我是天空的云', '我是海底的鱼'], answer: 0, song: '小太阳' },
+  { lyric: '既然青春留不住', options: ['还是做个大叔好', '不如好好珍惜', '那就勇敢前行', '就让它随风去'], answer: 0, song: '志明与春娇' },
+  { lyric: '恋爱ing', options: ['happy ing', 'loving ing', 'smiling ing', 'dreaming ing'], answer: 0, song: '恋爱ing' },
+  { lyric: '将军令', options: ['将军令下', '将军出征', '将军一怒', '将军百战'], answer: 0, song: '将军令' }
+];
+var landState = { idx: 0, score: 0, total: 0 };
+function landInit() {
+  landState = { idx: 0, score: 0, total: 0 };
+  landRender();
+}
+function landRender() {
+  var body = document.getElementById('landBody');
+  if (!body) return;
+  if (landState.idx >= LAND_QUIZ.length) {
+    body.innerHTML = '<div style="text-align:center;padding:30px"><div style="font-size:24px;font-weight:900;color:#7a60d2">完成！</div><div style="margin:14px;font-size:16px">得分：' + landState.score + ' / ' + landState.total + '</div><button class="action-btn primary" style="display:inline-flex;padding:12px 28px" onclick="landInit()">再来一次</button></div>';
+    return;
+  }
+  var q = LAND_QUIZ[landState.idx];
+  /* 打乱选项 */
+  var opts = q.options.slice();
+  var correctText = opts[q.answer];
+  for (var i = opts.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = opts[i]; opts[i] = opts[j]; opts[j] = t; }
+  var correctIdx = opts.indexOf(correctText);
+  body.innerHTML = '<div class="land-card"><div class="lc-lyric">「' + q.lyric + '…」</div><div class="lc-credit">— ' + q.song + ' · 第 ' + (landState.idx + 1) + '/' + LAND_QUIZ.length + ' 题</div></div>' +
+    '<div class="land-options">' + opts.map(function (o, i) {
+      return '<div class="land-opt" onclick="landPick(' + i + ',' + correctIdx + ')">' + o + '</div>';
+    }).join('') + '</div><div style="text-align:center;margin:14px;font-size:13px;color:#999">得分：' + landState.score + '</div>';
+}
+function landPick(i, correctIdx) {
+  landState.total++;
+  var opts = document.querySelectorAll('#landBody .land-opt');
+  if (i === correctIdx) { landState.score++; if (opts[i]) opts[i].classList.add('correct'); }
+  else { if (opts[i]) opts[i].classList.add('wrong'); if (opts[correctIdx]) opts[correctIdx].classList.add('correct'); }
+  setTimeout(function () {
+    landState.idx++;
+    if (landState.idx >= LAND_QUIZ.length) {
+      var st = ls.get('land_stats', { played: 0, bestScore: 0, total: LAND_QUIZ.length });
+      st.played++; st.bestScore = Math.max(st.bestScore, landState.score);
+      ls.set('land_stats', st);
+    }
+    landRender();
+  }, 800);
+}
+
+/* ============================================================
+ * 游戏 6：合成大月天 Synthesis（原生 Canvas 简化物理）
+ * ============================================================ */
+var synState = { balls: [], score: 0, next: 1, over: false, raf: null, canvas: null, ctx: null, W: 320, H: 420, dropping: null };
+var SYN_RADII = [16, 22, 28, 34, 42, 50, 60, 72, 86, 100];
+var SYN_IMAGES = [];
+var synImagesLoaded = 0;
+function synPreloadImages(cb) {
+  synImagesLoaded = 0;
+  SYN_IMAGES = [];
+  for (var i = 0; i < 10; i++) {
+    var img = new Image();
+    img.onload = function () { synImagesLoaded++; if (synImagesLoaded >= 10 && cb) cb(); };
+    img.onerror = function () { synImagesLoaded++; if (synImagesLoaded >= 10 && cb) cb(); };
+    img.src = SYN_EMOJI[i];
+    SYN_IMAGES.push(img);
+  }
+}
+function synInit() {
+  var c = document.getElementById('synCanvas');
+  if (!c) return;
+  synState.canvas = c;
+  synState.ctx = c.getContext('2d');
+  synState.balls = []; synState.score = 0; synState.over = false; synState.next = 1; synState.dropping = null;
+  if (synState.raf) cancelAnimationFrame(synState.raf);
+  synPreloadImages(function () { synLoop(); });
+  synRenderScore();
+  /* 事件 */
+  c.onmousedown = synDrop;
+  c.ontouchstart = function (e) { e.preventDefault(); synDrop(e); };
+}
+function synDrop(e) {
+  if (synState.over || synState.dropping) return;
+  var rect = synState.canvas.getBoundingClientRect();
+  var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  x = Math.max(SYN_RADII[0], Math.min(synState.W - SYN_RADII[0], x));
+  synState.dropping = { x: x, y: 20, vx: 0, vy: 0, level: synState.next, r: SYN_RADII[synState.next] };
+  synState.next = Math.floor(Math.random() * 4);
+  synRenderNext();
+}
+function synRenderScore() {
+  var s = document.getElementById('synScore');
+  if (s) s.textContent = synState.score;
+}
+function synRenderNext() {
+  var n = document.getElementById('synNext');
+  if (n) n.innerHTML = '<img src="' + SYN_EMOJI[synState.next] + '" alt="">';
+}
+function synLoop() {
+  if (!synState.ctx) return;
+  var ctx = synState.ctx;
+  ctx.clearRect(0, 0, synState.W, synState.H);
+  /* 顶部线 */
+  ctx.strokeStyle = 'rgba(240,74,99,.4)';
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(0, 50); ctx.lineTo(synState.W, 50); ctx.stroke();
+  ctx.setLineDash([]);
+  /* 下落球 */
+  if (synState.dropping) {
+    synState.dropping.vy += 0.5;
+    synState.dropping.y += synState.dropping.vy;
+    synState.dropping.x += synState.dropping.vx;
+    if (synState.dropping.x < synState.dropping.r) { synState.dropping.x = synState.dropping.r; synState.dropping.vx *= -0.5; }
+    if (synState.dropping.x > synState.W - synState.dropping.r) { synState.dropping.x = synState.W - synState.dropping.r; synState.dropping.vx *= -0.5; }
+    /* 碰撞检测 */
+    var landed = false;
+    for (var i = 0; i < synState.balls.length; i++) {
+      var b = synState.balls[i];
+      var dx = synState.dropping.x - b.x, dy = synState.dropping.y - b.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < synState.dropping.r + b.r) { landed = true; break; }
+    }
+    if (synState.dropping.y + synState.dropping.r >= synState.H) landed = true;
+    if (landed) {
+      var nb = synState.dropping;
+      synState.balls.push(nb);
+      synState.dropping = null;
+      synCheckMerge();
+      synCheckOver();
+    }
+  }
+  /* 物理：球之间简单分离 */
+  for (var i2 = 0; i2 < synState.balls.length; i2++) {
+    var b1 = synState.balls[i2];
+    b1.vy = (b1.vy || 0) + 0.3;
+    b1.y += b1.vy;
+    b1.x += b1.vx || 0;
+    if (b1.x < b1.r) { b1.x = b1.r; b1.vx = 0; }
+    if (b1.x > synState.W - b1.r) { b1.x = synState.W - b1.r; b1.vx = 0; }
+    if (b1.y + b1.r >= synState.H) { b1.y = synState.H - b1.r; b1.vy = 0; b1.vx *= 0.8; }
+    for (var j = i2 + 1; j < synState.balls.length; j++) {
+      var b2 = synState.balls[j];
+      var dx2 = b2.x - b1.x, dy2 = b2.y - b1.y;
+      var d = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+      var minD = b1.r + b2.r;
+      if (d < minD && d > 0) {
+        var overlap = (minD - d) / 2;
+        var nx = dx2 / d, ny = dy2 / d;
+        b1.x -= nx * overlap; b1.y -= ny * overlap;
+        b2.x += nx * overlap; b2.y += ny * overlap;
+        b1.vx = (b1.vx || 0) * 0.7; b1.vy = (b1.vy || 0) * 0.7;
+        b2.vx = (b2.vx || 0) * 0.7; b2.vy = (b2.vy || 0) * 0.7;
+      }
+    }
+  }
+  /* 绘制球 */
+  for (var k = 0; k < synState.balls.length; k++) {
+    var b3 = synState.balls[k];
+    if (SYN_IMAGES[b3.level] && SYN_IMAGES[b3.level].complete) {
+      ctx.save();
+      ctx.beginPath(); ctx.arc(b3.x, b3.y, b3.r, 0, 2 * Math.PI); ctx.clip();
+      ctx.drawImage(SYN_IMAGES[b3.level], b3.x - b3.r, b3.y - b3.r, b3.r * 2, b3.r * 2);
+      ctx.restore();
+    } else {
+      ctx.beginPath(); ctx.arc(b3.x, b3.y, b3.r, 0, 2 * Math.PI);
+      ctx.fillStyle = ['#57bd6a', '#425AEF', '#fbbf24', '#FF7C7C', '#7a60d2', '#f04a63', '#22c55e', '#06b6d4', '#a78bfa', '#e38100'][b3.level] || '#57bd6a';
+      ctx.fill();
+    }
+  }
+  /* 绘制下落球 */
+  if (synState.dropping) {
+    var db = synState.dropping;
+    if (SYN_IMAGES[db.level] && SYN_IMAGES[db.level].complete) {
+      ctx.save();
+      ctx.beginPath(); ctx.arc(db.x, db.y, db.r, 0, 2 * Math.PI); ctx.clip();
+      ctx.drawImage(SYN_IMAGES[db.level], db.x - db.r, db.y - db.r, db.r * 2, db.r * 2);
+      ctx.restore();
+    } else {
+      ctx.beginPath(); ctx.arc(db.x, db.y, db.r, 0, 2 * Math.PI); ctx.fillStyle = '#57bd6a'; ctx.fill();
+    }
+  }
+  synState.raf = requestAnimationFrame(synLoop);
+}
+function synCheckMerge() {
+  var merged = true;
+  while (merged) {
+    merged = false;
+    for (var i = 0; i < synState.balls.length; i++) {
+      for (var j = i + 1; j < synState.balls.length; j++) {
+        var a = synState.balls[i], b = synState.balls[j];
+        if (a.level === b.level && a.level < 9) {
+          var dx = a.x - b.x, dy = a.y - b.y;
+          if (Math.sqrt(dx * dx + dy * dy) < a.r + b.r) {
+            a.level++; a.r = SYN_RADII[a.level]; a.x = (a.x + b.x) / 2; a.y = (a.y + b.y) / 2; a.vy = -2;
+            synState.balls.splice(j, 1);
+            synState.score += (a.level + 1) * 10;
+            synRenderScore();
+            merged = true;
+            break;
+          }
+        }
+      }
+      if (merged) break;
+    }
+  }
+}
+function synCheckOver() {
+  for (var i = 0; i < synState.balls.length; i++) {
+    if (synState.balls[i].y - synState.balls[i].r < 50 && Math.abs(synState.balls[i].vy || 0) < 0.5) {
+      synState.over = true;
+      var st = ls.get('synthesis_stats', { bestScore: 0, games: 0 });
+      st.games++; st.bestScore = Math.max(st.bestScore, synState.score);
+      ls.set('synthesis_stats', st);
+      var s = document.getElementById('synStatus');
+      if (s) s.innerHTML = '游戏结束！得分：' + synState.score + ' · 最高：' + st.bestScore + '<br><button class="action-btn primary" style="display:inline-flex;margin-top:10px;padding:10px 24px" onclick="synInit()">重新开始</button>';
+      break;
+    }
+  }
+}
+
+/* ============================================================
+ * 游戏 7：记忆配对 Memory
+ * ============================================================ */
+var memState = { level: 1, cards: [], flipped: [], matched: 0, total: 8, timer: null, time: 0, lock: false };
+var MEM_LEVELS = [{ cols: 4, rows: 4, pairs: 8 }, { cols: 5, rows: 4, pairs: 10 }, { cols: 6, rows: 6, pairs: 18 }];
+function memInit() {
+  if (memState.timer) { clearInterval(memState.timer); memState.timer = null; }
+  var cfg = MEM_LEVELS[memState.level - 1] || MEM_LEVELS[0];
+  memState.total = cfg.pairs * 2;
+  memState.matched = 0;
+  memState.flipped = [];
+  memState.time = 0;
+  memState.lock = false;
+  var imgs = [];
+  for (var i = 0; i < cfg.pairs; i++) { imgs.push(TEN_EMOJI[i % 10], TEN_EMOJI[i % 10]); }
+  /* 洗牌 */
+  for (var j = imgs.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)); var t = imgs[j]; imgs[j] = imgs[k]; imgs[k] = t; }
+  memState.cards = imgs.map(function (src) { return { src: src, flipped: false, matched: false }; });
+  var grid = document.getElementById('memGrid');
+  if (grid) {
+    grid.style.gridTemplateColumns = 'repeat(' + cfg.cols + ', 64px)';
+    grid.innerHTML = memState.cards.map(function (c, i) {
+      return '<div class="mem-card" onclick="memFlip(' + i + ')"><div class="mem-card-inner"><div class="mem-face mem-front">🎵</div><div class="mem-face mem-back"><img src="' + c.src + '" alt=""></div></div></div>';
+    }).join('');
+  }
+  memUpdateInfo();
+  memState.timer = setInterval(function () { memState.time++; memUpdateInfo(); }, 1000);
+}
+function memFlip(i) {
+  if (memState.lock) return;
+  var c = memState.cards[i];
+  if (c.flipped || c.matched) return;
+  c.flipped = true;
+  memState.flipped.push(i);
+  var el = document.querySelectorAll('#memGrid .mem-card')[i];
+  if (el) el.classList.add('flipped');
+  if (memState.flipped.length === 2) {
+    memState.lock = true;
+    var a = memState.flipped[0], b = memState.flipped[1];
+    if (memState.cards[a].src === memState.cards[b].src) {
+      memState.cards[a].matched = true; memState.cards[b].matched = true;
+      memState.matched += 2;
+      var ea = document.querySelectorAll('#memGrid .mem-card')[a];
+      var eb = document.querySelectorAll('#memGrid .mem-card')[b];
+      if (ea) ea.querySelector('.mem-back').classList.add('matched');
+      if (eb) eb.querySelector('.mem-back').classList.add('matched');
+      memState.flipped = [];
+      memState.lock = false;
+      memUpdateInfo();
+      if (memState.matched >= memState.total) {
+        clearInterval(memState.timer); memState.timer = null;
+        var key = 'level' + memState.level + 'Best';
+        var st = ls.get('memory_stats', {});
+        if (!st[key] || memState.time < st[key]) { st[key] = memState.time; ls.set('memory_stats', st); }
+        toast('🎉 通关！用时 ' + memState.time + 's');
+      }
+    } else {
+      setTimeout(function () {
+        memState.cards[a].flipped = false; memState.cards[b].flipped = false;
+        var ea2 = document.querySelectorAll('#memGrid .mem-card')[a];
+        var eb2 = document.querySelectorAll('#memGrid .mem-card')[b];
+        if (ea2) ea2.classList.remove('flipped');
+        if (eb2) eb2.classList.remove('flipped');
+        memState.flipped = [];
+        memState.lock = false;
+      }, 800);
+    }
+  }
+}
+function memUpdateInfo() {
+  var l = document.getElementById('memLevel'); if (l) l.textContent = memState.level;
+  var t = document.getElementById('memTime'); if (t) t.textContent = memState.time;
+  var m = document.getElementById('memMatched'); if (m) m.textContent = memState.matched;
+  var tot = document.getElementById('memTotal'); if (tot) tot.textContent = memState.total;
+}
+function memNextLevel() {
+  memState.level = memState.level >= 3 ? 1 : memState.level + 1;
+  memInit();
+}
+
+/* ============================================================
+ * 工具 1：朋友圈 Moments
+ * ============================================================ */
+var MOMENTS_DATA = [
+  { name: '温柔的歌', color: '#FF7C7C', time: '今天 14:32', text: '鸟巢 55 场，毕业快乐 🎓 从无名高地到鸟巢的 10 年，谢谢你们对五月天的疼爱。', imgs: [ASSET + 'albums/' + encodeURIComponent('自传-C9G6ePFH.jpg')] },
+  { name: '倔强的番茄', color: '#425AEF', time: '今天 11:20', text: '明园餐厅的炸酱面绝了！玛莎同款，对暗号还能送酸梅汤 🍜', imgs: [ASSET + 'albums/' + encodeURIComponent('第一张创作专辑-DkV_pH8G.jpg')] },
+  { name: '任意门守门人', color: '#57bd6a', time: '昨天 19:05', text: '外滩夜景 + 歌词地贴 = 完美出片，建议日落前来，光线最棒 🌇', imgs: [ASSET + 'albums/' + encodeURIComponent('知足 最真杰作选-Dshc6mg-.jpg')] },
+  { name: '卜卜爱好者', color: '#fbbf24', time: '昨天 16:00', text: '7.4 米纯真兔太治愈了！限定 Tee 已入手，西单更新场走起 🐰', imgs: [ASSET + 'albums/' + encodeURIComponent('后青春期的诗-EzCXj1Qb.jpg')] },
+  { name: '梦想卜览员', color: '#7a60d2', time: '前天 11:30', text: '33 米胡萝卜麦克风震撼！吉尼斯认证实至名归 🥕🎤', imgs: [ASSET + 'albums/' + encodeURIComponent('步步 自选作品辑-DoBobm4t.jpg')] },
+  { name: '工业风五迷', color: '#f04a63', time: '3 天前 18:45', text: '首钢园日落 + 石头公仔 = 北京最出片打卡点，没有之一 🏭', imgs: [ASSET + 'albums/' + encodeURIComponent('离开地球表面 Jump!-BhO1XiYG.jpg')] },
+  { name: '星空下的我们', color: '#06b6d4', time: '3 天前 20:30', text: '朝阳公园五大球灯光秀太美了，好运桥《星空》光影步道必打卡 ✨', imgs: [ASSET + 'albums/' + encodeURIComponent('因为你 所以我-s_V6WMTD.jpg')] },
+  { name: '石头本石', color: '#22c55e', time: '4 天前 09:15', text: '居庸关长城 + 阿信公仔同框，不到长城非好汉的五迷版 🧱', imgs: [ASSET + 'albums/' + encodeURIComponent('玫瑰少年-DbTsPLrn.jpg')] },
+  { name: '勇敢的少年', color: '#e38100', time: '5 天前 13:00', text: '人生海海，今天又是新的一天。五月天陪你走过每一个重要时刻 🌊', imgs: [ASSET + 'albums/' + encodeURIComponent('人生海海-BOGDD25n.jpg')] },
+  { name: '伤心的人别听慢歌', color: '#a78bfa', time: '5 天前 22:10', text: '伤心的人别听慢歌，但五月天的快歌能治愈一切 🎵', imgs: [ASSET + 'albums/' + encodeURIComponent('伤心的人别听慢歌-C6arM80p.jpg')] }
+];
+function momentsInit() {
+  var el = document.getElementById('momentsList');
+  if (!el) return;
+  /* 应用保存的主题 */
+  var dark = ls.get('moments_dark', false);
+  momApplyTheme(dark);
+  el.innerHTML = MOMENTS_DATA.map(function (m) {
+    return '<div class="moment-card"><div class="mc-head"><div class="mc-avatar" style="background:' + m.color + '">' + m.name.charAt(0) + '</div><div><div class="mc-name">' + m.name + '</div><div class="mc-time">' + m.time + '</div></div></div>' +
+      '<div class="mc-text">' + m.text + '</div>' +
+      (m.imgs ? '<div class="mc-imgs">' + m.imgs.map(function (s) { return '<img src="' + s + '" loading="lazy" onclick="openLightbox(\'' + s + '\')">'; }).join('') + '</div>' : '') +
+      '</div>';
+  }).join('');
+}
+function momToggleTheme() {
+  var dark = ls.get('moments_dark', false);
+  dark = !dark;
+  ls.set('moments_dark', dark);
+  momApplyTheme(dark);
+}
+function momApplyTheme(dark) {
+  var page = document.getElementById('page-tool-moments');
+  var toggle = document.getElementById('momThemeToggle');
+  if (page) page.classList.toggle('mom-dark', dark);
+  if (toggle) toggle.textContent = dark ? '☀️' : '🌙';
+}
+
+/* ============================================================
+ * 工具 2：DIY 刮刮乐 Scratch
+ * ============================================================ */
+var SCRATCH_TPLS = ['温柔', '倔强', '拥抱', '任意门', '步步', '知足', '恋爱ing'];
+var scratchState = { ctx: null, canvas: null, text: '温柔', scratched: 0 };
+function scratchInit() {
+  var c = document.getElementById('scratchCanvas');
+  if (!c) return;
+  scratchState.canvas = c;
+  scratchState.ctx = c.getContext('2d');
+  /* 模板行 */
+  var tpls = document.getElementById('scratchTpls');
+  if (tpls) tpls.innerHTML = SCRATCH_TPLS.map(function (t, i) {
+    return '<div class="stp' + (t === scratchState.text ? ' active' : '') + '" onclick="scratchPick(\'' + t + '\')">' + t + '</div>';
+  }).join('');
+  var txt = document.getElementById('scratchText');
+  if (txt) scratchState.text = txt.value || '温柔';
+  scratchReset();
+}
+function scratchPick(t) {
+  scratchState.text = t;
+  var inp = document.getElementById('scratchText');
+  if (inp) inp.value = t;
+  var prize = document.getElementById('scratchPrize');
+  if (prize) prize.textContent = t;
+  scratchInit();
+}
+function scratchReset() {
+  var ctx = scratchState.ctx;
+  if (!ctx) return;
+  var prize = document.getElementById('scratchPrize');
+  if (prize) prize.textContent = scratchState.text;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#c0c0c4';
+  ctx.fillRect(0, 0, 300, 200);
+  ctx.fillStyle = '#999';
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('刮开看看你的运气 ✨', 150, 105);
+  scratchState.scratched = 0;
+  var c = scratchState.canvas;
+  c.onmousedown = scratchStart;
+  c.ontouchstart = function (e) { e.preventDefault(); scratchStart(e); };
+}
+var _scratchMove = null, _scratchEnd = null;
+function scratchStart(e) {
+  var ctx = scratchState.ctx;
+  if (!ctx) return;
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.lineWidth = 30;
+  ctx.lineCap = 'round';
+  var rect = scratchState.canvas.getBoundingClientRect();
+  var scale = 300 / rect.width;
+  var p = e.touches ? e.touches[0] : e;
+  var x = (p.clientX - rect.left) * scale, y = (p.clientY - rect.top) * scale;
+  ctx.beginPath(); ctx.moveTo(x, y);
+  _scratchMove = function (ev) {
+    var pp = ev.touches ? ev.touches[0] : ev;
+    var nx = (pp.clientX - rect.left) * scale, ny = (pp.clientY - rect.top) * scale;
+    ctx.lineTo(nx, ny); ctx.stroke();
+    scratchState.scratched++;
+    if (scratchState.scratched > 80 && !scratchState._done) {
+      scratchState._done = true;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, 300, 200);
+      toast('🎉 刮中「' + scratchState.text + '」！');
+    }
+  };
+  _scratchEnd = function () {
+    document.removeEventListener('mousemove', _scratchMove);
+    document.removeEventListener('mouseup', _scratchEnd);
+    document.removeEventListener('touchmove', _scratchMove);
+    document.removeEventListener('touchend', _scratchEnd);
+  };
+  document.addEventListener('mousemove', _scratchMove);
+  document.addEventListener('mouseup', _scratchEnd);
+  document.addEventListener('touchmove', _scratchMove, { passive: false });
+  document.addEventListener('touchend', _scratchEnd);
+}
+function scratchShare() {
+  var user = ls.get('portal_user', { nickname: '五迷' });
+  var name = user.nickname || '五迷';
+  var date = new Date();
+  var dateStr = date.getFullYear() + '.' + String(date.getMonth() + 1).padStart(2, '0') + '.' + String(date.getDate()).padStart(2, '0');
+  /* 合成分享图：渐变背景 + 奖品文字 + 昵称 + 日期 + Logo */
+  var cv = document.createElement('canvas');
+  cv.width = 600; cv.height = 800;
+  var ctx = cv.getContext('2d');
+  /* 背景渐变 */
+  var grad = ctx.createLinearGradient(0, 0, 600, 800);
+  grad.addColorStop(0, '#425AEF');
+  grad.addColorStop(0.5, '#7a60d2');
+  grad.addColorStop(1, '#FF6B9D');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 600, 800);
+  /* 装饰圆点 */
+  ctx.fillStyle = 'rgba(255,255,255,.15)';
+  ctx.beginPath(); ctx.arc(80, 120, 60, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(540, 700, 80, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(500, 100, 30, 0, Math.PI * 2); ctx.fill();
+  /* 标题 */
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 32px sans-serif';
+  ctx.fillText('MaydayLand 刮刮乐', 300, 100);
+  ctx.font = '16px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,.8)';
+  ctx.fillText('Mayday 陪你刮到好运', 300, 130);
+  /* 奖品卡片 */
+  ctx.fillStyle = 'rgba(255,255,255,.95)';
+  roundRect(ctx, 80, 220, 440, 280, 24);
+  ctx.fill();
+  ctx.fillStyle = '#425AEF';
+  ctx.font = 'bold 72px sans-serif';
+  ctx.fillText(scratchState.text, 300, 380);
+  ctx.fillStyle = '#999';
+  ctx.font = '18px sans-serif';
+  ctx.fillText('刮中好运 🎉', 300, 430);
+  ctx.fillStyle = '#FF6B9D';
+  ctx.font = 'bold 20px sans-serif';
+  ctx.fillText('✨ ✨ ✨', 300, 470);
+  /* 底部信息 */
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 22px sans-serif';
+  ctx.fillText(name, 300, 600);
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  ctx.fillText(dateStr + ' · MaydayLand', 300, 630);
+  ctx.font = '12px sans-serif';
+  ctx.fillText('长按图片保存或分享', 300, 720);
+  /* 渲染预览 */
+  var prev = document.getElementById('scratchSharePreview');
+  if (!prev) return;
+  prev.style.display = 'block';
+  prev.innerHTML = '<img src="' + cv.toDataURL('image/png') + '" style="max-width:260px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.2)"><div style="font-size:12px;color:#999;margin-top:6px">长按图片保存到相册</div>';
+  toast('分享图已生成 ✨');
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/* ============================================================
+ * 工具 3：图库 Gallery
+ * ============================================================ */
+function galleryInit() {
+  var el = document.getElementById('galleryGrid');
+  if (!el) return;
+  var imgs = [];
+  /* 用专辑封面作为图库内容 */
+  var albums = ['自传-C9G6ePFH.jpg', '第一张创作专辑-DkV_pH8G.jpg', '知足 最真杰作选-Dshc6mg-.jpg', '后青春期的诗-EzCXj1Qb.jpg', '步步 自选作品辑-DoBobm4t.jpg', '离开地球表面 Jump!-BhO1XiYG.jpg', '因为你 所以我-s_V6WMTD.jpg', '时光机-CGbQBaUm.jpg', '玫瑰少年-DbTsPLrn.jpg', '勇敢-BXCpUl6B.jpg', '人生海海-BOGDD25n.jpg', '盛夏光年-DeGlutqh.jpg', '伤心的人别听慢歌-C6arM80p.jpg', '将军令-CxjrlsAV.jpg', '凡人歌-B23FlQae.jpg', 'DNA-cz_Tdu1n.jpg', '为爱而生-B4BFUtgw.jpg', '爱情万岁-C7BlxB8G.jpg'];
+  imgs = albums.map(function (a) { return ASSET + 'albums/' + encodeURIComponent(a); });
+  el.innerHTML = imgs.map(function (s) {
+    return '<div class="gallery-item"><img src="' + s + '" loading="lazy" onclick="openLightbox(\'' + s + '\')"></div>';
+  }).join('');
+}
+function openLightbox(src) {
+  var lb = document.getElementById('galleryLightbox');
+  var img = document.getElementById('lightboxImg');
+  if (!lb || !img) return;
+  img.src = src;
+  lb.classList.add('show');
+  lb.style.display = 'flex';
+}
+function closeLightbox() {
+  var lb = document.getElementById('galleryLightbox');
+  if (!lb) return;
+  lb.classList.remove('show');
+  lb.style.display = 'none';
+}
