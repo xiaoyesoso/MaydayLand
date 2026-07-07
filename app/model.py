@@ -13,11 +13,13 @@
 - UserStat: 用户统计（点赞/分享/切城计数）
 """
 from datetime import datetime
+import config
 from app import db
 
 # MySQL 严格模式下 TIMESTAMP 列需要数据库端默认值
 _TS_DEFAULT = db.text('CURRENT_TIMESTAMP')
-_TS_UPDATE = db.text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+# SQLite 不支持 CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+_TS_UPDATE = db.text('CURRENT_TIMESTAMP') if config.USE_SQLITE else db.text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
 
 
 class Corner(db.Model):
