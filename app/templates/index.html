@@ -587,7 +587,7 @@ body.in-quiz .page{padding-bottom:0 !important}
 @keyframes wFlip{0%{transform:rotateX(0)}50%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
 .wordle-kb{display:flex;flex-direction:column;gap:5px;align-items:center;margin-top:14px}
 .wordle-kb-row{display:flex;gap:4px}
-.wordle-key{min-width:28px;height:42px;padding:0 8px;border-radius:6px;background:#f0f0f2;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.wordle-key{flex:1;min-width:0;height:42px;border-radius:6px;background:#f0f0f2;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .wordle-key:active{transform:scale(.94)}
 .wordle-key.green{background:#57bd6a;color:#fff}
 .wordle-key.yellow{background:#fbbf24;color:#fff}
@@ -860,10 +860,11 @@ body.in-quiz .page{padding-bottom:0 !important}
 <!-- ===== 猜词 Wordle ===== -->
 <div class="page" id="page-game-wordle"><div class="scroll">
 <div class="game-page">
-<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">猜歌名</div><div class="game-sub">5 次机会，颜色小球给你提示</div></div></div>
+<div class="game-header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="game-title">猜歌名</div><div class="game-sub">5 次机会，颜色小球给你提示</div></div><div style="display:flex;gap:8px"><div class="back-btn" style="width:34px;height:34px" onclick="wordleShowHelp()" title="规则">?</div><div class="back-btn" style="width:34px;height:34px" onclick="wordleInit()" title="重新开始">↻</div></div></div>
 <div id="wordleGrid" class="wordle-grid"></div>
 <div id="wordleKb" class="wordle-kb"></div>
 <div id="wordleStatus" style="text-align:center;margin:14px;font-size:14px;color:#999"></div>
+<div id="wordleShare" style="text-align:center;margin:0 14px 14px;display:none"></div>
 </div></div></div>
 
 <!-- ===== 二选一 Choice ===== -->
@@ -960,6 +961,7 @@ body.in-quiz .page{padding-bottom:0 !important}
 </div>
 </div></div>
 <div class="modal-mask" id="passcodeModal"><div class="modal" id="passcodeModalContent"></div></div>
+<div class="modal-mask" id="infoModal" onclick="if(event.target===this)closeInfoModal()"><div class="modal"><div class="modal-title" id="infoModalTitle"></div><div class="modal-sub" id="infoModalBody" style="text-align:left;margin-top:12px;line-height:1.7"></div><button class="modal-btn" id="infoModalBtn" style="margin-top:20px" onclick="closeInfoModal()">知道了</button></div></div>
 <div class="city-panel-mask" id="cityPanelMask" onclick="closeCityPanel()"></div>
 <div class="city-panel" id="cityPanel">
   <div class="city-panel-header">

@@ -142,6 +142,22 @@ var api = {
 /* ---- Toast ---- */
 function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },1800); }
 
+/* ---- 通用信息弹窗 ---- */
+function showModal(title, body, btnText){
+  var mask=document.getElementById('infoModal');
+  var t=document.getElementById('infoModalTitle');
+  var b=document.getElementById('infoModalBody');
+  var btn=document.getElementById('infoModalBtn');
+  if(t) t.textContent=title||'';
+  if(b) b.innerHTML=body||'';
+  if(btn) btn.textContent=btnText||'知道了';
+  if(mask) mask.classList.add('show');
+}
+function closeInfoModal(){
+  var mask=document.getElementById('infoModal');
+  if(mask) mask.classList.remove('show');
+}
+
 /* ---- 时钟（状态栏已移除，保留空函数避免报错） ---- */
 function tick(){ var el=document.getElementById('clock'); if(el){ var d=new Date(); el.textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); } }
 setInterval(tick,30000); tick();
@@ -2048,12 +2064,25 @@ function saveNick() {
 /* ============================================================
  * 游戏 1：猜歌名 Wordle
  * ============================================================ */
-var WORDLE_SONGS = ['温柔', '倔强', '拥抱', '任意门', '步步', '知足', '恋爱ing', '突然好想你', '志明与春娇', '离开地球表面'];
-var wordleState = { answer: '', len: 0, row: 0, col: 0, grid: [], over: false };
+var WORDLE_SONGS = ['温柔', '倔强', '拥抱', '任意门', '步步', '知足', '恋爱ing', '突然好想你', '志明与春娇', '离开地球表面',
+  '伤心的人别听慢歌', '如烟', '玫瑰少年', '勇敢', '人生海海', '盛夏光年', '派对动物', '成名在望', '如果我们不曾相遇',
+  '因为你所以我', '后青春期的诗', '你不是真正的快乐', '小太阳', '垃圾车', '轧车', '爱情万岁', '凡人歌', 'DNA', 'OAOA'];
+var WORDLE_ROWS = (function () {
+  var set = {};
+  WORDLE_SONGS.forEach(function (s) { for (var i = 0; i < s.length; i++) set[s.charAt(i)] = true; });
+  var chars = Object.keys(set);
+  /* 常用字前置，便于输入 */
+  var priority = '的你我了是不要人就都在一有这中为到大来去来上过个说道想着好知爱温柔倔强拥抱足恋突志明离伤烟玫勇敢生海盛夏光年派对动然望果因所春青期诗真正快乐太垃圾轧情万凡听慢歌想遇与后曾相以面开地表球DNOA';
+  chars.sort(function (a, b) { return (priority.indexOf(a) === -1 ? 999 : priority.indexOf(a)) - (priority.indexOf(b) === -1 ? 999 : priority.indexOf(b)); });
+  var rows = [];
+  for (var i = 0; i < chars.length; i += 8) rows.push(chars.slice(i, i + 8).join(''));
+  return rows;
+})();
+var wordleState = { answer: '', len: 0, row: 0, col: 0, grid: [], over: false, keyStates: {} };
 
 function wordleInit() {
   var pick = WORDLE_SONGS[Math.floor(Math.random() * WORDLE_SONGS.length)];
-  wordleState = { answer: pick, len: pick.length, row: 0, col: 0, grid: [], over: false };
+  wordleState = { answer: pick, len: pick.length, row: 0, col: 0, grid: [], over: false, keyStates: {} };
   var g = document.getElementById('wordleGrid');
   if (g) g.innerHTML = '';
   for (var r = 0; r < 5; r++) {
@@ -2071,28 +2100,31 @@ function wordleInit() {
   }
   wordleRenderKb();
   var st = document.getElementById('wordleStatus');
-  if (st) st.textContent = '猜一首 ' + wordleState.len + ' 字歌名（共 5 次机会）';
+  if (st) st.innerHTML = '猜一首 ' + wordleState.len + ' 字歌名（共 5 次机会）<br><span style="font-size:12px;color:#bbb">🟢 位置对 🟡 字对位置错 ⚪ 不在答案中</span>';
+  var sh = document.getElementById('wordleShare');
+  if (sh) { sh.style.display = 'none'; sh.innerHTML = ''; }
 }
 function wordleRenderKb() {
   var kb = document.getElementById('wordleKb');
   if (!kb) return;
-  /* 构建候选字池：答案字符 + 其他歌名中的干扰字 */
-  var pool = {};
-  var ans = wordleState.answer;
-  for (var i = 0; i < ans.length; i++) pool[ans.charAt(i)] = true;
-  WORDLE_SONGS.forEach(function (s) { for (var j = 0; j < s.length; j++) pool[s.charAt(j)] = true; });
-  var chars = Object.keys(pool);
-  /* 洗牌 */
-  for (var k = chars.length - 1; k > 0; k--) { var r = Math.floor(Math.random() * (k + 1)); var t = chars[k]; chars[k] = chars[r]; chars[r] = t; }
-  wordleState.pool = chars;
-  kb.innerHTML = '<div class="wordle-pool">' + chars.map(function (c) {
-    return '<div class="wordle-key" onclick="wordleKey(\'' + c + '\')">' + c + '</div>';
-  }).join('') + '</div><div class="wordle-kb-row"><div class="wordle-key wide" onclick="wordleKey(\'⌫\')">⌫ 删除</div><div class="wordle-key wide primary" onclick="wordleKey(\'⏎\')">提交</div></div>';
+  var states = wordleState.keyStates || {};
+  var rowsHtml = WORDLE_ROWS.map(function (rowStr) {
+    return '<div class="wordle-kb-row">' + rowStr.split('').map(function (c) {
+      var cls = states[c] || '';
+      return '<div class="wordle-key ' + cls + '" onclick="wordleKey(\'' + c + '\')">' + c + '</div>';
+    }).join('') + '</div>';
+  }).join('');
+  kb.innerHTML = rowsHtml + '<div class="wordle-kb-row"><div class="wordle-key wide" onclick="wordleKey(\'⌫\')">⌫ 删除</div><div class="wordle-key wide" onclick="wordleKey(\'clear\')" title="清空当前行">清空</div><div class="wordle-key wide primary" onclick="wordleKey(\'⏎\')">提交</div></div>';
 }
 function wordleKey(k) {
   if (wordleState.over) return;
   if (k === '⌫') {
     if (wordleState.col > 0) { wordleState.col--; wordleState.grid[wordleState.row][wordleState.col].textContent = ''; }
+    return;
+  }
+  if (k === 'clear') {
+    for (var ci = 0; ci < wordleState.len; ci++) wordleState.grid[wordleState.row][ci].textContent = '';
+    wordleState.col = 0;
     return;
   }
   if (k === '⏎') { wordleSubmit(); return; }
@@ -2124,12 +2156,16 @@ function wordleSubmit() {
   }
   /* 翻转动画 */
   for (var i5 = 0; i5 < ans.length; i5++) {
-    (function (idx, cls) {
+    (function (idx, cls, ch) {
       setTimeout(function () {
         var cell = wordleState.grid[wordleState.row][idx];
         if (cell) { cell.classList.add('flip'); setTimeout(function () { cell.classList.add(cls); }, 250); }
+        var rank = { green: 3, yellow: 2, gray: 1 };
+        var cur = wordleState.keyStates[ch] || '';
+        if (!cur || (rank[cls] || 0) > (rank[cur] || 0)) wordleState.keyStates[ch] = cls;
+        if (idx === ans.length - 1) wordleRenderKb();
       }, idx * 200);
-    })(i5, result[i5]);
+    })(i5, result[i5], guess[i5]);
   }
   var win = result.every(function (r) { return r === 'green'; });
   setTimeout(function () {
@@ -2139,18 +2175,43 @@ function wordleSubmit() {
       st.played++; st.wins++; st.streak++; st.maxStreak = Math.max(st.maxStreak, st.streak);
       ls.set('wordle_stats', st);
       var s = document.getElementById('wordleStatus');
-      if (s) s.innerHTML = '🎉 猜对了！答案是《' + ans + '》<br><button class="action-btn primary" style="display:inline-flex;margin-top:10px;padding:10px 24px" onclick="wordleInit()">再来一局</button>';
+      if (s) s.innerHTML = '🎉 猜对了！答案是《' + ans + '》<br>连击 ' + st.streak + ' 场 | 胜率 ' + Math.round(st.wins / st.played * 100) + '%';
+      wordleShowShare(true, ans);
     } else if (wordleState.row >= 4) {
       wordleState.over = true;
       var st2 = ls.get('wordle_stats', { played: 0, wins: 0, streak: 0, maxStreak: 0 });
       st2.played++; st2.streak = 0;
       ls.set('wordle_stats', st2);
       var s2 = document.getElementById('wordleStatus');
-      if (s2) s2.innerHTML = '😢 答案是《' + ans + '》<br><button class="action-btn primary" style="display:inline-flex;margin-top:10px;padding:10px 24px" onclick="wordleInit()">再来一局</button>';
+      if (s2) s2.innerHTML = '😢 答案是《' + ans + '》<br>连击中断了，再来一局？';
+      wordleShowShare(false, ans);
     } else {
       wordleState.row++; wordleState.col = 0;
     }
   }, ans.length * 200 + 300);
+}
+function wordleShowShare(win, ans) {
+  var sh = document.getElementById('wordleShare');
+  if (!sh) return;
+  var stats = ls.get('wordle_stats', { played: 0, wins: 0, streak: 0, maxStreak: 0 });
+  var text = 'MaydayLand 猜歌名 ' + (win ? '✅' : '❌') + '\n今日答案：《' + ans + '》\n战绩：' + stats.wins + '/' + stats.played + ' 胜 | 连击 ' + stats.streak + ' 场\n快来挑战 👉 https://modelscope.cn/studios/souljoy/MaydayLand';
+  sh.style.display = 'block';
+  sh.innerHTML = '<button class="action-btn primary" style="display:inline-flex;margin:6px;padding:10px 24px" onclick="wordleCopyShare()">📋 复制战绩</button><button class="action-btn" style="display:inline-flex;margin:6px;padding:10px 24px" onclick="wordleInit()">🔄 再来一局</button><textarea id="wordleShareText" style="position:absolute;left:-9999px" readonly>' + text + '</textarea>';
+}
+function wordleCopyShare() {
+  var ta = document.getElementById('wordleShareText');
+  if (!ta) return;
+  ta.select();
+  try { document.execCommand('copy'); toast('战绩已复制，快去分享吧！'); } catch (e) { toast('复制失败，请手动长按复制'); }
+}
+function wordleShowHelp() {
+  showModal('猜歌名规则', '<div style="line-height:1.8;font-size:14px">' +
+    '在 5 次机会内猜出今天的五月天歌名。<br><br>' +
+    '🟢 <b>绿色</b>：字猜对了，位置也对。<br>' +
+    '🟡 <b>黄色</b>：答案里有这个字，但位置不对。<br>' +
+    '⚪ <b>灰色</b>：答案里没有这个字。<br><br>' +
+    '键盘上的字会根据你的猜测自动变色，帮你排除错误选项。' +
+    '</div>', '知道了');
 }
 
 /* ============================================================
