@@ -118,6 +118,15 @@ MaydayLand/
 - 已修复：`run.py` 自动 `CREATE DATABASE` + `db.create_all()` + `seed_all()`
 - `model.py` 已改用 `server_default=CURRENT_TIMESTAMP`
 
+### 多远程仓库同步（GitHub + ModelScope）
+- 本项目同时维护 **GitHub（`origin`）** 与 **ModelScope 创空间（`modelscope`）** 两个远程仓库
+- 每次代码更新后，需要分别推送到两个仓库，不能只推一个：
+  ```bash
+  git push origin main      # GitHub 主分支
+  git push modelscope master # ModelScope 部署分支（默认读取 master）
+  ```
+- 注意：ModelScope 创空间默认读取 `master` 分支进行部署；若只 `git push origin main`，线上部署不会更新
+
 ### 服务 30 分钟无访问被回收
 - `app/keepalive.py` 每 20 分钟 ping 一次云托管域名
 
