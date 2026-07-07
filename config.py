@@ -21,7 +21,7 @@ if USE_SQLITE:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'mayday_land.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 else:
-    # 微信云托管 / 生产 MySQL 模式
+    # 生产 MySQL 模式
     SQLALCHEMY_DATABASE_URI = 'mysql://{}:{}@{}/mayday_land'.format(
         username, password, db_address)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
