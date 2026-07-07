@@ -153,13 +153,19 @@ https://modelscope.cn/studios/souljoy/MaydayLand
 
 ---
 
-## 7. 经验总结
+## 7. 经验总结：与 TRAE 配合的真实感受
 
-- **素材体积会直接影响部署成功率**：`assets/images/albums/` 最初 84MB，浏览器上传方式会超时，改为 Git 推送后成功部署到 ModelScope。
-- **多远程仓库管理要写入规范**：GitHub `main` 与 ModelScope `master` 默认分支不一致，已将同步命令写入 `AGENTS.md`，避免漏推导致线上仍是旧代码。
-- **SQLite 与 MySQL 语法差异需兜底**：`ON UPDATE CURRENT_TIMESTAMP` 在 SQLite 中报错，通过 `config.USE_SQLITE` 动态选择 SQL 片段解决。
-- **不要主动引入大型前端框架**：项目始终坚持零依赖前端方案，单文件 `app.js` + `index.html` 即可承载完整门户与 11 个页面，构建与缓存成本极低。
-- **自动更新要考虑失败兜底**：新闻抓取线程失败只记 warning，不抛异常、不影响主服务，保证线上稳定性。
+这次 Demo 让我第一次完整体验到「用自然语言驱动代码」的快感，也总结了几点和 TRAE 配合的心得：
+
+- **把需求拆得越小，TRAE 越能精准命中**：不要一次性说「帮我做个游戏门户」。我会先讲页面结构（TabBar 几个 tab），再讲每个 tab 里的区块，最后才进入具体游戏逻辑。分层描述后，TRAE 生成的代码结构清晰，改起来也快。
+
+- **OpenSpec + AGENTS.md 是提效的秘诀**：项目里有 `openspec/` 规格文档和 `AGENTS.md` 研发指引。每次开新任务前，我先让 TRAE 读一遍这些上下文，它就能自动对齐技术栈、命名规范和禁止项（比如不能引入 React/Vue），减少了很多返工。
+
+- **遇到报错不要慌，把日志直接贴给 TRAE**：ModelScope 部署时出现过 MySQL 连接拒绝、SQLite `ON UPDATE` 语法错误、浏览器上传超时等问题。我把报错日志完整贴进去，TRAE 能快速定位根因并给出修复方案，比自己查文档快得多。
+
+- **保持单文件前端是 TRAE 的舒适区**：我让 TRAE 把 8 款游戏 + 3 款工具全部写进 `app.js` 和 `index.html`，零前端框架、零构建步骤。TRAE 对单文件大脚本的理解很好，上下文不会断片，反而比多文件项目更容易维护。
+
+- **多 Session 协作比一个大长对话更稳**：我把游戏门户、部署、新闻抓取拆成不同 Session。每个 Session 只聚焦一个目标，TRAE 的上下文更集中；需要关联时，再让它读取已有文件或 AGENTS.md 即可。
 
 ---
 
