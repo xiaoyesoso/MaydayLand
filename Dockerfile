@@ -28,11 +28,13 @@ RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple
 && pip install -r requirements.txt
 
 # 生产环境关闭 debug 模式，避免 reloader 和 stderr 噪音
+# ModelScope 创空间使用 SQLite（平台不提供 MySQL）
 ENV DEBUG=0
 ENV PYTHONUNBUFFERED=1
+ENV USE_SQLITE=1
 
-# 暴露端口
-EXPOSE 80
+# 暴露端口（ModelScope 创空间要求 7860）
+EXPOSE 7860
 
 # 执行启动命令
-CMD ["python3", "run.py", "0.0.0.0", "80"]
+CMD ["python3", "run.py", "0.0.0.0", "7860"]
