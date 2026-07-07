@@ -22,6 +22,9 @@
 
 **MaydayLand · 五月天·城市漫游** 是一款面向五月天粉丝（五迷）的移动端 H5 单页应用，由 Flask 后端 + 原生 HTML/ES5/CSS 前端构成，目前部署在 **ModelScope 创空间**，无需下载即可访问。
 
+- 在线体验：https://modelscope.cn/studios/souljoy/MaydayLand
+- GitHub 仓库：https://github.com/xiaoyesoso/MaydayLand
+
 ### 面向谁
 
 核心用户是 18–35 岁的五月天粉丝：
