@@ -59,6 +59,10 @@ def _inject_buildtime():
     return dict(build_time=build_time or str(int(os.environ.get('DEBUG', '0'))))
 
 
-# 启动保活线程（生产环境定时访问云托管域名，避免 30 分钟无访问被回收）
+# 启动保活线程（生产环境定时访问域名，避免实例被回收）
 from app import keepalive
 keepalive.start()
+
+# 启动新闻定时刷新线程（每天抓取五月天最新官方动态）
+from app import news_refresh
+news_refresh.start()

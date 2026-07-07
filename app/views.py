@@ -83,6 +83,16 @@ def get_news():
     return make_succ_response(data)
 
 
+@app.route('/api/refresh-news', methods=['POST'])
+def refresh_news():
+    """手动触发新闻刷新（从相信音乐官网抓取五月天最新动态）"""
+    from app.news_refresh import refresh_now
+    success, new_count, msg = refresh_now()
+    if success:
+        return make_succ_response({'newCount': new_count, 'message': msg})
+    return make_err_response(msg)
+
+
 # ---------- 城市 ----------
 @app.route('/api/cities', methods=['GET'])
 def get_cities():
