@@ -36,5 +36,5 @@ ENV USE_SQLITE=1
 # 暴露端口（ModelScope 创空间要求 7860）
 EXPOSE 7860
 
-# 执行启动命令
-CMD ["python3", "run.py", "0.0.0.0", "7860"]
+# 执行启动命令（显式设置 USE_SQLITE=1 确保平台环境变量覆盖时仍走 SQLite）
+CMD ["sh", "-c", "USE_SQLITE=1 python3 run.py 0.0.0.0 7860"]

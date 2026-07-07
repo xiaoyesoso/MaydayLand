@@ -9,7 +9,11 @@ password = os.environ.get("MYSQL_PASSWORD", 'root')
 db_address = os.environ.get("MYSQL_ADDRESS", '127.0.0.1:3306')
 
 # 数据库 URI：优先 MySQL，本地无 MySQL 时回退 SQLite 方便开发
+# 当未配置 MYSQL_ADDRESS 或为本地默认地址时，自动使用 SQLite
+_mysql_address = os.environ.get('MYSQL_ADDRESS', '')
 USE_SQLITE = os.environ.get('USE_SQLITE', '0') == '1'
+if not USE_SQLITE and (not _mysql_address or _mysql_address == '127.0.0.1:3306'):
+    USE_SQLITE = True
 
 if USE_SQLITE:
     # SQLite 本地开发模式
