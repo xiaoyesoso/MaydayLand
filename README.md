@@ -1,6 +1,8 @@
 # MaydayLand · 五月天·城市漫游
 
-> 报名赛道：**生活娱乐**　|　产品形态：**微信云托管 H5 / 小程序**　|　创意名称：**五月天·城市漫游**
+> 报名赛道：**生活娱乐**　|　产品形态：**ModelScope 创空间 H5**　|　创意名称：**五月天·城市漫游**
+>
+> 在线体验：https://modelscope.cn/studios/souljoy/MaydayLand
 
 面向五月天粉丝（五迷）的城市漫游产品 —— **"跟着歌词，发现城市里的五迷角落"**。
 将 **歌词主题打卡**、**演唱会同好互动** 与 **五月天全曲库人格测评** 融为一体，验证五迷群体对 "歌词角落地图 + 打卡分享 + 同好暗号 + 人格测评" 四大核心功能的接受度。
@@ -49,13 +51,13 @@ MaydayLand 用 **"歌词情绪标签 + LBS 城市角落 + 同好暗号 + 人格�
 
 ```
 MaydayLand/
-├── app/                             # 🐍 Flask 后端应用（仿 wxcloudrun-flask 架构）
+├── app/                             # 🐍 Flask 后端应用
 │   ├── __init__.py                  # Flask 应用初始化 + SQLAlchemy + 静态资源 CORS + 保活线程
 │   ├── model.py                     # 10 张表数据模型（Corner/Concert/News/Comment/Footprint/PasscodeLog/SongUnlock/QuizResult/UserStat）
 │   ├── dao.py                       # 数据访问层（CRUD 封装）
 │   ├── views.py                     # RESTful API 路由
 │   ├── response.py                  # 统一响应格式（code/data/errorMsg）
-│   ├── keepalive.py                 # 生产环境定时访问云托管域名，避免实例被回收
+│   ├── keepalive.py                 # 服务保活模块（当前部署于 ModelScope，未启用）
 │   ├── templates/index.html         # 前端单页 HTML（Jinja2 模板）
 │   └── static/                      # 前端交互逻辑与微信验证文件
 │       ├── app.js                   # 前端交互逻辑（fetch 调用后端 API）
@@ -79,9 +81,10 @@ MaydayLand/
 ├── config.py                        # 配置（DB URI / DEBUG / MySQL / SQLite fallback）
 ├── run.py                           # 应用入口：自动建库建表 + 导入种子数据
 ├── requirements.txt                 # Python 依赖
-├── Dockerfile                       # 微信云托管容器化部署
+├── Dockerfile                       # Docker 容器化部署配置（当前用于 ModelScope）
 ├── .dockerignore                    # 排除 .git/__pycache__/*.db 等
-├── container.config.json            # 微信云托管配置（端口 / CPU / DB 初始化 SQL）
+├── container.config.json            # 微信云托管遗留配置（当前未使用）
+├── ms_deploy.json                   # ModelScope 创空间部署配置
 ├── AGENTS.md                        # 项目研发指引（含 v1.2 需求清单）
 └── README.md                        # 本文件
 ```
@@ -90,7 +93,7 @@ MaydayLand/
 
 ## 🚀 快速体验
 
-参照 [`wxcloudrun-flask`](https://github.com/WeixinCloud/wxcloudrun-flask) 微信云托管模板改造，前端 HTML 由 Flask 渲染，所有数据持久化到数据库。
+前端 HTML 由 Flask 渲染，本地开发使用 SQLite，生产部署在 ModelScope 创空间。
 
 ```bash
 # 1. 安装依赖
@@ -103,11 +106,11 @@ USE_SQLITE=1 python run.py 0.0.0.0 8080
 # 3. 浏览器打开 http://127.0.0.1:8080/
 ```
 
-**生产部署（微信云托管）**：直接将仓库根目录作为云托管服务源码，依据 `Dockerfile` 和 `container.config.json` 自动构建容器，连接 MySQL 即可。
+**生产部署（ModelScope 创空间）**：应用已部署至 https://modelscope.cn/studios/souljoy/MaydayLand，依据根目录 `Dockerfile` 与 `ms_deploy.json` 自动构建容器，使用 SQLite 运行。
 
-**生产环境特性**：
-- `run.py` 启动时自动 `CREATE DATABASE` → `db.create_all()` → `seed_all()`，无需手动初始化
-- `app/keepalive.py` 每 20 分钟访问一次云托管域名，防止 30 分钟无访问被平台回收
+**部署特性**：
+- `run.py` 启动时自动 `db.create_all()` → `seed_all()`，无需手动初始化
+- 容器内使用 SQLite，无需外部 MySQL 服务
 - 前端 `app.js` 通过 `?v={{ build_time }}` 实现 cache busting，每次部署自动刷新
 
 ---

@@ -20,7 +20,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 USE_SQLITE=1 python seed.py
 USE_SQLITE=1 python run.py 0.0.0.0 8080
 
-# 生产构建（微信云托管自动执行）
+# 生产构建（ModelScope 创空间自动执行）
 # docker build -t maydayland .
 ```
 
@@ -29,8 +29,8 @@ USE_SQLITE=1 python run.py 0.0.0.0 8080
 - 后端：Flask 2.0 + Flask-SQLAlchemy 2.5 + PyMySQL 1.0 + SQLAlchemy 1.4
 - 数据库：MySQL（生产）/ SQLite（本地 `USE_SQLITE=1`）
 - 前端：原生 HTML + ES5 JS + CSS，单文件零依赖
-- 容器：Alpine 3.13 + Python3，端口 80
-- 部署：微信云托管
+- 容器：Alpine 3.13 + Python3，端口 7860（ModelScope 要求）
+- 部署：ModelScope 创空间（https://modelscope.cn/studios/souljoy/MaydayLand）
 
 **禁止引入**：React / Vue / Taro、UI 库、状态管理库、Canvas 库、图表库。
 
@@ -55,7 +55,8 @@ MaydayLand/
 ├── config.py                # DB URI / DEBUG / SQLite fallback
 ├── Dockerfile
 ├── .dockerignore
-└── container.config.json    # 微信云托管配置
+├── container.config.json    # 微信云托管遗留配置（当前未使用）
+└── ms_deploy.json           # ModelScope 创空间部署配置
 ```
 
 ## Code Conventions
@@ -128,7 +129,7 @@ MaydayLand/
 - 注意：ModelScope 创空间默认读取 `master` 分支进行部署；若只 `git push origin main`，线上部署不会更新
 
 ### 服务 30 分钟无访问被回收
-- `app/keepalive.py` 每 20 分钟 ping 一次云托管域名
+- `app/keepalive.py` 原用于微信云托管保活；当前部署于 ModelScope 创空间，该模块未启用
 
 ## Data Compliance
 
